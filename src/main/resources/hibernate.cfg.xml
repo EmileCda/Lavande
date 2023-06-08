@@ -8,7 +8,7 @@
 		<property name="hibernate.connection.driver_class">com.mysql.cj.jdbc.Driver</property>
 		<property name="hibernate.connection.username">root</property>
 		<property name="hibernate.connection.password">a</property>
-		<property name="hibernate.connection.url">jdbc:mysql://127.0.0.1:3306/e_commerce_db</property>
+		<property name="hibernate.connection.url">jdbc:mysql://127.0.0.1:3306/lotus</property>
 		<property name="hibernate.dialect">org.hibernate.dialect.MySQL8Dialect</property>
 
 		<property name="show_sql">false</property>
@@ -21,16 +21,18 @@
 		<property name="hibernate.enable_lazy_load_no_trans">true</property>
 		<property name="hibernate.charSet">UTF-8</property>
 
-		<mapping class="fr.ecommerce.entity.User"></mapping>
-		<mapping class="fr.ecommerce.entity.Adresse"></mapping>
-		<mapping class="fr.ecommerce.utils.Params"></mapping>
-		<mapping class="fr.ecommerce.entity.CartePaiement"></mapping>
-		<mapping class="fr.ecommerce.entity.Categorie"></mapping> 
-		<mapping class="fr.ecommerce.entity.Article"></mapping>
-		<mapping class="fr.ecommerce.entity.Commande"></mapping>
-		<mapping class="fr.ecommerce.entity.Commentaire"></mapping>
- 		<mapping class="fr.ecommerce.entity.ArticlePanier"></mapping> 
-		<mapping class="fr.ecommerce.entity.LigneDeCommande"></mapping>
+		<mapping class="fr.lotus.entity.User"></mapping>
+		<mapping class="fr.lotus.entity.Costumer"></mapping>
+		<mapping class="fr.lotus.entity.Address"></mapping>
+		<!-- <mapping class="fr.lotus.entity.ItemCart"></mapping> -->
+		<mapping class="fr.lotus.entity.Param"></mapping>
+		<mapping class="fr.lotus.entity.BankCard"></mapping>
+		<mapping class="fr.lotus.entity.Category"></mapping>
+		<mapping class="fr.lotus.entity.Item"></mapping>
+		<mapping class="fr.lotus.entity.Order"></mapping>
+		<mapping class="fr.lotus.entity.Comment"></mapping>
+		<mapping class="fr.lotus.entity.CartItem"></mapping>
+		<mapping class="fr.lotus.entity.OrderLine"></mapping>
 
 	</session-factory>
 </hibernate-configuration>
