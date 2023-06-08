@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<ui:composition>
+
+	<div class="upper-bar">
+		<div class="logo">
+			<h:form>
+				<h:commandLink action="/accueil.xhtml">
+					<h:graphicImage library="images" name="jasmin.png" />
+				</h:commandLink>
+			</h:form>
+		</div>
+		<div class="header-title">
+			<h1>#{msg['project.title']}</h1>
+		</div>
+		<h:form>
+			<h:panelGroup rendered="#{loginBean.user.cartItemList.size() gt 0 }">
+				<li><h:commandLink action="/cart.xhtml">
+						<h:graphicImage library="images" name="my_cart.png"
+							class="iconCart" />
+						<h:outputText value="#{msg['menu.cart']} #{loginBean.labelCart} "></h:outputText>
+					</h:commandLink></li>
+			</h:panelGroup>
+		</h:form>
+		<h:panelGroup rendered="#{loginBean.isConnected}">
+			<h:form>
+				<div class="addOn">
+					<h:outputText value="#{loginBean.welcome}"></h:outputText>
+					<h:commandLink action="#{loginBean.disconnect}"
+						class="button-header">
+						<h:outputText value="#{msg['menu.disconnect']}"></h:outputText>
+					</h:commandLink>
+
+				</div>
+			</h:form>
+		</h:panelGroup>
+
+		<h:panelGroup rendered="#{!loginBean.isConnected}">
+			<h:form>
+				<div class="addOn">
+					<h:outputText value="#{loginBean.welcome}"></h:outputText>
+					<h:commandLink action="/login-utilisateur.xhtml">
+						<h:graphicImage library="images" name="my_account.png"
+							class="iconCart" />
+					</h:commandLink>
+
+				</div>
+			</h:form>
+		</h:panelGroup>
+
+	</div>
+	<div class="lower-bar">
+		<h:form>
+
+			<input id="menu-toggle" type="checkbox" />
+			<label class="menu-button-container" for="menu-toggle">
+				<div class="menu-button"></div>
+			</label>
+
+			<ul class="menu">
+				<li><h:commandLink action="/accueil.xhtml">
+						<h:outputText value="#{msg['menu.home']}"></h:outputText>
+					</h:commandLink></li>
+				<li><h:panelGroup rendered="#{loginBean.isClient}">
+
+						<h:commandLink action="/procurement-management.xhtml">
+							<h:outputText value="#{msg['menu.purchase']}"></h:outputText>
+						</h:commandLink>
+					</h:panelGroup></li>
+
+				<li><h:panelGroup rendered="#{loginBean.isStoreKeeper}">
+
+						<h:commandLink action="/item-management.xhtml">
+							<h:outputText value="#{msg['menu.storeKeeper']}"></h:outputText>
+						</h:commandLink>
+					</h:panelGroup></li>
+
+				<li><h:commandLink action="/add-utilisateur.xhtml">
+						<h:outputText value="#{msg['menu.addUser']}"></h:outputText>
+					</h:commandLink></li>
+
+				<li><h:panelGroup rendered="#{loginBean.isAdmin}">
+						<h:commandLink action="/admin-management.xhtml">
+							<h:outputText value="#{msg['menu.admin']}"></h:outputText>
+						</h:commandLink>
+					</h:panelGroup></li>
+				<h:panelGroup rendered="#{msg['cheat.code']}">
+					<li><h:commandLink action="/procurement-management.xhtml">
+							<h:outputText value="Test"></h:outputText>
+						</h:commandLink></li>
+					<li><h:commandLink action="/cart.xhtml">
+							<h:outputText value="Test partiel"></h:outputText>
+						</h:commandLink></li>
+					<li><h:commandLink action="/testUnitaire.xhtml">
+							<h:outputText value="Test unitaire"></h:outputText>
+						</h:commandLink></li>
+				</h:panelGroup>
+			</ul>
+		</h:form>
+	</div>
+
+</ui:composition>
+
+</html>
