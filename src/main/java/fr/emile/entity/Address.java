@@ -36,9 +36,9 @@ public  class Address implements IConstant, Serializable {
 	@Column(name = "is_valide")
 	private Boolean isValide;
 
-//	@ManyToOne
-//	@JoinColumn(name = "costumer_id", nullable = false)
-//	private Costumer costumer;
+	@ManyToOne
+	@JoinColumn(name = "costumer_id", nullable = false)
+	private Costumer costumer;
 	
 	
 	public Address() {

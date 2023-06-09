@@ -20,7 +20,7 @@ public class CrudDao extends UtilDao  {
 			this.getSession().save(myObject);
 			commit();
 		} catch (Exception e) {
-			Utils.trace("catch create " + e.toString());
+			Utils.trace("catch create %s\n", e.toString());
 			rollBack();
 		}
 		return myObject;
@@ -31,7 +31,7 @@ public class CrudDao extends UtilDao  {
 		try {
 			myObject = (Object) this.getSession().find(this.getCurrentObject().getClass(), id);
 		} catch (Exception e) {
-			Utils.trace("catch Read " + e.toString());
+			Utils.trace("catch read %s\n", e.toString());
 		}
 		return myObject;
 	}
@@ -46,7 +46,7 @@ public class CrudDao extends UtilDao  {
 			Query<Object> myQuery = this.getSession().createQuery(querryString);
 			objectList = myQuery.list();
 		} catch (Exception e) {
-			Utils.trace("catch Read " + e.toString());
+			Utils.trace("catch list%s\n", e.toString());
 		}
 		return objectList;
 	}
@@ -78,7 +78,7 @@ public class CrudDao extends UtilDao  {
 
 		} catch (Exception e) {
 
-			Utils.trace("catch update " + e.toString());
+			Utils.trace("catch delete%s\n", e.toString());
 			rollBack();
 
 		}

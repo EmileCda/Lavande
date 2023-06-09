@@ -24,8 +24,8 @@
 		<mapping class="fr.emile.entity.Address"></mapping>
 		<mapping class="fr.emile.entity.Param"></mapping>
 		<mapping class="fr.emile.entity.User"></mapping>
+		<mapping class="fr.emile.entity.Costumer"></mapping>
 <!-- 		<mapping class="fr.emile.entity.BankCard"></mapping> -->
-<!-- 		<mapping class="fr.emile.entity.Costumer"></mapping> -->
 		<!-- <mapping class="fr.emile.entity.ItemCart"></mapping> -->
 <!-- 		<mapping class="fr.emile.entity.Param"></mapping> -->
 <!-- 		<mapping class="fr.emile.entity.Category"></mapping> -->

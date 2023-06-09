@@ -13,6 +13,7 @@ import java.util.concurrent.TimeUnit;
 import fr.emile.common.IConstant;
 import fr.emile.entity.Address;
 import fr.emile.entity.BankCard;
+import fr.emile.entity.Costumer;
 import fr.emile.entity.Param;
 import fr.emile.entity.User;
 import fr.emile.enums.Gender;
@@ -36,32 +37,40 @@ public final class DataTest implements IConstant {
 	private static List<String> itemDescriptionList;
 
 	// ---------------------------------------------------------------------------------------------------
-		public static Param genParam(int codeFunction)  {
-			
-			String firstname = DataTest.firstname();
-			byte[] code = null ;
-			try {
-				code = firstname.getBytes(CHARSET);
-			} catch (UnsupportedEncodingException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			
+	public static Param genParam(int codeFunction) {
+
+		String firstname = DataTest.firstname();
+		byte[] code = null;
+		try {
+			code = firstname.getBytes(CHARSET);
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 //			public Param(int  functionKey, int intValue, String varcharValue256, String varcharValue4096,
 //					byte[] blobValue, Date datetimeValue) {		
-			return new Param(			
-					codeFunction,
-					Utils.randInt(1, 100),
-					firstname, 
-					firstname+" "+firstname+" "+firstname+" "+firstname+" "+firstname+" ",
-					code,
-					DATE_NOW );
+		return new Param(codeFunction, Utils.randInt(1, 100), firstname,
+				firstname + " " + firstname + " " + firstname + " " + firstname + " " + firstname + " ", code,
+				DATE_NOW);
 
+	}
 
-		}
-		// ---------------------------------------------------------------------------------------------------
-//		public static Category genCategorie() {
-//			return  DataTest.genCategory();
+	// ---------------------------------------------------------------------------------------------------
+	public static Costumer genCostumer() {
+
+		String firstname = DataTest.firstname();
+		String lastname = DataTest.lastname();
+
+		return new Costumer(DataTest.gender(), firstname, lastname, DataTest.birthDate(), DataTest.phone(),
+				Profile.COSTUMER, DataTest.email(firstname, lastname), DataTest.pass(firstname));
+
+	}
+
+// ---------------------------------------------------------------------------------------------------
+//public static Category genCategorie() {
+//	return  DataTest.genCategory();
+
 //		}
 //			// ---------------------------------------------------------------------------------------------------
 //			public static Categorie genCategory() {
@@ -123,7 +132,6 @@ public final class DataTest implements IConstant {
 //	public Comment( String text, int grade, Item item, Costumer costumer) {
 //	this(DEFAULT_ID,text, grade, item, costumer);
 
-
 //	// ---------------------------------------------------------------------------------------------------
 	public static BankCard genBankCardNoName() {
 
@@ -142,37 +150,36 @@ public final class DataTest implements IConstant {
 	}
 
 // ---------------------------------------------------------------------------------------------------
-//		public static BankCard genBankCard(User user) {
-//
-//		int nbday = Utils.randInt(1, 30) * 30;
-//		String crypto = String.format("%03d", Utils.randInt(0, 999));
-//
-//		return new BankCard(DataTest.bankCardNumber(), Utils.addDate(DATE_NOW, nbday), crypto, user);
-//	}
-//
+	public static BankCard genBankCard(User user) {
+
+		int nbday = Utils.randInt(1, 30) * 30;
+		String crypto = String.format("%03d", Utils.randInt(0, 999));
+
+		return new BankCard(DataTest.bankCardNumber(), Utils.addDate(DATE_NOW, nbday), crypto, user);
+	}
+
 //
 //		// ---------------------------------------------------------------------------------------------------
-		public static User genUserAfpha(int id) {
+	public static User genUserAfpha(int id) {
 
-			Date startDate = Utils.string2Date("01/01/1900", "dd/MM/yyyy");
-			Date endDate = Utils.string2Date("01/01/2023", "dd/MM/yyyy");
-			Gender gender = DataTest.gender();
-			String firstname = DataTest.firstname(gender);
-			String lastname = DataTest.lastname();
+		Date startDate = Utils.string2Date("01/01/1900", "dd/MM/yyyy");
+		Date endDate = Utils.string2Date("01/01/2023", "dd/MM/yyyy");
+		Gender gender = DataTest.gender();
+		String firstname = DataTest.firstname(gender);
+		String lastname = DataTest.lastname();
 
-			return new 
-			User(id, DataTest.profile(),  DataTest.email(firstname, lastname), DataTest.pass(firstname),true);
-		
+		return new User(id, DataTest.profile(), DataTest.email(firstname, lastname), DataTest.pass(firstname), true);
+
 //			Profile profile, String email, String password, Boolean isActif)
-			
-		}
-//		// ---------------------------------------------------------------------------------------------------
-		public static User genUser() {
-			
-			return  genUserAfpha(DEFAULT_ID) ;
 
-			 
-		}
+	}
+
+//		// ---------------------------------------------------------------------------------------------------
+	public static User genUser() {
+
+		return genUserAfpha(DEFAULT_ID);
+
+	}
 
 //	// ---------------------------------------------------------------------------------------------------
 //	public static Costumer genCostumer() {
@@ -201,10 +208,7 @@ public final class DataTest implements IConstant {
 		return new Address(DataTest.number(), DataTest.numberType(), DataTest.streetType(), DataTest.street(),
 				DataTest.city(), DataTest.zipcode());
 
-	
-
 	}
-
 
 //	// ---------------------------------------------------------------------------------------------------
 //	public static String sentence() {
@@ -227,18 +231,17 @@ public final class DataTest implements IConstant {
 		return String.format("0.3%S", Utils.randInt(0, 999));
 
 	}
+
 	// ---------------------------------------------------------------------------------------------------
 	public static String orderNumber() {
-		
+
 //		JSMyyyymmdd-<1.. 1000>-FR-<1.99>
-		
-		return String.format("JSM-%s-%05d-FR-%02d", 
-				Utils.date2String(DATE_NOW, "yyyyMMdd"),
-				Utils.randInt(1, 99999),
+
+		return String.format("JSM-%s-%05d-FR-%02d", Utils.date2String(DATE_NOW, "yyyyMMdd"), Utils.randInt(1, 99999),
 				Utils.randInt(1, 99));
-				
-	
+
 	}
+
 	// ---------------------------------------------------------------------------------------------------
 	public static String bankCardNumber() {
 
@@ -339,7 +342,7 @@ public final class DataTest implements IConstant {
 	}
 
 // ---------------------------------------------------------------------------------------------------
-			public static String domain() {
+	public static String domain() {
 		if (domainList == null) {
 			domainList = new ArrayList<String>();
 
@@ -519,20 +522,18 @@ public final class DataTest implements IConstant {
 		return itemList.get(position);
 	}
 
-	
 	// ---------------------------------------------------------------------------------------------------
 	public static String comment() {
-		if (DataTest.commentList == null) 
-			DataTest.commentList= initList("comment");
+		if (DataTest.commentList == null)
+			DataTest.commentList = initList("comment");
 		int position = Utils.randInt(0, commentList.size() - 1);
 		return DataTest.commentList.get(position);
 	}
 
-	
 	// ---------------------------------------------------------------------------------------------------
 	public static String city() {
-		
-		if (DataTest.cityList == null) 
+
+		if (DataTest.cityList == null)
 			DataTest.cityList = initList("CityName");
 		int position = Utils.randInt(0, cityList.size() - 1);
 		return DataTest.cityList.get(position);
@@ -623,8 +624,8 @@ public final class DataTest implements IConstant {
 	}
 
 //---------------------------------------------------------------------------------------------------
-	public static List<String> initList(String key){
-		
+	public static List<String> initList(String key) {
+
 		List<String> returnList = new ArrayList<String>();
 
 		ResourceBundle myResource = ResourceBundle.getBundle("testData"); // retreive data from Dbase.properties
@@ -633,13 +634,12 @@ public final class DataTest implements IConstant {
 
 		for (String value : propertieArray) {
 
-			returnList.add(value) ;
+			returnList.add(value);
 		}
 
-
-		return returnList ;
+		return returnList;
 	}
-			
+
 // ---------------------------------------------------------------------------------------------------
 
 }

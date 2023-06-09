@@ -39,20 +39,21 @@ public class Costumer extends User implements IConstant, Serializable {
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "costumer", fetch = FetchType.LAZY)
 	private List<Address> addressList;
 
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "costumer", fetch = FetchType.LAZY)
+//	@OneToMany(cascade = CascadeType.ALL, mappedBy = "costumer", fetch = FetchType.LAZY)
+	@Transient
 	private List<BankCard> bankCardList;
 
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "costumer", fetch = FetchType.LAZY)
-//	@Transient
+//	@OneToMany(cascade = CascadeType.ALL, mappedBy = "costumer", fetch = FetchType.LAZY)
+	@Transient
 	private List<CartItem> cartItemList; // meaning cart : item + quan
 	
-	@OneToMany(cascade = CascadeType.DETACH, mappedBy = "costumer", fetch = FetchType.LAZY)
+//	@OneToMany(cascade = CascadeType.DETACH, mappedBy = "costumer", fetch = FetchType.LAZY)
 	@Transient
 	private List<Order> orderList;
 	
 	
-	@OneToMany(cascade = CascadeType.DETACH, mappedBy = "costumer", fetch = FetchType.LAZY)
-//	@Transient
+//	@OneToMany(cascade = CascadeType.DETACH, mappedBy = "costumer", fetch = FetchType.LAZY)
+	@Transient
 	private List<Comment> commentList;
 
 	public Costumer() {
@@ -151,26 +152,6 @@ public class Costumer extends User implements IConstant, Serializable {
 
 	}
 
-	public void preWrite() {
-		super.preWrite();
-		for (Address address : this.getAddressList()) {
-			address.preWrite();
-		}
-
-		for (BankCard bankCard : this.getBankCardList()) {
-			bankCard.preWrite();
-		}
-
-	}
-
-	public void postRead() {
-		super.postRead();
-
-		for (BankCard bankCard : this.getBankCardList()) {
-			bankCard.postRead();
-		}
-
-	}
 
 	public Gender getGender() {
 		return this.gender;

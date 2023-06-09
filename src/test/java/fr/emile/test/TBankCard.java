@@ -5,6 +5,7 @@ import java.util.List;
 
 import fr.emile.ctrl.BankCardCtrl;
 import fr.emile.ctrl.CrudCtrl;
+import fr.emile.ctrl.UserCtrl;
 import fr.emile.entity.Address;
 import fr.emile.entity.BankCard;
 import fr.emile.entity.User;
@@ -111,13 +112,12 @@ public class TBankCard {
 		BankCardCtrl bankCardCtrl = new BankCardCtrl();
 		User user = new User();
 
-//		user = getUser(1);
+		costumer = getCostumer(1);
 
-//		cartePaiement = DataTest.genBankCardt(user);
 		bankCard = DataTest.genBankCard(user);
 
-//		cartePaiement.setUser(user);
-//		user.addBankCard(cartePaiement);
+		bankCard.setCostumer(costumer);
+		costumer.addBankCard(bankCard );
 
 		Utils.trace("CB %s \n", bankCard);
 
@@ -208,18 +208,18 @@ public class TBankCard {
 	}
 //-------------------------------------------------------------------------------------------------	
 
-//	public static User getUser(int userId) {
-//
-//		User user = new User();
-//		IUserCtrl userCtrl = new UserCtrl();
-//		try {
-//			user = userCtrl.getUserById(userId);
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		}
-//		return user;
-//
-//	}
+	public static User getUser(int userId) {
+
+		User user = new User();
+		UserCtrl userCtrl = new UserCtrl();
+		try {
+			user = (User) userCtrl.read(userId);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return user;
+
+	}
 //	// -------------------------------------------------------------------------------------------------
 //
 //	public static Article getArticle(int idArticle) {
