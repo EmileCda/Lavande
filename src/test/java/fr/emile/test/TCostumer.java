@@ -19,11 +19,11 @@ public class TCostumer {
 	public static void main(String[] args) {
 		Utils.trace("*************************** Begin ************************************\n");
 //		createOne();
-//		createMany();
-//		readOne(1);
+		createMany();
+//		readOne(10);
 //		readMany();
 //		update();
-		delete();
+//		delete();
 
 		Utils.trace("*************************** end ************************************\n");
 

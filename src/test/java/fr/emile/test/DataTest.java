@@ -150,12 +150,12 @@ public final class DataTest implements IConstant {
 	}
 
 // ---------------------------------------------------------------------------------------------------
-	public static BankCard genBankCard(User user) {
+	public static BankCard genBankCard(Costumer costumer) {
 
 		int nbday = Utils.randInt(1, 30) * 30;
 		String crypto = String.format("%03d", Utils.randInt(0, 999));
 
-		return new BankCard(DataTest.bankCardNumber(), Utils.addDate(DATE_NOW, nbday), crypto, user);
+		return new BankCard(DataTest.bankCardNumber(), Utils.addDate(DATE_NOW, nbday), crypto, costumer);
 	}
 
 //

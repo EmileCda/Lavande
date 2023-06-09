@@ -17,7 +17,7 @@ import javax.persistence.Transient;
 
 import fr.emile.enums.Gender;
 import fr.emile.utils.Code;
-import fr.emile.utils.Encryption;
+
 import fr.emile.utils.Utils;
 import fr.emile.common.IConstant;
 
@@ -53,9 +53,9 @@ public class BankCard  implements IConstant, Serializable {
 	@Column(name = "is_deleted")
 	private boolean isDeleted;
 
-//	@ManyToOne
-//	@JoinColumn(name = "costumer_id", nullable = false)
-	@Transient
+	@ManyToOne
+	@JoinColumn(name = "costumer_id", nullable = false)
+//	@Transient
 	private Costumer costumer;
 
 	public BankCard() {
@@ -96,7 +96,7 @@ public class BankCard  implements IConstant, Serializable {
 	}
 
 	public Gender getOwnerGender() {
-		return ownerGender;
+		return this.ownerGender;
 	}
 
 	public void setOwnerGender(Gender ownerGender) {

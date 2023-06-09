@@ -1,7 +1,6 @@
 package fr.emile.entity;
 
 import java.io.Serializable;
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -18,7 +17,7 @@ import javax.persistence.Transient;
 import fr.emile.common.IConstant;
 import fr.emile.enums.Gender;
 import fr.emile.enums.Profile;
-import fr.emile.utils.Encryption;
+
 import fr.emile.utils.Utils;
 
 @Entity
@@ -39,19 +38,18 @@ public class Costumer extends User implements IConstant, Serializable {
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "costumer", fetch = FetchType.LAZY)
 	private List<Address> addressList;
 
-//	@OneToMany(cascade = CascadeType.ALL, mappedBy = "costumer", fetch = FetchType.LAZY)
-	@Transient
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "costumer", fetch = FetchType.LAZY)
+//	@Transient
 	private List<BankCard> bankCardList;
 
 //	@OneToMany(cascade = CascadeType.ALL, mappedBy = "costumer", fetch = FetchType.LAZY)
 	@Transient
 	private List<CartItem> cartItemList; // meaning cart : item + quan
-	
+
 //	@OneToMany(cascade = CascadeType.DETACH, mappedBy = "costumer", fetch = FetchType.LAZY)
 	@Transient
 	private List<Order> orderList;
-	
-	
+
 //	@OneToMany(cascade = CascadeType.DETACH, mappedBy = "costumer", fetch = FetchType.LAZY)
 	@Transient
 	private List<Comment> commentList;
@@ -121,21 +119,20 @@ public class Costumer extends User implements IConstant, Serializable {
 	}
 
 	public void initBankCardList() {
-		if (this.getBankCardList() == null) 
+		if (this.getBankCardList() == null)
 			this.setBankCardList(new ArrayList<BankCard>());
 
 	}
 
 	public void initAddressList() {
-		if (this.getAddressList() == null) 
+		if (this.getAddressList() == null)
 			this.setAddressList(new ArrayList<Address>());
 
 	}
 
 	public void initOrderList() {
-		if (this.getOrderList() == null) 
+		if (this.getOrderList() == null)
 			this.setOrderList(new ArrayList<Order>());
-		
 
 	}
 
@@ -146,12 +143,10 @@ public class Costumer extends User implements IConstant, Serializable {
 	}
 
 	public void initCartItemList() {
-		if (this.getCartItemList() == null) 
+		if (this.getCartItemList() == null)
 			this.setCartItemList(new ArrayList<CartItem>());
-		
 
 	}
-
 
 	public Gender getGender() {
 		return this.gender;
@@ -242,19 +237,22 @@ public class Costumer extends User implements IConstant, Serializable {
 				getGender().getId() == 0 ? "" : getGender().getTitle() + " ", getFirstname(), getLastname(),
 				getGender().getId() == 2 ? "e" : "", Utils.date2String(getBirthdate()), getPhoneNumber());
 
-		stringReturn += "Address" + "\n";
+		if (this.getAddressList().size() > 0) {
+			stringReturn += "Address" + "\n";
 
-		for (Address address : this.getAddressList()) {
+			for (Address address : this.getAddressList()) {
 
-			stringReturn += "\t" + address.toString() + "\n";
+				stringReturn += "\t" + address.toString() + "\n";
 
+			}
 		}
-		stringReturn += "BankCard" + "\n";
-		for (BankCard bankcard : this.getBankCardList()) {
-			stringReturn += "\t" + bankcard.toString() + "\n";
+		if (this.getBankCardList().size() > 0) {
+			stringReturn += "BankCard" + "\n";
+			for (BankCard bankcard : this.getBankCardList()) {
+				stringReturn += "\t" + bankcard.toString() + "\n";
 
+			}
 		}
-
 		return stringReturn;
 	}
 

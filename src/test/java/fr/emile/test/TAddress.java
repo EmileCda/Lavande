@@ -8,6 +8,7 @@ import java.util.List;
 import fr.emile.ctrl.CrudCtrl;
 import fr.emile.ctrl.StandardCrudCtrl;
 import fr.emile.entity.Address;
+import fr.emile.entity.Costumer;
 import fr.emile.utils.Utils;
 
 public class TAddress {
@@ -15,11 +16,11 @@ public class TAddress {
 	public static void main(String[] args) {
 		Utils.trace("*************************** Begin ************************************\n");
 //		createOne();
-//		createMany();
+		createMany();
 //		readOne();
 //		readMany();
-		delete();
-		update();
+//		delete();
+//		update();
 
 		Utils.trace("*************************** end ************************************\n");
 
@@ -130,23 +131,26 @@ public class TAddress {
 
 	public static void createMany() {
 		Utils.trace("=========================== read many  ===========================\n");
-		int maxIndex = 10;
-		int maxIndexUser = 10;
+	
+		int maxIndexCostumer= 10;
 
 		Address address = new Address();
-//		User user = new User();
+		Costumer costumer = new Costumer ();
 		
 
 		CrudCtrl addressCtrl = new StandardCrudCtrl(new Address());
 
 		try {
 
-			for (int indexUser = 1; indexUser < maxIndexUser; indexUser++) {
-//				user = getUser(indexUser);
+			for (int indexCostumer = 1; indexCostumer < maxIndexCostumer; indexCostumer++) {
+
+				int maxIndex = Utils.randInt(1, 4);
+				costumer = getCostumer(indexCostumer);
+				
 				for (int index = 0; index < maxIndex; index++) {
 					address = DataTest.genAddress();
-//					address.setUser(user);
-//					user.addAddress(address);
+					address.setCostumer(costumer);
+					costumer.addAddress(address);
 					addressCtrl.create(address);
 					Utils.trace("%s\n", address);
 				}
@@ -194,6 +198,22 @@ public class TAddress {
 			Utils.trace("address null\n");
 
 	}
+	// -------------------------------------------------------------------------------------------------
+
+	public static Costumer getCostumer(int costumerId) {
+
+		Costumer costumer= new Costumer();
+		CrudCtrl costumerCtrl = new StandardCrudCtrl(new Costumer());
+		try {
+			costumer = (Costumer ) costumerCtrl.read(costumerId);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return costumer;
+
+	}
+	// -------------------------------------------------------------------------------------------------
+
 	// -------------------------------------------------------------------------------------------------
 
 //	public static User getUser(int userId) {

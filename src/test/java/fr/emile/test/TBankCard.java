@@ -5,9 +5,11 @@ import java.util.List;
 
 import fr.emile.ctrl.BankCardCtrl;
 import fr.emile.ctrl.CrudCtrl;
+import fr.emile.ctrl.StandardCrudCtrl;
 import fr.emile.ctrl.UserCtrl;
 import fr.emile.entity.Address;
 import fr.emile.entity.BankCard;
+import fr.emile.entity.Costumer;
 import fr.emile.entity.User;
 
 import fr.emile.utils.Utils;
@@ -16,8 +18,8 @@ public class TBankCard {
 
 	public static void main(String[] args) {
 		Utils.trace("*************************** Begin ************************************\n");
-		createOne();
-//		createMany();
+//		createOne();
+		createMany();
 //		readOne();
 //		readMany();
 //		update();
@@ -58,7 +60,7 @@ public class TBankCard {
 				Utils.trace("Before  %s\n", bankCard);
 
 				// -------------------------- update ----------------------
-				bankCard.setIsValid(true);
+				bankCard.setIsValid(!bankCard.getIsValid());
 				bankCardCtrl.update(bankCard);
 
 				bankCard = (BankCard) bankCardCtrl.read(bankCardId);
@@ -110,11 +112,11 @@ public class TBankCard {
 
 		BankCard bankCard = new BankCard();
 		BankCardCtrl bankCardCtrl = new BankCardCtrl();
-		User user = new User();
+		Costumer costumer = new Costumer ();
 
 		costumer = getCostumer(1);
 
-		bankCard = DataTest.genBankCard(user);
+		bankCard = DataTest.genBankCard(costumer);
 
 		bankCard.setCostumer(costumer);
 		costumer.addBankCard(bankCard );
@@ -125,7 +127,6 @@ public class TBankCard {
 			bankCardCtrl.create(bankCard);
 		} catch (Exception e) {
 			Utils.trace("catch create %s\n", e.toString());
-		} finally {
 
 		}
 
@@ -135,29 +136,28 @@ public class TBankCard {
 
 	public static void createMany() {
 		Utils.trace("=========================== create many  ===========================\n");
-//		int maxIndex = 3;
-		int maxIndexUser = 10;
+		int maxIndexCostumer= 10;
 
 		BankCard bankCard = new BankCard();
 		BankCardCtrl bankCardCtrl = new BankCardCtrl();
-		User user = new User();
-//		user = getUser(4);
+		Costumer costumer = new Costumer ();
 
 		try {
 
-			for (int indexUser = 1; indexUser < maxIndexUser; indexUser++) {
+			for (int indexCostumer = 1; indexCostumer < maxIndexCostumer; indexCostumer++) {
 
 				int maxIndex = Utils.randInt(1, 4);
-//				user = getUser(indexUser);
+				costumer = getCostumer(indexCostumer);
 
 				for (int index = 1; index < maxIndex; index++) {
 
-					bankCard = DataTest.genBankCardNoName();
-//					bankCard.setUser(user);
+					bankCard = DataTest.genBankCard(costumer);
+					bankCard.setCostumer(costumer);
 
-//					user.addBankCard(bankCard);
+					costumer.addBankCard(bankCard);
 					bankCardCtrl.create(bankCard);
-					Utils.trace("CB %s \n", bankCard);
+					if (bankCard != null) 
+						Utils.trace("CB %s \n", bankCard);
 					
 				}
 			}
@@ -208,6 +208,19 @@ public class TBankCard {
 	}
 //-------------------------------------------------------------------------------------------------	
 
+	public static Costumer getCostumer(int costumerId) {
+
+		Costumer costumer= new Costumer();
+		CrudCtrl costumerCtrl = new StandardCrudCtrl(new Costumer());
+		try {
+			costumer = (Costumer ) costumerCtrl.read(costumerId);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return costumer;
+
+	}
+//	// -------------------------------------------------------------------------------------------------
 	public static User getUser(int userId) {
 
 		User user = new User();
