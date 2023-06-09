@@ -16,7 +16,7 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import fr.emile.enums.Gender;
-
+import fr.emile.utils.Code;
 import fr.emile.utils.Encryption;
 import fr.emile.utils.Utils;
 import fr.emile.common.IConstant;
@@ -55,7 +55,8 @@ public class BankCard  implements IConstant, Serializable {
 
 //	@ManyToOne
 //	@JoinColumn(name = "costumer_id", nullable = false)
-//	private Costumer costumer;
+	@Transient
+	private Costumer costumer;
 
 	public BankCard() {
 		this(DEFAULT_ID, DEFAULT_BANK_CARD_NUMBER, DATE_NOW, DEFAULT_BANK_CARD_CRYPTO, true, false, null);
@@ -85,28 +86,6 @@ public class BankCard  implements IConstant, Serializable {
 		}
 	}
 
-	public void preWrite(){
-		try {
-			this.setCardNumberEncrypted(Encryption.encrypt(this.getCardNumber()));
-			this.setCryptoEncrypted(Encryption.encrypt(this.getCrypto()));
-		} catch (UnsupportedEncodingException e) {
-			Utils.trace("catch test encrypt" + e.toString());
-		}
-		
-		
-		this.setExpiryDateSql( Utils.toSqlDate(this.getExpiryDate()));
-	}
-
-	public void postRead(){
-		
-		
-		this.setCardNumber(Encryption.decrypt(this.getCardNumberEncrypted()));
-		this.setCrypto(Encryption.decrypt(this.getCryptoEncrypted()));
-		this.setExpiryDate( Utils.toSqlDate(this.getExpiryDateSql()));
-		
-		
-	}
-	
 
 	public int getId() {
 		return id;

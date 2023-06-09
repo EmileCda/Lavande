@@ -2,12 +2,13 @@ package fr.emile.ctrl;
 
 import fr.emile.common.IConstant;
 import fr.emile.entity.BankCard;
+import fr.emile.utils.Code;
 import fr.emile.utils.Utils;
 
 public class BankCardCtrl extends CrudCtrl implements IConstant {
 
-	public BankCardCtrl(Object currentObject) {
-		super(currentObject);
+	public BankCardCtrl() {
+		super(new BankCard());
 		// TODO Auto-generated constructor stub
 	}
 

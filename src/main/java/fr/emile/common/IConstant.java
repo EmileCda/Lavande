@@ -17,8 +17,12 @@ public interface IConstant {
 		public final int KEY_LENGTH = 256;
 		public final String DEFAULT_ALGORYTHM = "DES";
 		public final int DEFAULT_FUNCTION_CODE = 0;
+		public final int BC_KEY = 0;
+		public final int PASS_KEY = 1;
 
-	
+		public final Date DATE_NOW = new Date();
+
+		
 //	************************************* Below is obsolete;  for trash *******************************
 	// common to all class 
 	
@@ -27,7 +31,6 @@ public interface IConstant {
 	public final String DATE_FORMAT= "dd/MM/yyyy";
 	
 	public final Date DEFAULT_DATE = Utils.string2Date("01/01/1970", DATE_FORMAT);
-	public final Date DATE_NOW = new Date();
 	public final String DEFAULT_FIRSTNAME = "No-Firstname";
 	public final String DEFAULT_LASTNAME = "No-Lastname";
 	public final String DEFAULT_USER = DEFAULT_FIRSTNAME + " " + DEFAULT_LASTNAME;

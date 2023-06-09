@@ -4,9 +4,13 @@ import java.io.UnsupportedEncodingException;
 import java.security.InvalidKeyException;
 import java.security.Key;
 import java.security.NoSuchAlgorithmException;
+import java.util.Date;
+
 import javax.crypto.spec.SecretKeySpec;
 
+import fr.emile.common.IConstant;
 import fr.emile.ctrl.CrudCtrl;
+import fr.emile.ctrl.ParamCtrl;
 import fr.emile.ctrl.StandardCrudCtrl;
 import fr.emile.entity.Address;
 import fr.emile.entity.Param;
@@ -17,7 +21,7 @@ import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.KeyGenerator;
 import javax.crypto.NoSuchPaddingException;
 
-public class Code {
+public class Code implements IConstant {
 
 	private static Key key = null;
 
@@ -47,12 +51,14 @@ public class Code {
 	private static Key getKeyFromDB(int functionCode) {
 
 		Key keyReturn = null;
-		CrudCtrl myParamsCtrl = new StandardCrudCtrl(new Param());
+		Param param = null ;  
+		ParamCtrl paramCtrl = new ParamCtrl();
 		try {
-			Param param = myParamsCtrl.getParamsFunctionCode(functionCode);
+			
+			param = paramCtrl.getByFunctionCode(functionCode);
 			
 			if (param != null)
-				keyReturn = new SecretKeySpec(param.getBlobKey(), param.getAlgorythm());
+				keyReturn = new SecretKeySpec(param.getBlobValue(), param.getVarcharValue256());
 		} catch (Exception e) {
 			Utils.trace("catch getKeyFromDB(functionCode) ");
 			e.printStackTrace();
@@ -64,17 +70,18 @@ public class Code {
 	// -------------------------------------------------------------------------------------------------
 	private static void saveKeyToDB(Key key) {
 
-		IParamsDao myParamsDao = new ParamsDao();
+		ParamCtrl paramCtrl = new ParamCtrl();
 		try {
 
 			if (key != null) {
 				byte[] blobKey = key.getEncoded();
-				Params param = new Params(FUNCTION_KEY_DB, blobKey, KEY_LENGTH, ALGORITHM);
-				myParamsDao.addParams(param);
+				Param param = new Param(FUNCTION_KEY_DB, KEY_LENGTH, ALGORITHM,
+								"Encrytion bankCard and password",blobKey,DATE_NOW);
+				paramCtrl.create(param);
 			}
-
+			
 		} catch (Exception e) {
-			Utils.trace("catch getKeyFromDB(functionCode) ");
+			Utils.trace("catch getKeyFromDB(functionCode) \n");
 			e.printStackTrace();
 		}
 
@@ -84,14 +91,12 @@ public class Code {
 	private static void initKey() {
 		Code.setStaticKey(Code.getKeyFromDB(FUNCTION_KEY_DB));
 		if (Code.getStaticKey() == null) {
-			Utils.trace("Code.setStaticKey(Code.getKeyFromDB(FUNCTION_KEY_DB))== null");
+			Utils.trace("Code.setStaticKey(Code.getKeyFromDB(FUNCTION_KEY_DB))== null\n");
 			try {
 				Code.setStaticKey(generateKey(KEY_LENGTH, ALGORITHM));
 				Code.saveKeyToDB(Code.getStaticKey());
 			} catch (NoSuchAlgorithmException e) {
-				Utils.trace("catch initKey()");
-				Utils.trace(e.toString());
-				;
+				Utils.trace("catch initKey() %s\n",e.toString());
 			}
 		}
 

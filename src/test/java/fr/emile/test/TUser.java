@@ -4,6 +4,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import fr.emile.ctrl.CrudCtrl;
+import fr.emile.ctrl.StandardCrudCtrl;
+import fr.emile.ctrl.UserCtrl;
+import fr.emile.entity.Address;
+import fr.emile.entity.User;
+import fr.emile.enums.Profile;
 import fr.emile.utils.Utils;
 
 
@@ -12,14 +18,14 @@ public class TUser {
 
 	public static void main(String[] args) {
 		Utils.trace("*************************** Begin ************************************\n");
-		addArticlePanier();
+//		addArticlePanier();
 //		initUserTest();
 //		createOne();
 //		createMany();
 //		readOne(1);
 //		readMany();
 //		update();
-//		delete();
+		delete();
 
 		Utils.trace("*************************** end ************************************\n");
 
@@ -70,27 +76,11 @@ public class TUser {
 
 	// -------------------------------------------------------------------------------------------------
 	public static void update(User user) {
-		
-		User usrCheck ; 
 
-		IUserCtrl userCtrl = new UserCtrl();
+		UserCtrl userCtrl = new UserCtrl();
 		try {
-			usrCheck = userCtrl.getUserById(user.getId());
-			if (usrCheck == null)
-				Utils.trace("User null \n");
-			else {
-				Utils.trace("Before  %s\n", usrCheck);
-				userCtrl.updateUser(user);
-				user = userCtrl.getUserById(user.getId());
-				if (user != null)
-					Utils.trace("After %s\n", user);
-				else
-					Utils.trace("Address null\n");
-			}
-
-		} catch (
-
-		Exception e) {
+			userCtrl.update(user );
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -99,21 +89,21 @@ public class TUser {
 
 	// -------------------------------------------------------------------------------------------------
 	public static void update() {
-		Utils.trace("=========================== Update ===========================\n");
-		int userId = 5;
-		User user = null;
-		IUserCtrl userCtrl = new UserCtrl();
+		int userId = 1;
+		User usrCheck ; 
+
+		UserCtrl userCtrl = new UserCtrl();
 		try {
-			user = userCtrl.getUserById(userId);
-			if (user == null)
+			usrCheck = (User) userCtrl.read(userId);
+			if (usrCheck == null)
 				Utils.trace("User null \n");
 			else {
-				Utils.trace("Before  %s\n", user);
-				user.setFirstname("luulu");
-				userCtrl.updateUser(user);
-				user = userCtrl.getUserById(userId);
-				if (user != null)
-					Utils.trace("After %s\n", user);
+				Utils.trace("Before  %s\n", usrCheck);
+				usrCheck .setIsActif(false);
+				userCtrl.update(usrCheck );
+				usrCheck = (User) userCtrl.read(userId);
+				if (usrCheck != null)
+					Utils.trace("After %s\n", usrCheck);
 				else
 					Utils.trace("Address null\n");
 			}
@@ -124,7 +114,7 @@ public class TUser {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 	}
 
 	// -------------------------------------------------------------------------------------------------
@@ -137,16 +127,16 @@ public class TUser {
 	// -------------------------------------------------------------------------------------------------
 	public static void remove(int userId) {
 		User user = new User();
-		IUserCtrl userCtrl = new UserCtrl();
-		IUserDao userDao = new UserDao();
+		UserCtrl userCtrl = new UserCtrl();
+
 		try {
-			user = userCtrl.getUserById(userId);
+			user = (User) userCtrl.read(userId);
 			if (user == null)
 				Utils.trace("Error : l'user n'existe pas\n");
 			else {
-				userDao.deleteUser(user);
+				userCtrl.delete(user);
 
-				user = userCtrl.getUserById(userId);
+				user = (User) userCtrl.read(userId);
 
 				if (user != null)
 					Utils.trace("Error not remove\n");
@@ -167,10 +157,10 @@ public class TUser {
 		user = DataTest.genUser();
 		Utils.trace("%s\n", user);
 
-		IUserCtrl userCtrl = new UserCtrl();
+		UserCtrl userCtrl = new UserCtrl();
 
 		try {
-			userCtrl.addUser(user);
+			userCtrl.create(user);
 		} catch (Exception e) {
 			Utils.trace("catch create %s\n", e.toString());
 		} finally {
@@ -185,20 +175,16 @@ public class TUser {
 	public static void createMany() {
 		Utils.trace("=========================== read many  ===========================\n");
 		int maxIndex = 10;
-
 		User user = new User();
-		Utils.trace("%s\n", user);
-
-		IUserCtrl userCtrl = new UserCtrl();
-
+		UserCtrl userCtrl = new UserCtrl();
 		try {
 			for (int index = 0; index < maxIndex; index++) {
 				user = DataTest.genUser();
-				userCtrl.addUser(user);
+				userCtrl.create(user);
+				Utils.trace("%s\n", user);
 			}
 		} catch (Exception e) {
 			Utils.trace("catch create %s\n", e.toString());
-		} finally {
 
 		}
 	}
@@ -207,16 +193,16 @@ public class TUser {
 	public static void readMany() {
 		Utils.trace("=========================== read many  ===========================\n");
 
-		List<User> userList = new ArrayList<User>();
-		IUserCtrl userCtrl = new UserCtrl();
+		List<Object> userList = new ArrayList<Object>();
+		UserCtrl userCtrl = new UserCtrl();
 		try {
-			userList = userCtrl.getUsers();
+			userList = userCtrl.list();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		if ((userList.size() > 0) && (userList != null)) {
-			for (User user : userList) {
-				Utils.trace("%s\n", user);
+			for (Object object : userList) {
+				Utils.trace("%s\n", (User) object);
 			}
 		} else
 			Utils.trace("user null");
@@ -226,9 +212,9 @@ public class TUser {
 	public static User getUser(int userId) {
 
 		User user = new User();
-		IUserCtrl userCtrl = new UserCtrl();
+		UserCtrl userCtrl = new UserCtrl();
 		try {
-			user = userCtrl.getUserById(userId);
+			user = (User) userCtrl.read(userId);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -241,9 +227,9 @@ public class TUser {
 	public static User getUser(String email) {
 
 		User user = new User();
-		IUserCtrl userCtrl = new UserCtrl();
+		UserCtrl userCtrl = new UserCtrl();
 		try {
-			user = userCtrl.getUserByEmail(email);
+			user = (User) userCtrl.read(email);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -277,60 +263,60 @@ public class TUser {
 
 	}
 // -------------------------------------------------------------------------------------------------
-		public static void addArticlePanier() {
-			Utils.trace("%s\n", "ici");
-			User user = new User();
-			Utils.trace("%s\n",user);
-			Article article = new Article();
-
-			for (int index = 10; index < 20; index ++) {
-				user = getUser(index);
-				if (user != null ) break; 
-				
-			}
-			
-			Utils.trace("%s\n",user);
-		
-			ArticlePanier  articlePanier;
-			for (int index= 10 ; index < 20 ; index++) {
-				
-				article= getArticle(index);
-				Utils.trace("%s\n",article);
-				
-				articlePanier = new ArticlePanier(100+index, article);
-				
-				user.addCartItem(articlePanier);
-				
-			}
-			Utils.trace("%s\n",user);
-			Utils.trace("%d\n",user.getCartItemList().size());
-			
-			for (ArticlePanier aPanier : user.getCartItemList()) {
-				Utils.trace("%s\n",
-						aPanier.getArticle().getName());
-				
-				Utils.trace("quatity %s\n",
-						aPanier.getQuantity());
-				
-				Utils.trace("%s \n",
-						aPanier.getUser().getEmail());
-			}
-			
-		}
-
-
-		
-//-------------------------------------------------------------------------------------------------		
-		public static Article getArticle(int ArticleId) {
-			Article article = new Article();
-			IArticleDao articleDao = new ArticleDao();
-			try {
-				article = articleDao.getArticleById(ArticleId);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			return article ; 
-
-		}
+//		public static void addArticlePanier() {
+//			Utils.trace("%s\n", "ici");
+//			User user = new User();
+//			Utils.trace("%s\n",user);
+//			Article article = new Article();
+//
+//			for (int index = 10; index < 20; index ++) {
+//				user = getUser(index);
+//				if (user != null ) break; 
+//				
+//			}
+//			
+//			Utils.trace("%s\n",user);
+//		
+//			ArticlePanier  articlePanier;
+//			for (int index= 10 ; index < 20 ; index++) {
+//				
+//				article= getArticle(index);
+//				Utils.trace("%s\n",article);
+//				
+//				articlePanier = new ArticlePanier(100+index, article);
+//				
+//				user.addCartItem(articlePanier);
+//				
+//			}
+//			Utils.trace("%s\n",user);
+//			Utils.trace("%d\n",user.getCartItemList().size());
+//			
+//			for (ArticlePanier aPanier : user.getCartItemList()) {
+//				Utils.trace("%s\n",
+//						aPanier.getArticle().getName());
+//				
+//				Utils.trace("quatity %s\n",
+//						aPanier.getQuantity());
+//				
+//				Utils.trace("%s \n",
+//						aPanier.getUser().getEmail());
+//			}
+//			
+//		}
+//
+//
+//		
+////-------------------------------------------------------------------------------------------------		
+//		public static Article getArticle(int ArticleId) {
+//			Article article = new Article();
+//			IArticleDao articleDao = new ArticleDao();
+//			try {
+//				article = articleDao.getArticleById(ArticleId);
+//			} catch (Exception e) {
+//				e.printStackTrace();
+//			}
+//			return article ; 
+//
+//		}
 
 }

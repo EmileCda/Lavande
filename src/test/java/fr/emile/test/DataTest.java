@@ -141,43 +141,38 @@ public final class DataTest implements IConstant {
 		return myBankCard;
 	}
 
-//	// ---------------------------------------------------------------------------------------------------
-//	public static CartePaiement genCartePaiement(User user) {
-//
-//		return DataTest.genBankCard( user); 
-//	}
-//		
-//		//		// ---------------------------------------------------------------------------------------------------
-//		public static CartePaiement genBankCard(User user) {
+// ---------------------------------------------------------------------------------------------------
+//		public static BankCard genBankCard(User user) {
 //
 //		int nbday = Utils.randInt(1, 30) * 30;
 //		String crypto = String.format("%03d", Utils.randInt(0, 999));
 //
-//		return new CartePaiement(DataTest.bankCardNumber(), Utils.addDate(DATE_NOW, nbday), crypto, user);
+//		return new BankCard(DataTest.bankCardNumber(), Utils.addDate(DATE_NOW, nbday), crypto, user);
 //	}
 //
 //
 //		// ---------------------------------------------------------------------------------------------------
-//		public static User genUserAfpha(int id) {
-//
-//			Date startDate = Utils.string2Date("01/01/1900", "dd/MM/yyyy");
-//			Date endDate = Utils.string2Date("01/01/2023", "dd/MM/yyyy");
-//			Gender gender = DataTest.gender();
-//			String firstname = DataTest.firstname(gender);
-//			String lastname = DataTest.lastname();
-//
-//			return new 
-//			User(id, DataTest.profile(),  DataTest.email(firstname, lastname), DataTest.pass(firstname),true,
-//					gender,firstname,lastname,DataTest.birthDate(),DataTest.phone());
-//			 
-//		}
+		public static User genUserAfpha(int id) {
+
+			Date startDate = Utils.string2Date("01/01/1900", "dd/MM/yyyy");
+			Date endDate = Utils.string2Date("01/01/2023", "dd/MM/yyyy");
+			Gender gender = DataTest.gender();
+			String firstname = DataTest.firstname(gender);
+			String lastname = DataTest.lastname();
+
+			return new 
+			User(id, DataTest.profile(),  DataTest.email(firstname, lastname), DataTest.pass(firstname),true);
+		
+//			Profile profile, String email, String password, Boolean isActif)
+			
+		}
 //		// ---------------------------------------------------------------------------------------------------
-//		public static User genUser() {
-//			
-//			return  genUserAfpha(DEFAULT_ID) ;
-//
-//			 
-//		}
+		public static User genUser() {
+			
+			return  genUserAfpha(DEFAULT_ID) ;
+
+			 
+		}
 
 //	// ---------------------------------------------------------------------------------------------------
 //	public static Costumer genCostumer() {

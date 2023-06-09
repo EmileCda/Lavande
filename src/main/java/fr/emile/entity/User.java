@@ -1,7 +1,6 @@
 package fr.emile.entity;
 
 import java.io.Serializable;
-import java.io.UnsupportedEncodingException;
 
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
@@ -12,15 +11,12 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
-import javax.persistence.MappedSuperclass;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import fr.emile.common.IConstant;
 import fr.emile.enums.Profile;
 
-import fr.emile.utils.Encryption;
-import fr.emile.utils.Utils;
 
 
 @Entity
@@ -66,23 +62,23 @@ public class User implements IConstant,Serializable {
 	}
 
 
-	public void preWrite(){
-		try {
-			this.setPasswordEncrpted(Encryption.encrypt(this.getPassword()));
-		} catch (UnsupportedEncodingException e) {
-			Utils.trace("catch test encrypt" + e.toString());
-		}
-	}
-
-	public void postRead(){
-		
-		
-		this.setPassword(Encryption.decrypt(this.getPasswordEncrpted()));
-		
-		
-	}
-	
-	
+//	public void preWrite(){
+//		try {
+//			this.setPasswordEncrpted(Code.encrypt(this.getPassword()));
+//		} catch (UnsupportedEncodingException e) {
+//			Utils.trace("catch test encrypt" + e.toString());
+//		}
+//	}
+//
+//	public void postRead(){
+//		
+//		
+//		this.setPassword(Encryption.decrypt(this.getPasswordEncrpted()));
+//		
+//		
+//	}
+//	
+//	
 	public int getId() {
 		return id;
 	}

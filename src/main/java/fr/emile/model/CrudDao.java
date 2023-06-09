@@ -61,7 +61,7 @@ public class CrudDao extends UtilDao  {
 
 		} catch (Exception e) {
 
-			Utils.trace("catch update " + e.toString());
+			Utils.trace("catch update %s\n", e.toString());
 			rollBack();
 
 		}

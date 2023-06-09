@@ -3,6 +3,7 @@ package fr.emile.test;
 import java.util.ArrayList;
 import java.util.List;
 
+import fr.emile.ctrl.BankCardCtrl;
 import fr.emile.ctrl.CrudCtrl;
 import fr.emile.entity.Address;
 import fr.emile.entity.BankCard;
@@ -44,24 +45,24 @@ public class TBankCard {
 //-------------------------------------------------------------------------------------------------
 	public static void update() {
 		Utils.trace("=========================== Update ===========================\n");
-		int cartePaiementId = 3;
-		BankCard cartePaiement = null;
+		int bankCardId = 3;
+		BankCard bankCard = null;
 
-		BankCardCtrl cartePaiementCtrl = new BankCardCtrl();
+		BankCardCtrl bankCardCtrl = new BankCardCtrl();
 		try {
-			cartePaiement = cartePaiementCtrl.getBankCardById(cartePaiementId);
-			if (cartePaiement == null)
+			bankCard = (BankCard) bankCardCtrl.read(bankCardId);
+			if (bankCard == null)
 				Utils.trace("cartePaiement null\n");
 			else {
-				Utils.trace("Before  %s\n", cartePaiement);
+				Utils.trace("Before  %s\n", bankCard);
 
 				// -------------------------- update ----------------------
-				cartePaiement.setIsValid(true);
-				cartePaiementCtrl.updateBankCard(cartePaiement);
+				bankCard.setIsValid(true);
+				bankCardCtrl.update(bankCard);
 
-				cartePaiement = cartePaiementCtrl.getBankCardById(cartePaiementId);
-				if (cartePaiement != null)
-					Utils.trace("After %s\n", cartePaiement);
+				bankCard = (BankCard) bankCardCtrl.read(bankCardId);
+				if (bankCard != null)
+					Utils.trace("After %s\n", bankCard);
 				else
 					Utils.trace("cartePaiement null\n");
 			}
@@ -77,19 +78,19 @@ public class TBankCard {
 //-------------------------------------------------------------------------------------------------
 	public static void delete() {
 		Utils.trace("=========================== Delete ===========================\n");
-		int addressId = 1;
-		BankCard cartePaiement = new BankCard();
-		IBankCardDao cartePaiementDao = new BankCardDao();
+		int bankCardId = 1;
+		BankCard bankCard = new BankCard();
+		BankCardCtrl bankCardCtrl = new BankCardCtrl();
 		try {
-			cartePaiement = cartePaiementDao.getBankCardById(addressId);
-			if (cartePaiement == null)
+			bankCard = (BankCard) bankCardCtrl.read(bankCardId);
+			if (bankCard== null)
 				Utils.trace("Error : l'cartePaiement n'existe pas\n");
 			else {
-				cartePaiementDao.deleteBankCard(cartePaiement);
+				bankCardCtrl .delete(bankCard);
 
-				cartePaiement = cartePaiementDao.getBankCardById(addressId);
+				bankCard = (BankCard) bankCardCtrl.read(bankCardId);
 
-				if (cartePaiement != null)
+				if (bankCard != null)
 					Utils.trace("Error not remove\n");
 				else
 					Utils.trace("remove ok\n");
@@ -107,18 +108,18 @@ public class TBankCard {
 
 
 		BankCard bankCard = new BankCard();
-//		User user = new User();
+		BankCardCtrl bankCardCtrl = new BankCardCtrl();
+		User user = new User();
 
 //		user = getUser(1);
 
 //		cartePaiement = DataTest.genBankCardt(user);
-		bankCard = DataTest.genBankCardNoName();
+		bankCard = DataTest.genBankCard(user);
 
 //		cartePaiement.setUser(user);
 //		user.addBankCard(cartePaiement);
 
 		Utils.trace("CB %s \n", bankCard);
-		CrudCtrl bankCardCtrl = new CrudCtrl(new BankCard());
 
 		try {
 			bankCardCtrl.create(bankCard);
@@ -137,28 +138,27 @@ public class TBankCard {
 //		int maxIndex = 3;
 		int maxIndexUser = 10;
 
-		BankCard cartePaiement = new BankCard();
-
-		IBankCardCtrl cartePaiementCtrl = new BankCardCtrl();
+		BankCard bankCard = new BankCard();
+		BankCardCtrl bankCardCtrl = new BankCardCtrl();
 		User user = new User();
-		user = getUser(4);
+//		user = getUser(4);
 
 		try {
 
 			for (int indexUser = 1; indexUser < maxIndexUser; indexUser++) {
 
 				int maxIndex = Utils.randInt(1, 4);
-				user = getUser(indexUser);
+//				user = getUser(indexUser);
 
 				for (int index = 1; index < maxIndex; index++) {
 
-					cartePaiement = DataTest.genBankCard(user);
-					cartePaiement.setUser(user);
+					bankCard = DataTest.genBankCardNoName();
+//					bankCard.setUser(user);
 
-					user.addBankCard(cartePaiement);
-					cartePaiementCtrl.addBankCard(cartePaiement);
-					Utils.trace("CB %s \n", cartePaiement);
-
+//					user.addBankCard(bankCard);
+					bankCardCtrl.create(bankCard);
+					Utils.trace("CB %s \n", bankCard);
+					
 				}
 			}
 		} catch (Exception e) {
@@ -172,38 +172,38 @@ public class TBankCard {
 	public static void readMany() {
 		Utils.trace("=========================== read many  ===========================\n");
 
-		List<BankCard> cartePaiementList = new ArrayList<BankCard>();
+		List<Object> bankCardList = new ArrayList<Object>();
 
-		IBankCardCtrl cartePaiementCtrl = new BankCardCtrl();
+		BankCardCtrl bankCardCtrl = new BankCardCtrl();
 		try {
-			cartePaiementList = cartePaiementCtrl.getBankCards();
+			bankCardList = bankCardCtrl.list();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		if ((cartePaiementList.size() > 0) && (cartePaiementList != null)) {
-			for (BankCard cartePaiement : cartePaiementList) {
-				Utils.trace("%s\n", cartePaiement);
+		if ((bankCardList.size() > 0) && (bankCardList != null)) {
+			for (Object object : bankCardList) {
+				Utils.trace("%s\n", ( BankCard)object );
 			}
 		} else
-			Utils.trace("address null");
+			Utils.trace("bankCardList");
 	}
 
 //-------------------------------------------------------------------------------------------------	
 	public static void readOne() {
 		Utils.trace("=========================== read One  ===========================\n");
-		int cartePaiementId = 14;
-		BankCard cartePaiement = new BankCard();
+		int bankCardId  = 14;
+		BankCard bankCard = new BankCard();
 
-		IBankCardCtrl cartePaiementCtrl = new BankCardCtrl();
+		BankCardCtrl bankCardCtrl = new BankCardCtrl();
 		try {
-			cartePaiement = cartePaiementCtrl.getBankCardById(cartePaiementId);
+			bankCard = (BankCard) bankCardCtrl.read(bankCardId);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		if (cartePaiement != null)
-			Utils.trace("%s\n", cartePaiement);
+		if (bankCard != null)
+			Utils.trace("%s\n", bankCard);
 		else
-			Utils.trace("cartePaiement null\n");
+			Utils.trace("bankCard null\n");
 
 	}
 //-------------------------------------------------------------------------------------------------	
