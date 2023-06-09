@@ -1,4 +1,4 @@
-package fr.lotus.entity;
+package fr.emile.entity;
 
 import java.io.Serializable;
 import java.util.Arrays;
@@ -10,19 +10,20 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
-import fr.lotus.common.IConstant;
-import fr.lotus.model.implement.ClassDao;
+import fr.emile.common.IConstant;
+
 
 @Entity
 @Table(name = "sys_param")
-public class Param extends ClassDao  implements IConstant, Serializable {
+public class Param implements IConstant, Serializable {
 
 	private static final long serialVersionUID = 1L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
-	@Column(name = "function_key")
+	@Column(name = "function_key",unique = true,nullable = false)
 	private int functionKey;
 	@Column(name = "int_value")
 	private int intValue;
@@ -32,8 +33,11 @@ public class Param extends ClassDao  implements IConstant, Serializable {
 	private String varcharValue4096;
 	@Column(name = "blob_value")
 	private byte[] blobValue;
+	@Transient
+	private Date datetimeValueJava;
+
 	@Column(name = "datetime_value")
-	private Date datetimeValue;
+	private java.sql.Date datetimeValueSql;
 
 	public Param() {
 		this(DEFAULT_ID, DEFAULT_FUNCTION_KEY, DEFAULT_INT,
@@ -56,19 +60,10 @@ public class Param extends ClassDao  implements IConstant, Serializable {
 		this.setVarcharValue256 ( varcharValue256);
 		this.setVarcharValue4096 ( varcharValue4096);
 		this.setBlobValue ( blobValue);
-		this.setDatetimeValue ( datetimeValue);
+		this.setDatetimeValueJava(datetimeValue);
 	}
 
 	
-	public void preWrite(){
-		
-	}
-
-	public void postRead(){
-		
-		
-		
-	}
 
 	public int getId() {
 		return id;
@@ -118,21 +113,29 @@ public class Param extends ClassDao  implements IConstant, Serializable {
 		this.blobValue = blobValue;
 	}
 
-	public Date getDatetimeValue() {
-		return datetimeValue;
+
+	public Date getDatetimeValueJava() {
+		return datetimeValueJava;
 	}
 
-	public void setDatetimeValue(Date datetimeValue) {
-		this.datetimeValue = datetimeValue;
+	public void setDatetimeValueJava(Date datetimeValueJava) {
+		this.datetimeValueJava = datetimeValueJava;
 	}
 
+	public java.sql.Date  getDatetimeValueSql() {
+		return datetimeValueSql;
+	}
+
+	public void setDatetimeValueSql(java.sql.Date  datetimeValueSql) {
+		this.datetimeValueSql = datetimeValueSql;
+	}
+	
 	@Override
 	public String toString() {
 		return String.format(
-				"Id[%d] key=%d, int%d, s-string[%s] B-String[%s], blob[%s], %s",
+				"Id[%d] key=%d, int:%d, s-string[%s] B-String[%s], blob[%s], %s",
 				getId(), getFunctionKey(), getIntValue(), getVarcharValue256(), getVarcharValue4096(),
-				Arrays.toString(getBlobValue()), getDatetimeValue());
+				Arrays.toString(getBlobValue()), getDatetimeValueJava());
 	}
-	
 
 }

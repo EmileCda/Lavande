@@ -1,25 +1,25 @@
-package fr.ecommerce.test;
+package fr.emile.test;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import fr.emile.common.IConstant;
+import fr.emile.ctrl.ParamCtrl;
+import fr.emile.entity.Param;
+import fr.emile.utils.Utils;
 
-import fr.ecommerce.model.dao.implement.ParamsDao;
-import fr.ecommerce.model.dao.interfaces.IParamsDao;
-import fr.ecommerce.utils.DataTest;
-import fr.ecommerce.utils.Params;
-import fr.ecommerce.utils.Utils;
 
-public class TParams {
+
+public class TParam implements IConstant{
 
 	public static void main(String[] args) {
 		Utils.trace("*************************** Begin ************************************\n");
-		createOne();
+//		createOne();
 //		createMany();
-		readOne();
+//		readOne();
 //		readMany();
 //		update();
-//		delete();
+		delete();
 
 		Utils.trace("*************************** end ************************************\n");
 
@@ -44,24 +44,24 @@ public class TParams {
 //-------------------------------------------------------------------------------------------------
 	public static void update() {
 		Utils.trace("=========================== Update ===========================\n");
-		int paramsId = 3;
-		Params params = null ;  
+		int codeFunction = 3;
+		Param param = null ;  
 		
-		IParamsDao paramsDao = new ParamsDao();
+		ParamCtrl paramCtrl = new ParamCtrl();
 		try {
-			params = paramsDao.getParamsById(paramsId);
-			if (params == null )
-				Utils.trace("Address null\n");
+			param = paramCtrl.getByFunctionCode(codeFunction);
+			if (param == null )
+				Utils.trace("param null\n");
 			else {
-				Utils.trace("Before  %s\n", params);
+				Utils.trace("param  %s\n", param);
 
 				// -------------------------- update ----------------------
-				params.setFunctionCode(12345);
-				paramsDao.updateParams(params);
+				param.setIntValue(10000);
+				paramCtrl.update(param);
 	
-				params = paramsDao.getParamsById(paramsId);
-				if (params != null )
-					Utils.trace("After %s\n", params);
+				param = paramCtrl.getByFunctionCode(codeFunction);
+				if (param != null )
+					Utils.trace("After %s\n", param);
 				else
 					Utils.trace("Address null\n");
 			}
@@ -77,19 +77,19 @@ public class TParams {
 //-------------------------------------------------------------------------------------------------
 	public static void delete() {
 		Utils.trace("=========================== Delete ===========================\n");
-		int addressId = 3;
-		Params params = new Params();
-		IParamsDao paramsDao = new ParamsDao();
+		int codeFunction = 3;
+		Param param = new Param();
+		ParamCtrl paramCtrl = new ParamCtrl();
 		try {
-			params = paramsDao.getParamsById(addressId);
-			if (params == null) 
-				Utils.trace("Error : l'params n'existe pas\n");
+			param = paramCtrl.getByFunctionCode(codeFunction);
+			if (param == null) 
+				Utils.trace("Error : l'param n'existe pas\n");
 			else {
-				paramsDao.deleteParams(params );
+				paramCtrl.delete(param );
 
-				params = paramsDao.getParamsById(addressId);
+				param = paramCtrl.getByFunctionCode(codeFunction);
 
-				if (params != null)
+				if (param != null)
 					Utils.trace("Error not remove\n");
 				else
 					Utils.trace("remove ok\n");
@@ -104,42 +104,35 @@ public class TParams {
 
 	public static void createOne() {
 //
-		Params params = new Params();
-		params = DataTest.genParams();
-		Utils.trace("%s\n", params);
+		Param param = new Param();
+		param = DataTest.genParam(FUNCTION_KEY_DB);
+		Utils.trace("%s\n", param);
 
 
-		IParamsDao paramsDao = new ParamsDao();
+		ParamCtrl paramCtrl = new ParamCtrl();
 
 		try {
-			paramsDao.addParams(params);
+			paramCtrl.create(param);
 		} catch (Exception e) {
 			Utils.trace("catch create %s\n", e.toString());
 		} finally {
 
 		}
 
-		Utils.trace("%s\n", params);
+		Utils.trace("%s\n", param);
 	}
 	//-------------------------------------------------------------------------------------------------	
 
 	public static void createMany() {
 		Utils.trace("=========================== read many  ===========================\n");
 		int maxIndex = 10;
-
-		Params params = new Params();
-		Utils.trace("%s\n", params);
-
-//address.setCostumer(costumer);
-//costumer.addAddress(address);
-//Utils.trace(costumer.getAddressList().get(0).toString());
-
-		IParamsDao paramsDao = new ParamsDao();
+		Param param = new Param();
+		ParamCtrl paramCtrl = new ParamCtrl();
 
 		try {
 			for (int index = 0; index < maxIndex; index++) {
-				params = DataTest.genParams();
-				paramsDao.addParams(params);
+				param = DataTest.genParam(index);
+				paramCtrl.create(param);
 			}
 		} catch (Exception e) {
 			Utils.trace("catch create %s\n", e.toString());
@@ -151,16 +144,16 @@ public class TParams {
 	public static void readMany() {
 		Utils.trace("=========================== read many  ===========================\n");
 
-		List<Params> paramsList = new ArrayList<Params>() ;
-		IParamsDao paramsDao = new ParamsDao();
+		List<Object> paramList = new ArrayList<Object>() ;
+		ParamCtrl paramCtrl = new ParamCtrl();
 		try {
-			paramsList = paramsDao.getParamss();
+			paramList = paramCtrl.list();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		if ((paramsList.size() >0  ) && (paramsList != null)) {
-			for (Params params : paramsList) {
-				Utils.trace("%s\n",params); 
+		if ((paramList.size() >0  ) && (paramList != null)) {
+			for (Object object : paramList) {
+				Utils.trace("%s\n",(Param) object ); 
 			}
 		}
 		else
@@ -169,16 +162,15 @@ public class TParams {
 //-------------------------------------------------------------------------------------------------	
 	public static void readOne() {
 		Utils.trace("=========================== read One  ===========================\n");
-		int addressId = 6;
-		Params params = new Params() ;
-		IParamsDao paramsDao = new ParamsDao();
+		Param param = new Param() ;
+		ParamCtrl paramCtrl = new ParamCtrl();
 		try {
-			params = paramsDao.getParamsById(addressId);
+			param = paramCtrl.getByFunctionCode(FUNCTION_KEY_DB);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		if (params != null )
-			Utils.trace("%s\n",params); 
+		if (param != null )
+			Utils.trace("%s\n",param); 
 		else 
 			Utils.trace("address null\n");
 		

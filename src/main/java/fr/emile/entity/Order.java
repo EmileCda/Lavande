@@ -1,4 +1,4 @@
-package fr.lotus.entity;
+package fr.emile.entity;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -19,14 +19,13 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
-import fr.lotus.common.IConstant;
-import fr.lotus.model.implement.ClassDao;
-import fr.lotus.utils.Utils;
+import fr.emile.common.IConstant;
+import fr.emile.utils.Utils;
 
 
 @Entity
 @Table(name = "costumer_order")
-public class Order extends ClassDao implements IConstant, Serializable {
+public class Order implements IConstant, Serializable {
 	
 	
 	private static final long serialVersionUID = 1L;

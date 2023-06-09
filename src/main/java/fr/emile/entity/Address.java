@@ -1,4 +1,4 @@
-package fr.lotus.entity;
+package fr.emile.entity;
 
 import java.io.Serializable;
 
@@ -11,13 +11,13 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import fr.lotus.common.IConstant;
-import fr.lotus.model.implement.ClassDao;
+import fr.emile.common.IConstant;
+
 
 
 @Entity
 @Table(name = "address")
-public final class Address extends ClassDao implements IConstant, Serializable {
+public  class Address implements IConstant, Serializable {
 
 	private static final long serialVersionUID = 1L;
 	
@@ -36,9 +36,9 @@ public final class Address extends ClassDao implements IConstant, Serializable {
 	@Column(name = "is_valide")
 	private Boolean isValide;
 
-	@ManyToOne
-	@JoinColumn(name = "costumer_id", nullable = false)
-	private Costumer costumer;
+//	@ManyToOne
+//	@JoinColumn(name = "costumer_id", nullable = false)
+//	private Costumer costumer;
 	
 	
 	public Address() {

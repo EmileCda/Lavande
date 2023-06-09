@@ -1,4 +1,4 @@
-package fr.lotus.utils;
+package fr.emile.utils;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;

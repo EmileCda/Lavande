@@ -1,8 +1,8 @@
-package fr.lotus.model.interfaces;
+package fr.model.interfaces;
 
 import java.util.List;
 
-import fr.lotus.model.implement.ClassDao;
+
 
 public interface ICrudDao {
 	

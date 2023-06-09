@@ -1,21 +1,12 @@
-package fr.ecommerce.test;
+package fr.emile.test;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import fr.ecommerce.Ctrl.implement.UserCtrl;
-import fr.ecommerce.Ctrl.interfaces.IUserCtrl;
-import fr.ecommerce.entity.Article;
-import fr.ecommerce.entity.ArticlePanier;
-import fr.ecommerce.entity.User;
-import fr.ecommerce.enums.Profile;
-import fr.ecommerce.model.dao.implement.ArticleDao;
-import fr.ecommerce.model.dao.implement.UserDao;
-import fr.ecommerce.model.dao.interfaces.IArticleDao;
-import fr.ecommerce.model.dao.interfaces.IUserDao;
-import fr.ecommerce.utils.DataTest;
-import fr.ecommerce.utils.Utils;
+import fr.emile.utils.Utils;
+
+
 
 public class TUser {
 

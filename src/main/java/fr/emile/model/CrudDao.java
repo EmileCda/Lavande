@@ -1,11 +1,10 @@
-package fr.lotus.model.implement;
+package fr.emile.model;
 
 import java.util.List;
 import org.hibernate.query.Query;
-import fr.lotus.model.interfaces.ICrudDao;
-import fr.lotus.utils.Utils;
+import fr.emile.utils.Utils;
 
-public class CrudDao extends UtilDao implements ICrudDao {
+public class CrudDao extends UtilDao  {
 
 	private Object currentObject;
 
@@ -15,47 +14,37 @@ public class CrudDao extends UtilDao implements ICrudDao {
 	}
 
 //-------------------------------------------------------------------------------------------------
-	@Override
-	public ClassDao create(ClassDao myDao) throws Exception {
+	public Object create(Object myObject) throws Exception {
 		try {
 			beginTransaction();
-			myDao.preWrite();
-			this.getSession().save(myDao);
+			this.getSession().save(myObject);
 			commit();
 		} catch (Exception e) {
 			Utils.trace("catch create " + e.toString());
 			rollBack();
 		}
-		return myDao;
+		return myObject;
 	}
 //-------------------------------------------------------------------------------------------------
-	@Override
-	public ClassDao read(int id) throws Exception {
-		ClassDao myDao = null;
+	public Object read(int id) throws Exception {
+		Object myObject = null;
 		try {
-			myDao = (ClassDao) this.getSession().find(this.getCurrentObject().getClass(), id);
-			if (myDao != null)
-				myDao.postRead();
+			myObject = (Object) this.getSession().find(this.getCurrentObject().getClass(), id);
 		} catch (Exception e) {
 			Utils.trace("catch Read " + e.toString());
 		}
-		return myDao;
+		return myObject;
 	}
 
 //-------------------------------------------------------------------------------------------------
-	@Override
-	public List<ClassDao> read() throws Exception {
-		List<ClassDao> objectList = null;
+	public List<Object> list() throws Exception {
+		List<Object> objectList = null;
 		try {
 			String className = this.getCurrentObject().getClass().getSimpleName();
 			String querryString = "from " + className;
 			@SuppressWarnings("unchecked")
-			Query<ClassDao> myQuery = this.getSession().createQuery(querryString);
+			Query<Object> myQuery = this.getSession().createQuery(querryString);
 			objectList = myQuery.list();
-			for (ClassDao oneDao : objectList) {
-				if (oneDao != null)
-					oneDao.postRead();
-			}
 		} catch (Exception e) {
 			Utils.trace("catch Read " + e.toString());
 		}
@@ -63,13 +52,11 @@ public class CrudDao extends UtilDao implements ICrudDao {
 	}
 
 //-------------------------------------------------------------------------------------------------
-	@Override
-	public void update(ClassDao myDao) throws Exception {
+	public int update(Object myObject) throws Exception {
 		try {
 			beginTransaction();
 
-			myDao.preWrite();
-			this.getSession().update(myDao);
+			this.getSession().update(myObject);
 			commit();
 
 		} catch (Exception e) {
@@ -78,15 +65,15 @@ public class CrudDao extends UtilDao implements ICrudDao {
 			rollBack();
 
 		}
+		return 0 ; 
 	}
 
 //-------------------------------------------------------------------------------------------------
-	@Override
-	public void delete(ClassDao myDao) throws Exception {
+	public int delete(Object myObject) throws Exception {
 		try {
 			beginTransaction();
 
-			this.getSession().remove(myDao);
+			this.getSession().remove(myObject);
 			commit();
 
 		} catch (Exception e) {
@@ -95,6 +82,7 @@ public class CrudDao extends UtilDao implements ICrudDao {
 			rollBack();
 
 		}
+		return 0 ; 
 	}
 
 //-------------------------------------------------------------------------------------------------
@@ -106,6 +94,8 @@ public class CrudDao extends UtilDao implements ICrudDao {
 	public void setCurrentObject(Object currentObject) {
 		this.currentObject = currentObject;
 	}
+
+	
 
 //-------------------------------------------------------------------------------------------------
 

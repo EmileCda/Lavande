@@ -1,4 +1,4 @@
-package fr.lotus.entity;
+package fr.emile.entity;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -17,8 +17,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
-import fr.lotus.common.IConstant;
-import fr.lotus.model.implement.ClassDao;
+import fr.emile.common.IConstant;
+import fr.emile.model.implement.ClassDao;
 
 @Entity
 @Table(name = "item")

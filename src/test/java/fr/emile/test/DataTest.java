@@ -1,4 +1,4 @@
-package fr.lotus.utils;
+package fr.emile.test;
 
 import java.io.UnsupportedEncodingException;
 import java.time.Duration;
@@ -10,26 +10,14 @@ import java.util.List;
 import java.util.ResourceBundle;
 import java.util.concurrent.TimeUnit;
 
-import fr.lotus.common.IConstant;
-import fr.lotus.entity.Address;
-import fr.lotus.entity.BankCard;
-import fr.lotus.entity.Category;
-import fr.lotus.entity.Comment;
-import fr.lotus.entity.Costumer;
-import fr.lotus.entity.Item;
-import fr.lotus.entity.Order;
-import fr.lotus.entity.Param;
-//import fr.jasmin.entity.Address;
-//import fr.jasmin.entity.BankCard;
-//import fr.jasmin.entity.Comment;
-//import fr.jasmin.entity.Item;
-//import fr.jasmin.entity.Order;
-//import fr.jasmin.entity.User;
-//import fr.jasmin.entity.Category;
-import fr.lotus.entity.User;
-import fr.lotus.enums.Gender;
-import fr.lotus.enums.Profile;
-import fr.lotus.utils.Utils;
+import fr.emile.common.IConstant;
+import fr.emile.entity.Address;
+import fr.emile.entity.BankCard;
+import fr.emile.entity.Param;
+import fr.emile.entity.User;
+import fr.emile.enums.Gender;
+import fr.emile.enums.Profile;
+import fr.emile.utils.Utils;
 
 public final class DataTest implements IConstant {
 
@@ -48,100 +36,162 @@ public final class DataTest implements IConstant {
 	private static List<String> itemDescriptionList;
 
 	// ---------------------------------------------------------------------------------------------------
-	public static Category genCategory() {
+		public static Param genParam(int codeFunction)  {
+			
+			String firstname = DataTest.firstname();
+			byte[] code = null ;
+			try {
+				code = firstname.getBytes(CHARSET);
+			} catch (UnsupportedEncodingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+//			public Param(int  functionKey, int intValue, String varcharValue256, String varcharValue4096,
+//					byte[] blobValue, Date datetimeValue) {		
+			return new Param(			
+					codeFunction,
+					Utils.randInt(1, 100),
+					firstname, 
+					firstname+" "+firstname+" "+firstname+" "+firstname+" "+firstname+" ",
+					code,
+					DATE_NOW );
 
-		return new Category(
-				DataTest.categoryName(), 
-				Utils.randInt(5, 90), 
-				Utils.randInt(0, 1) > 0 ? true : false,
-				DataTest.picUrl());
 
-	}
-
+		}
+		// ---------------------------------------------------------------------------------------------------
+//		public static Category genCategorie() {
+//			return  DataTest.genCategory();
+//		}
+//			// ---------------------------------------------------------------------------------------------------
+//			public static Categorie genCategory() {
+//
+//			return new Categorie(
+//					DataTest.categoryName(), 
+//					Utils.randInt(5, 90), 
+//					Utils.randInt(0, 1) > 0 ? true : false,
+//					DataTest.picUrl());
+//
+//			}
+//
+//			// ---------------------------------------------------------------------------------------------------
+//			public static Commande genCommande() {
+//				
+//				return genOrder(); 
+//			}
+//
+//			// ---------------------------------------------------------------------------------------------------
+//			public static Commande genOrder() {
+//
+////		public Order( String orderNumber,Date deliveryDate, float totalDiscount,
+////				float shippingCosts, float grandTotal) {
+//		
+//		
+//		return new Commande(DataTest.orderNumber(),
+//				Utils.addDate(DATE_NOW, Utils.randInt(7, 10)),
+//				Utils.randFloat(0, 1000),
+//				Utils.randFloat(1, 100),
+//				Utils.randFloat(1000, 2000));
+//
+//	}
+//
 	// ---------------------------------------------------------------------------------------------------
-	public static Order genOrder() {
-
-//		public Order( String orderNumber,Date deliveryDate, float totalDiscount,
-//				float shippingCosts, float grandTotal) {
-		
-		
-		return new Order(DataTest.orderNumber(),
-				Utils.addDate(DATE_NOW, Utils.randInt(7, 10)),
-				Utils.randFloat(0, 1000),
-				Utils.randFloat(1, 100),
-				Utils.randFloat(1000, 2000));
-
-	}
-
-	// ---------------------------------------------------------------------------------------------------
-	public static Item genItem() {
-
-		return new Item(DataTest.itemName(), DataTest.itemDescription(), Utils.randFloat(1, 100), Utils.randInt(1, 90),
-				Utils.randInt(1, 100), Utils.randInt(0, 1) > 0 ? true : false, DataTest.picUrl(), DataTest.videoUrl());
-	}
-
-//	// ---------------------------------------------------------------------------------------------------
-	
-	
-	public static Comment genComment() {
-		return new Comment (DataTest.comment(), Utils.randInt(0, 5));
-	}
+//	public static Article genArticle() {
+//
+//		return new Article(DataTest.itemName(), DataTest.itemDescription(), Utils.randFloat(1, 100), Utils.randInt(1, 90),
+//				Utils.randInt(1, 100), Utils.randInt(0, 1) > 0 ? true : false, DataTest.picUrl(), DataTest.videoUrl());
+//	}
+//
+////	// ---------------------------------------------------------------------------------------------------
+//	
+//	
+//	public static LigneDeCommande genLigneDeCommande() {
+//		
+//		return new LigneDeCommande(DEFAULT_ID, Utils.randInt(1, 10), null, null);
+//			
+//	}
+////	// ---------------------------------------------------------------------------------------------------
+//	public static Commentaire genCommentaire() {
+//		return DataTest.genComment();
+//	}
+////	// ---------------------------------------------------------------------------------------------------
+//	
+//	
+//	public static Commentaire genComment() {
+//		return new Commentaire (DataTest.comment(), Utils.randInt(0, 5));
+//	}
 //	public Comment( String text, int grade, Item item, Costumer costumer) {
 //	this(DEFAULT_ID,text, grade, item, costumer);
 
 
 //	// ---------------------------------------------------------------------------------------------------
-//	public static BankCard genBankCardNoName() {
+	public static BankCard genBankCardNoName() {
+
+		BankCard myBankCard = new BankCard();
+		int bin = Utils.randInt(111111, 999999);
+		int digit3 = Utils.randInt(0, 999);
+		int digit8 = Utils.randInt(11111111, 99999999);
+
+		myBankCard.setCardNumber(String.format("%06d%08d", bin, digit8));
+		Date startDate = Utils.string2Date("01/01/2023", "dd/MM/yyyy");
+		Date endDate = Utils.string2Date("01/01/2025", "dd/MM/yyyy");
+		myBankCard.setExpiryDate(DataTest.date(startDate, endDate));
+		myBankCard.setCrypto(String.format("%03d", digit3));
+
+		return myBankCard;
+	}
+
+//	// ---------------------------------------------------------------------------------------------------
+//	public static CartePaiement genCartePaiement(User user) {
 //
-//		BankCard myBankCard = new BankCard();
-//		int bin = Utils.randInt(111111, 999999);
-//		int digit3 = Utils.randInt(0, 999);
-//		int digit8 = Utils.randInt(11111111, 99999999);
+//		return DataTest.genBankCard( user); 
+//	}
+//		
+//		//		// ---------------------------------------------------------------------------------------------------
+//		public static CartePaiement genBankCard(User user) {
 //
-//		myBankCard.setCardClairNumber(String.format("%06d%08d", bin, digit8));
-//		Date startDate = Utils.string2Date("01/01/2023", "dd/MM/yyyy");
-//		Date endDate = Utils.string2Date("01/01/2025", "dd/MM/yyyy");
-//		myBankCard.setExpiryDateJava(DataTest.date(startDate, endDate));
-//		myBankCard.setClairCrypto(String.format("%03d", digit3));
+//		int nbday = Utils.randInt(1, 30) * 30;
+//		String crypto = String.format("%03d", Utils.randInt(0, 999));
 //
-//		return myBankCard;
+//		return new CartePaiement(DataTest.bankCardNumber(), Utils.addDate(DATE_NOW, nbday), crypto, user);
 //	}
 //
-//	// ---------------------------------------------------------------------------------------------------
-	public static BankCard genBankCard(Costumer costumer) {
-
-		int nbday = Utils.randInt(1, 30) * 30;
-		String crypto = String.format("%03d", Utils.randInt(0, 999));
-
-		return new BankCard(DataTest.bankCardNumber(), Utils.addDate(DATE_NOW, nbday), crypto, costumer);
-	}
-
 //
+//		// ---------------------------------------------------------------------------------------------------
+//		public static User genUserAfpha(int id) {
+//
+//			Date startDate = Utils.string2Date("01/01/1900", "dd/MM/yyyy");
+//			Date endDate = Utils.string2Date("01/01/2023", "dd/MM/yyyy");
+//			Gender gender = DataTest.gender();
+//			String firstname = DataTest.firstname(gender);
+//			String lastname = DataTest.lastname();
+//
+//			return new 
+//			User(id, DataTest.profile(),  DataTest.email(firstname, lastname), DataTest.pass(firstname),true,
+//					gender,firstname,lastname,DataTest.birthDate(),DataTest.phone());
+//			 
+//		}
+//		// ---------------------------------------------------------------------------------------------------
+//		public static User genUser() {
+//			
+//			return  genUserAfpha(DEFAULT_ID) ;
+//
+//			 
+//		}
+
 //	// ---------------------------------------------------------------------------------------------------
-	public static User genUser() {
-
-		Date startDate = Utils.string2Date("01/01/1900", "dd/MM/yyyy");
-		Date endDate = Utils.string2Date("01/01/2023", "dd/MM/yyyy");
-		Gender gender = DataTest.gender();
-		String firstname = DataTest.firstname(gender);
-		String lastname = DataTest.lastname();
-
-		return new User(DataTest.profile(), DataTest.email(firstname, lastname), DataTest.pass(firstname), true);
-	}
-
-//	// ---------------------------------------------------------------------------------------------------
-	public static Costumer genCostumer() {
-
-		Date startDate = Utils.string2Date("01/01/1900", "dd/MM/yyyy");
-		Date endDate = Utils.string2Date("01/01/2023", "dd/MM/yyyy");
-		Gender gender = DataTest.gender();
-		String firstname = DataTest.firstname(gender);
-		String lastname = DataTest.lastname();
-
-		return new Costumer(gender, firstname, lastname, DataTest.birthDate(), DataTest.phone(), Profile.COSTUMER,
-				DataTest.email(firstname, lastname), DataTest.pass(firstname));
-
-	}
+//	public static Costumer genCostumer() {
+//
+//		Date startDate = Utils.string2Date("01/01/1900", "dd/MM/yyyy");
+//		Date endDate = Utils.string2Date("01/01/2023", "dd/MM/yyyy");
+//		Gender gender = DataTest.gender();
+//		String firstname = DataTest.firstname(gender);
+//		String lastname = DataTest.lastname();
+//
+//		return new Costumer(gender, firstname, lastname, DataTest.birthDate(), DataTest.phone(), Profile.COSTUMER,
+//				DataTest.email(firstname, lastname), DataTest.pass(firstname));
+//
+//	}
 
 //	// ---------------------------------------------------------------------------------------------------
 //	public static Item genItem() {
@@ -155,22 +205,11 @@ public final class DataTest implements IConstant {
 
 		return new Address(DataTest.number(), DataTest.numberType(), DataTest.streetType(), DataTest.street(),
 				DataTest.city(), DataTest.zipcode());
+
+	
+
 	}
 
-////---------------------------------------------------------------------------------------------------
-	public static Param genParam() {
-
-		try {
-			return new Param(DataTest.number(), DataTest.number(),
-					"small string :" + DataTest.street() + " " + DataTest.city() + " " + DataTest.zipcode(),
-					"big string :" + DataTest.street() + " " + DataTest.city() + " " + DataTest.zipcode(),
-					DataTest.firstname().getBytes(CHARSET), DataTest.birthDate());
-		} catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return null;
-	}
 
 //	// ---------------------------------------------------------------------------------------------------
 //	public static String sentence() {

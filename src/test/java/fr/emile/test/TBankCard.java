@@ -1,28 +1,21 @@
-package fr.ecommerce.test;
+package fr.emile.test;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import fr.ecommerce.Ctrl.implement.CartePaiementCtrl;
-import fr.ecommerce.Ctrl.implement.UserCtrl;
-import fr.ecommerce.Ctrl.interfaces.ICartePaiementCtrl;
-import fr.ecommerce.Ctrl.interfaces.IUserCtrl;
-import fr.ecommerce.entity.Article;
-import fr.ecommerce.entity.CartePaiement;
-import fr.ecommerce.entity.User;
-import fr.ecommerce.model.dao.implement.ArticleDao;
-import fr.ecommerce.model.dao.implement.CartePaiementDao;
-import fr.ecommerce.model.dao.interfaces.IArticleDao;
-import fr.ecommerce.model.dao.interfaces.ICartePaiementDao;
-import fr.ecommerce.utils.DataTest;
-import fr.ecommerce.utils.Utils;
+import fr.emile.ctrl.CrudCtrl;
+import fr.emile.entity.Address;
+import fr.emile.entity.BankCard;
+import fr.emile.entity.User;
 
-public class TCartePaiement {
+import fr.emile.utils.Utils;
+
+public class TBankCard {
 
 	public static void main(String[] args) {
 		Utils.trace("*************************** Begin ************************************\n");
-//		createOne();
-		createMany();
+		createOne();
+//		createMany();
 //		readOne();
 //		readMany();
 //		update();
@@ -52,11 +45,11 @@ public class TCartePaiement {
 	public static void update() {
 		Utils.trace("=========================== Update ===========================\n");
 		int cartePaiementId = 3;
-		CartePaiement cartePaiement = null;
+		BankCard cartePaiement = null;
 
-		ICartePaiementCtrl cartePaiementCtrl = new CartePaiementCtrl();
+		BankCardCtrl cartePaiementCtrl = new BankCardCtrl();
 		try {
-			cartePaiement = cartePaiementCtrl.getCartePaiementById(cartePaiementId);
+			cartePaiement = cartePaiementCtrl.getBankCardById(cartePaiementId);
 			if (cartePaiement == null)
 				Utils.trace("cartePaiement null\n");
 			else {
@@ -64,9 +57,9 @@ public class TCartePaiement {
 
 				// -------------------------- update ----------------------
 				cartePaiement.setIsValid(true);
-				cartePaiementCtrl.updateCartePaiement(cartePaiement);
+				cartePaiementCtrl.updateBankCard(cartePaiement);
 
-				cartePaiement = cartePaiementCtrl.getCartePaiementById(cartePaiementId);
+				cartePaiement = cartePaiementCtrl.getBankCardById(cartePaiementId);
 				if (cartePaiement != null)
 					Utils.trace("After %s\n", cartePaiement);
 				else
@@ -85,16 +78,16 @@ public class TCartePaiement {
 	public static void delete() {
 		Utils.trace("=========================== Delete ===========================\n");
 		int addressId = 1;
-		CartePaiement cartePaiement = new CartePaiement();
-		ICartePaiementDao cartePaiementDao = new CartePaiementDao();
+		BankCard cartePaiement = new BankCard();
+		IBankCardDao cartePaiementDao = new BankCardDao();
 		try {
-			cartePaiement = cartePaiementDao.getCartePaiementById(addressId);
+			cartePaiement = cartePaiementDao.getBankCardById(addressId);
 			if (cartePaiement == null)
 				Utils.trace("Error : l'cartePaiement n'existe pas\n");
 			else {
-				cartePaiementDao.deleteCartePaiement(cartePaiement);
+				cartePaiementDao.deleteBankCard(cartePaiement);
 
-				cartePaiement = cartePaiementDao.getCartePaiementById(addressId);
+				cartePaiement = cartePaiementDao.getBankCardById(addressId);
 
 				if (cartePaiement != null)
 					Utils.trace("Error not remove\n");
@@ -112,31 +105,30 @@ public class TCartePaiement {
 	public static void createOne() {
 		Utils.trace("=========================== create One  ===========================\n");
 
-		Utils.trace("CB %s \n", DataTest.bankCardNumber());
-		Utils.trace("CB %s \n", DataTest.bankCardNumber());
 
-		CartePaiement cartePaiement = new CartePaiement();
-		User user = new User();
+		BankCard bankCard = new BankCard();
+//		User user = new User();
 
-		user = getUser(1);
+//		user = getUser(1);
 
-		cartePaiement = DataTest.genCartePaiement(user);
+//		cartePaiement = DataTest.genBankCardt(user);
+		bankCard = DataTest.genBankCardNoName();
 
-		cartePaiement.setUser(user);
-		user.addBankCard(cartePaiement);
+//		cartePaiement.setUser(user);
+//		user.addBankCard(cartePaiement);
 
-		Utils.trace("CB %s \n", cartePaiement);
-		ICartePaiementCtrl cartePaiementCtrl = new CartePaiementCtrl();
+		Utils.trace("CB %s \n", bankCard);
+		CrudCtrl bankCardCtrl = new CrudCtrl(new BankCard());
 
 		try {
-			cartePaiementCtrl.addCartePaiement(cartePaiement);
+			bankCardCtrl.create(bankCard);
 		} catch (Exception e) {
 			Utils.trace("catch create %s\n", e.toString());
 		} finally {
 
 		}
 
-		Utils.trace("%s\n", cartePaiement);
+		Utils.trace("%s\n", bankCard);
 	}
 	// -------------------------------------------------------------------------------------------------
 
@@ -145,9 +137,9 @@ public class TCartePaiement {
 //		int maxIndex = 3;
 		int maxIndexUser = 10;
 
-		CartePaiement cartePaiement = new CartePaiement();
+		BankCard cartePaiement = new BankCard();
 
-		ICartePaiementCtrl cartePaiementCtrl = new CartePaiementCtrl();
+		IBankCardCtrl cartePaiementCtrl = new BankCardCtrl();
 		User user = new User();
 		user = getUser(4);
 
@@ -160,11 +152,11 @@ public class TCartePaiement {
 
 				for (int index = 1; index < maxIndex; index++) {
 
-					cartePaiement = DataTest.genCartePaiement(user);
+					cartePaiement = DataTest.genBankCard(user);
 					cartePaiement.setUser(user);
 
 					user.addBankCard(cartePaiement);
-					cartePaiementCtrl.addCartePaiement(cartePaiement);
+					cartePaiementCtrl.addBankCard(cartePaiement);
 					Utils.trace("CB %s \n", cartePaiement);
 
 				}
@@ -180,16 +172,16 @@ public class TCartePaiement {
 	public static void readMany() {
 		Utils.trace("=========================== read many  ===========================\n");
 
-		List<CartePaiement> cartePaiementList = new ArrayList<CartePaiement>();
+		List<BankCard> cartePaiementList = new ArrayList<BankCard>();
 
-		ICartePaiementCtrl cartePaiementCtrl = new CartePaiementCtrl();
+		IBankCardCtrl cartePaiementCtrl = new BankCardCtrl();
 		try {
-			cartePaiementList = cartePaiementCtrl.getCartePaiements();
+			cartePaiementList = cartePaiementCtrl.getBankCards();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		if ((cartePaiementList.size() > 0) && (cartePaiementList != null)) {
-			for (CartePaiement cartePaiement : cartePaiementList) {
+			for (BankCard cartePaiement : cartePaiementList) {
 				Utils.trace("%s\n", cartePaiement);
 			}
 		} else
@@ -200,11 +192,11 @@ public class TCartePaiement {
 	public static void readOne() {
 		Utils.trace("=========================== read One  ===========================\n");
 		int cartePaiementId = 14;
-		CartePaiement cartePaiement = new CartePaiement();
+		BankCard cartePaiement = new BankCard();
 
-		ICartePaiementCtrl cartePaiementCtrl = new CartePaiementCtrl();
+		IBankCardCtrl cartePaiementCtrl = new BankCardCtrl();
 		try {
-			cartePaiement = cartePaiementCtrl.getCartePaiementById(cartePaiementId);
+			cartePaiement = cartePaiementCtrl.getBankCardById(cartePaiementId);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -216,30 +208,30 @@ public class TCartePaiement {
 	}
 //-------------------------------------------------------------------------------------------------	
 
-	public static User getUser(int userId) {
-
-		User user = new User();
-		IUserCtrl userCtrl = new UserCtrl();
-		try {
-			user = userCtrl.getUserById(userId);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return user;
-
-	}
-	// -------------------------------------------------------------------------------------------------
-
-	public static Article getArticle(int idArticle) {
-		Article article = new Article();
-		IArticleDao articleDao = new ArticleDao();
-		try {
-			article = articleDao.getArticleById(idArticle);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return article;
-
-	}
+//	public static User getUser(int userId) {
+//
+//		User user = new User();
+//		IUserCtrl userCtrl = new UserCtrl();
+//		try {
+//			user = userCtrl.getUserById(userId);
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
+//		return user;
+//
+//	}
+//	// -------------------------------------------------------------------------------------------------
+//
+//	public static Article getArticle(int idArticle) {
+//		Article article = new Article();
+//		IArticleDao articleDao = new ArticleDao();
+//		try {
+//			article = articleDao.getArticleById(idArticle);
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
+//		return article;
+//
+//	}
 
 }

@@ -1,4 +1,4 @@
-package fr.lotus.entity;
+package fr.emile.entity;
 
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
@@ -16,11 +16,11 @@ import javax.persistence.MappedSuperclass;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
-import fr.lotus.common.IConstant;
-import fr.lotus.enums.Profile;
-import fr.lotus.model.implement.ClassDao;
-import fr.lotus.utils.Encryption;
-import fr.lotus.utils.Utils;
+import fr.emile.common.IConstant;
+import fr.emile.enums.Profile;
+
+import fr.emile.utils.Encryption;
+import fr.emile.utils.Utils;
 
 
 @Entity
@@ -28,7 +28,7 @@ import fr.lotus.utils.Utils;
 @DiscriminatorColumn(name="user_type")
 @DiscriminatorValue("type-user")
 @Table(name="user")
-public class User extends ClassDao  implements IConstant,Serializable {
+public class User implements IConstant,Serializable {
 
 	private static final long serialVersionUID = 1L;
 	@Id

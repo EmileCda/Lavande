@@ -1,4 +1,4 @@
-package fr.lotus.entity;
+package fr.emile.entity;
 
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
@@ -15,15 +15,15 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
-import fr.lotus.enums.Gender;
-import fr.lotus.model.implement.ClassDao;
-import fr.lotus.utils.Encryption;
-import fr.lotus.utils.Utils;
-import fr.lotus.common.IConstant;
+import fr.emile.enums.Gender;
+
+import fr.emile.utils.Encryption;
+import fr.emile.utils.Utils;
+import fr.emile.common.IConstant;
 
 @Entity
 @Table(name = "bank_card")
-public class BankCard extends ClassDao implements IConstant, Serializable {
+public class BankCard  implements IConstant, Serializable {
 
 	private static final long serialVersionUID = 1L;
 	@Id
@@ -53,9 +53,9 @@ public class BankCard extends ClassDao implements IConstant, Serializable {
 	@Column(name = "is_deleted")
 	private boolean isDeleted;
 
-	@ManyToOne
-	@JoinColumn(name = "costumer_id", nullable = false)
-	private Costumer costumer;
+//	@ManyToOne
+//	@JoinColumn(name = "costumer_id", nullable = false)
+//	private Costumer costumer;
 
 	public BankCard() {
 		this(DEFAULT_ID, DEFAULT_BANK_CARD_NUMBER, DATE_NOW, DEFAULT_BANK_CARD_CRYPTO, true, false, null);

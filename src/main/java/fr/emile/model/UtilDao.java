@@ -1,10 +1,10 @@
-package fr.lotus.model.implement;
+package fr.emile.model;
 
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 
-import fr.lotus.utils.DBConnect;
+import fr.emile.utils.DBConnect;
 
 
 public abstract class UtilDao  {

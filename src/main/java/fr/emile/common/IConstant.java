@@ -1,14 +1,26 @@
-package fr.lotus.common;
+package fr.emile.common;
 
 import java.util.Date;
 
-import fr.lotus.enums.Gender;
-import fr.lotus.enums.Profile;
-import fr.lotus.utils.Utils;
+import fr.emile.enums.Gender;
+import fr.emile.enums.Profile;
+import fr.emile.utils.Utils;
 
 public interface IConstant {
 
-// common to all class 
+
+
+	//----------------- encryption-----------------------------------------------	
+		public final String ALGORITHM = "AES";
+		public final int FUNCTION_KEY_DB = 1705;
+		public final int DEFAULT_FUNCTION_KEY = 1000;
+		public final int KEY_LENGTH = 256;
+		public final String DEFAULT_ALGORYTHM = "DES";
+		public final int DEFAULT_FUNCTION_CODE = 0;
+
+	
+//	************************************* Below is obsolete;  for trash *******************************
+	// common to all class 
 	
 	public final String DEFAULT_TEXT = "Et je m’en vais au vent mauvais Qui m’emporte Deçà, delà,Pareil à la Feuille morte.";
 	public final int DEFAULT_INT= 0 ; 
@@ -54,16 +66,6 @@ public interface IConstant {
 // ----------------------Item -----------------------------
 	public final String DEFAULT_PIC= "http://default-picture.jpg";
 	
-//----------------- encryption-----------------------------------------------	
-	public final String ALGORITHM = "AES";
-	public final int FUNCTION_KEY_DB = 1705;
-	public final int DEFAULT_FUNCTION_KEY = 1000;
-	public final int KEY_LENGTH = 256;
-	public final String DEFAULT_ALGORYTHM = "DES";
-	public final int DEFAULT_FUNCTION_CODE = 0;
-
-	public final int BC_KEY = 0;
-	public final int PASS_KEY = 1;
 	
 	
 	public final String DEFAULT_NAME = "no-name";

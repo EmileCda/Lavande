@@ -1,4 +1,4 @@
-package fr.lotus.entity;
+package fr.emile.entity;
 
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
@@ -15,11 +15,11 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
-import fr.lotus.common.IConstant;
-import fr.lotus.enums.Gender;
-import fr.lotus.enums.Profile;
-import fr.lotus.utils.Encryption;
-import fr.lotus.utils.Utils;
+import fr.emile.common.IConstant;
+import fr.emile.enums.Gender;
+import fr.emile.enums.Profile;
+import fr.emile.utils.Encryption;
+import fr.emile.utils.Utils;
 
 @Entity
 @DiscriminatorValue("type-costumer")

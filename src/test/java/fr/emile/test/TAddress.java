@@ -1,28 +1,25 @@
-package fr.ecommerce.test;
+package fr.emile.test;
 
 
 import java.util.ArrayList;
 import java.util.List;
 
-import fr.ecommerce.Ctrl.implement.UserCtrl;
-import fr.ecommerce.Ctrl.interfaces.IUserCtrl;
-import fr.ecommerce.entity.Adresse;
-import fr.ecommerce.entity.User;
-import fr.ecommerce.model.dao.implement.AdresseDao;
-import fr.ecommerce.model.dao.interfaces.IAdresseDao;
-import fr.ecommerce.utils.DataTest;
-import fr.ecommerce.utils.Utils;
 
-public class TAdresse {
+import fr.emile.ctrl.CrudCtrl;
+import fr.emile.ctrl.StandardCrudCtrl;
+import fr.emile.entity.Address;
+import fr.emile.utils.Utils;
+
+public class TAddress {
 
 	public static void main(String[] args) {
 		Utils.trace("*************************** Begin ************************************\n");
 //		createOne();
-		createMany();
-//		readMany();
+//		createMany();
 //		readOne();
-//		delete();
-//		update();
+//		readMany();
+		delete();
+		update();
 
 		Utils.trace("*************************** end ************************************\n");
 
@@ -47,24 +44,24 @@ public class TAdresse {
 //-------------------------------------------------------------------------------------------------
 	public static void update() {
 		Utils.trace("=========================== Update ===========================\n");
-		int adresseId = 5;
-		Adresse adresse = null;
+		int addressId = 5;
+		Address address = null;
 
-		IAdresseDao adresseDao = new AdresseDao();
+		CrudCtrl addressCtrl = new StandardCrudCtrl(new Address());
 		try {
-			adresse = adresseDao.getAdresseById(adresseId);
-			if (adresse == null)
+			address = (Address) addressCtrl.read(addressId);
+			if (address == null)
 				Utils.trace("Address null\n");
 			else {
-				Utils.trace("Before  %s\n", adresse);
+				Utils.trace("Before  %s\n", address);
 
 				// -------------------------- update ----------------------
-				adresse.setCity("*** mod ***" + adresse.getCity() + "*** mod ***");
-				adresseDao.updateAdresse(adresse);
+				address.setCity("*** mod ***" + address.getCity() + "*** mod ***");
+				addressCtrl.update(address);
 
-				adresse = adresseDao.getAdresseById(adresseId);
-				if (adresse != null)
-					Utils.trace("After %s\n", adresse);
+				address = (Address) addressCtrl.read(addressId);
+				if (address != null)
+					Utils.trace("After %s\n", address);
 				else
 					Utils.trace("Address null\n");
 			}
@@ -81,18 +78,18 @@ public class TAdresse {
 	public static void delete() {
 		Utils.trace("=========================== Delete ===========================\n");
 		int addressId = 1;
-		Adresse adresse = new Adresse();
-		IAdresseDao adresseDao = new AdresseDao();
+		Address address = new Address();
+		CrudCtrl addressCtrl = new StandardCrudCtrl(new Address());
 		try {
-			adresse = adresseDao.getAdresseById(addressId);
-			if (adresse == null)
-				Utils.trace("Error : l'adresse n'existe pas\n");
+			address = (Address) addressCtrl.read(addressId);
+			if (address == null)
+				Utils.trace("Error : l'address n'existe pas\n");
 			else {
-				adresseDao.deleteAdresse(adresse);
+				addressCtrl.delete(address);
 
-				adresse = adresseDao.getAdresseById(addressId);
+				address = (Address) addressCtrl.read(addressId);
 
-				if (adresse != null)
+				if (address != null)
 					Utils.trace("Error not remove\n");
 				else
 					Utils.trace("remove ok\n");
@@ -107,24 +104,27 @@ public class TAdresse {
 
 	public static void createOne() {
 
-		User user = getUser(1);
-		Adresse adresse = new Adresse();
-		adresse = DataTest.genAdresse();
-		adresse.setUser(user);
-		user.addAddress(adresse);
-		Utils.trace("%s\n", adresse);
+//		User user = getUser(1);
+		Address address = new Address();
+		address = DataTest.genAddress();
+		Address addressReturn = null ; 
+//		address.setUser(user);
+//		user.addAddress(address);
+		Utils.trace("%s\n", address);
 
-		IAdresseDao adresseDao = new AdresseDao();
+		CrudCtrl addressCtrl = new StandardCrudCtrl(new Address());
 
 		try {
-			adresseDao.addAdresse(adresse);
+			addressReturn= (Address) addressCtrl.create(address);
 		} catch (Exception e) {
 			Utils.trace("catch create %s\n", e.toString());
 		} finally {
 
 		}
-
-		Utils.trace("%s\n", adresse);
+		if (addressReturn != null)
+			Utils.trace("%s\n", addressReturn);
+		else
+			Utils.trace("Address null \n");
 	}
 	// -------------------------------------------------------------------------------------------------
 
@@ -133,21 +133,22 @@ public class TAdresse {
 		int maxIndex = 10;
 		int maxIndexUser = 10;
 
-		Adresse adresse = new Adresse();
-		User user = new User();
-		Utils.trace("%s\n", adresse);
+		Address address = new Address();
+//		User user = new User();
+		
 
-		IAdresseDao adresseDao = new AdresseDao();
+		CrudCtrl addressCtrl = new StandardCrudCtrl(new Address());
 
 		try {
 
 			for (int indexUser = 1; indexUser < maxIndexUser; indexUser++) {
-				user = getUser(indexUser);
+//				user = getUser(indexUser);
 				for (int index = 0; index < maxIndex; index++) {
-					adresse = DataTest.genAdresse();
-					adresse.setUser(user);
-					user.addAddress(adresse);
-					adresseDao.addAdresse(adresse);
+					address = DataTest.genAddress();
+//					address.setUser(user);
+//					user.addAddress(address);
+					addressCtrl.create(address);
+					Utils.trace("%s\n", address);
 				}
 			}
 		} catch (Exception e) {
@@ -161,51 +162,51 @@ public class TAdresse {
 	public static void readMany() {
 		Utils.trace("=========================== read many  ===========================\n");
 
-		List<Adresse> adresseList = new ArrayList<Adresse>();
-		IAdresseDao adresseDao = new AdresseDao();
+		List<Object> addressList = new ArrayList<Object>();
+		CrudCtrl addressCtrl = new StandardCrudCtrl(new Address());
 		try {
-			adresseList = adresseDao.getAdresses();
+			addressList =  addressCtrl.list();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		if ((adresseList.size() > 0) && (adresseList != null)) {
-			for (Adresse adresse : adresseList) {
-				Utils.trace("%s\n", adresse);
+		if ((addressList.size() > 0) && (addressList != null)) {
+			for (Object address : addressList) {
+				Utils.trace("%s\n", (Address) address);
 			}
 		} else
-			Utils.trace("address null");
+			Utils.trace("address null\n");
 	}
 
 //-------------------------------------------------------------------------------------------------	
 	public static void readOne() {
 		Utils.trace("=========================== read One  ===========================\n");
 		int addressId = 1;
-		Adresse adresse = new Adresse();
-		IAdresseDao adresseDao = new AdresseDao();
+		Address address = new Address();
+		CrudCtrl addressCtrl = new StandardCrudCtrl(new Address());
 		try {
-			adresse = adresseDao.getAdresseById(addressId);
+			address = (Address) addressCtrl.read(addressId);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		if (adresse != null)
-			Utils.trace("%s\n", adresse);
+		if (address != null)
+			Utils.trace("%s\n", address);
 		else
 			Utils.trace("address null\n");
 
 	}
 	// -------------------------------------------------------------------------------------------------
 
-	public static User getUser(int userId) {
-
-		User user = new User();
-		IUserCtrl userCtrl = new UserCtrl();
-		try {
-			user = userCtrl.getUserById(userId);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return user;
-
-	}
+//	public static User getUser(int userId) {
+//
+//		User user = new User();
+//		IUserCtrl userCtrl = new UserCtrl();
+//		try {
+//			user = userCtrl.getUserById(userId);
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
+//		return user;
+//
+//	}
 
 }
