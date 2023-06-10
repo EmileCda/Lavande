@@ -13,6 +13,7 @@ import java.util.concurrent.TimeUnit;
 import fr.emile.common.IConstant;
 import fr.emile.entity.Address;
 import fr.emile.entity.BankCard;
+import fr.emile.entity.CartItem;
 import fr.emile.entity.Category;
 import fr.emile.entity.Costumer;
 import fr.emile.entity.Item;
@@ -55,7 +56,11 @@ public final class DataTest implements IConstant {
 				DATE_NOW);
 
 	}
-
+	// ---------------------------------------------------------------------------------------------------
+	public static CartItem genCartItem() {
+		
+		return new CartItem(Utils.randInt(1, 5),null, null );
+	}
 	// ---------------------------------------------------------------------------------------------------
 	public static Costumer genCostumer() {
 

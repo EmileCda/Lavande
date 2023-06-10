@@ -15,11 +15,11 @@ public class TItem {
 		Utils.trace("*************************** Begin ************************************\n");
 		TItemUnitTest unitTest = new TItemUnitTest();
 //		unitTest.createOne();
-//		unitTest.createMany();
+		unitTest.createMany();
 //		unitTest.readOne(1);
 //		unitTest.readMany();
 //		unitTest.update();
-		unitTest.delete();
+//		unitTest.delete();
 
 		Utils.trace("*************************** end ************************************\n");
 

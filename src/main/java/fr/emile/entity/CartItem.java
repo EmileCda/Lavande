@@ -9,7 +9,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import fr.emile.common.IConstant;
-import fr.lotus.entity.PickupItem;
 
 
 @Entity

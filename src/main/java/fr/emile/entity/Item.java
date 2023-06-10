@@ -47,8 +47,8 @@ public class Item  implements IConstant, Serializable {
 	@Transient
 	private List<Comment> commentList;
 
-//	@OneToMany(cascade = CascadeType.DETACH, mappedBy = "item", fetch = FetchType.LAZY)
-	@Transient
+	@OneToMany(cascade = CascadeType.DETACH, mappedBy = "item", fetch = FetchType.LAZY)
+//	@Transient
 	private List<CartItem > cartItemList;
 
 //	@OneToMany(cascade = CascadeType.DETACH, mappedBy = "item", fetch = FetchType.LAZY)

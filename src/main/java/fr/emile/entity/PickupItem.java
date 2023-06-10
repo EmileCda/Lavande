@@ -35,11 +35,10 @@ public abstract class PickupItem implements IConstant, Serializable {
 	private int quantity;
 	
 	
-	@ManyToOne
+	@OneToOne
 	@JoinColumn(name = "item_id", nullable = false)
 	private Item item;
 
-	
 	
 	
 	
@@ -59,12 +58,6 @@ public abstract class PickupItem implements IConstant, Serializable {
 
 	
 
-	@Override
-	public  void preWrite() {} ;
-
-	@Override
-	public void postRead(){} ;
-	
 	
 	
 	
