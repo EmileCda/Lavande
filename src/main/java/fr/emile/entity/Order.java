@@ -49,16 +49,16 @@ public class Order implements IConstant, Serializable {
 	@Column (name="grand_total")
 	private float grandTotal;
 
-//	@OneToOne(cascade = CascadeType.DETACH, mappedBy = "Address", fetch = FetchType.LAZY)
-	@Transient
+	@OneToOne
+	@JoinColumn(name = "delivery_address_id", nullable = false)
 	private Address deliveryAddress;
 	
-//	@OneToOne(cascade = CascadeType.DETACH, mappedBy = "Address", fetch = FetchType.LAZY)
-	@Transient
+	@OneToOne
+	@JoinColumn(name = "billing_address_id", nullable = false)
 	private Address billingAddress;
 	
-//	@OneToOne(cascade = CascadeType.DETACH, mappedBy = "BankCard", fetch = FetchType.LAZY)
-	@Transient
+	@OneToOne
+	@JoinColumn(name = "bank_card_used_id", nullable = false)
 	private BankCard bankCardUsed;
 	
 	@ManyToOne

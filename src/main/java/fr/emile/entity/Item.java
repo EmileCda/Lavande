@@ -39,20 +39,19 @@ public class Item  implements IConstant, Serializable {
 
 	@ManyToOne
 	@JoinColumn(name = "category_id" ,nullable = false)
-//	@Transient
 	private Category category;
 	
 	
+	@OneToMany(cascade = CascadeType.DETACH, mappedBy = "item", fetch = FetchType.LAZY)
+//	@Transient
+	private List<Comment> commentList;
+
 //	@OneToMany(cascade = CascadeType.DETACH, mappedBy = "item", fetch = FetchType.LAZY)
 	@Transient
-	private List<Comment> commentList;
+	private List<CartItem > cartItemList;
 
 	@OneToMany(cascade = CascadeType.DETACH, mappedBy = "item", fetch = FetchType.LAZY)
 //	@Transient
-	private List<CartItem > cartItemList;
-
-//	@OneToMany(cascade = CascadeType.DETACH, mappedBy = "item", fetch = FetchType.LAZY)
-	@Transient
 	private List<OrderLine> orderLineList;
 
 	public Item() {

@@ -19,7 +19,7 @@ public class TOrderLine {
 		Utils.trace("*************************** Begin ************************************\n");
 		TOrderLineUnitTest unitTest = new TOrderLineUnitTest();
 		unitTest.createOne();
-//		unitTest.createMany();
+//		unitTest.createMany(10);
 //		unitTest.readOne(45);
 //		unitTest.readMany();
 //		unitTest.update();
@@ -38,22 +38,6 @@ class TOrderLineUnitTest {
 
 	public TOrderLineUnitTest() {
 		this.setCtrl(new StandardCrudCtrl(new OrderLine()));
-	}
-
-//-------------------------------------------------------------------------------------------------
-	public void create() {
-		Utils.trace("=========================== Create ===========================\n");
-		createOne();
-		createMany();
-
-	}
-
-//-------------------------------------------------------------------------------------------------
-	public void read() {
-		Utils.trace("=========================== Read ===========================\n");
-		readMany();
-		readOne(1);
-
 	}
 
 //-------------------------------------------------------------------------------------------------
@@ -135,10 +119,9 @@ class TOrderLineUnitTest {
 	}
 	// -------------------------------------------------------------------------------------------------
 
-	public void createMany() {
+	public void createMany(int maxOrderLine) {
 		Utils.trace("=========================== create many  ===========================\n");
 		int maxOrder = 80;
-		int maxOrderLine= 5;
 		int maxItem = 100;
 
 		Item item = new Item();

@@ -15,7 +15,7 @@ public class TItem {
 		Utils.trace("*************************** Begin ************************************\n");
 		TItemUnitTest unitTest = new TItemUnitTest();
 //		unitTest.createOne();
-		unitTest.createMany();
+		unitTest.createMany(10);
 //		unitTest.readOne(1);
 //		unitTest.readMany();
 //		unitTest.update();
@@ -126,10 +126,9 @@ class TItemUnitTest {
 	}
 	// -------------------------------------------------------------------------------------------------
 
-	public void createMany() {
+	public void createMany(int maxItem ) {
 		Utils.trace("=========================== create many  ===========================\n");
-		int maxItem = 10;
-		int maxIndexCategory = 10;
+		int maxIndexCategory  = 10 ; 
 		Item item = new Item();
 		Category category = new Category();
 

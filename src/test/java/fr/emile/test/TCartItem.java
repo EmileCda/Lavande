@@ -17,7 +17,7 @@ public class TCartItem {
 	public static void main(String[] args) {
 		Utils.trace("*************************** Begin ************************************\n");
 		TCartItemUnitTest unitTest = new TCartItemUnitTest();
-//		unitTest.createOne();
+//		unitTest.createOne(3);
 //		unitTest.createMany();
 //		unitTest.readOne(1);
 //		unitTest.readMany();
@@ -37,22 +37,6 @@ class TCartItemUnitTest {
 
 	public TCartItemUnitTest() {
 		this.setCtrl(new StandardCrudCtrl(new CartItem()));
-	}
-
-//-------------------------------------------------------------------------------------------------
-	public void create() {
-		Utils.trace("=========================== Create ===========================\n");
-		createOne();
-		createMany();
-
-	}
-
-//-------------------------------------------------------------------------------------------------
-	public void read() {
-		Utils.trace("=========================== Read ===========================\n");
-		readMany();
-		readOne(1);
-
 	}
 
 //-------------------------------------------------------------------------------------------------
@@ -130,9 +114,8 @@ class TCartItemUnitTest {
 	}
 	// -------------------------------------------------------------------------------------------------
 
-	public void createMany() {
+	public void createMany(int startCostumer,int maxCartItem) {
 		Utils.trace("=========================== create many  ===========================\n");
-		int maxCartItem = 10;
 		int maxItem = 59;
 		int maxIndexCostumer= 10;
 		CartItem cartItem = new CartItem();
@@ -140,7 +123,7 @@ class TCartItemUnitTest {
 		Costumer costumer = new Costumer() ;
 
 		try {
-			for (int indexCostumer = 1; indexCostumer  <= maxIndexCostumer ; indexCostumer ++) {
+			for (int indexCostumer = startCostumer; indexCostumer  <= maxIndexCostumer+startCostumer ; indexCostumer ++) {
 				
 				int maxCurrentCartItem = Utils.randInt(0, maxCartItem);
 				costumer = getCostumer(indexCostumer);

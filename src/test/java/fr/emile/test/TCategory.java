@@ -42,23 +42,7 @@ class TCategoryUnitTest{
 
 	
 //-------------------------------------------------------------------------------------------------
-	public void create() {
-		Utils.trace("=========================== Create ===========================\n");
-		createOne();
-		createMany();
-
-	}
-
-//-------------------------------------------------------------------------------------------------
-	public void read() {
-		Utils.trace("=========================== Read ===========================\n");
-		readMany();
-		readOne(1);
-
-	}
-
-//-------------------------------------------------------------------------------------------------
-	public void update() {
+		public void update() {
 		Utils.trace("=========================== Update ===========================\n");
 		int categoryId = 3;
 		Category category = null;
@@ -127,9 +111,8 @@ class TCategoryUnitTest{
 	}
 	// -------------------------------------------------------------------------------------------------
 
-	public void createMany() {
+	public void createMany(int maxIndex) {
 		Utils.trace("=========================== create many  ===========================\n");
-		int maxIndex = 10;
 		Category category = new Category();
 
 		try {

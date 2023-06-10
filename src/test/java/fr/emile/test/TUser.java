@@ -1,142 +1,88 @@
 package fr.emile.test;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import fr.emile.ctrl.CrudCtrl;
 import fr.emile.ctrl.StandardCrudCtrl;
 import fr.emile.ctrl.UserCtrl;
-import fr.emile.entity.Address;
+import fr.emile.entity.Category;
+import fr.emile.entity.Costumer;
+import fr.emile.entity.Item;
 import fr.emile.entity.User;
-import fr.emile.enums.Profile;
 import fr.emile.utils.Utils;
-
-
 
 public class TUser {
 
 	public static void main(String[] args) {
 		Utils.trace("*************************** Begin ************************************\n");
-//		addArticlePanier();
-//		initUserTest();
-//		createOne();
-//		createMany();
-//		readOne(1);
-//		readMany();
-//		update();
-		delete();
-
+		TUserUnitTest unitTest = new TUserUnitTest();
+		unitTest.createOne();
+		unitTest.createMany(2);
+//		unitTest.readOne(1);
+//		unitTest.readMany();
+//		unitTest.update();
+//		unitTest.delete();
 		Utils.trace("*************************** end ************************************\n");
 
 	}
 
-	// -------------------------------------------------------------------------------------------------
-	public static void initUserTest() {
-		String StringArray[] = {"a","c","m"};
-		User user = null ;
-		int id;
-		for (String string : StringArray) {
-			user = getUser(string);
-			if (user !=null) {
-				remove(user.getId());
-			}
-			id = createOne();
-			user = getUser(id);
-			user.setEmail(string);
-			user.setPassword(string);
-			
-			switch (string) {
-			case "a" : user.setProfile(Profile.MANAGER); break ; 
-			case "m" : user.setProfile(Profile.STORE_KEEPER); break ;
-			default  : user.setProfile(Profile.COSTUMER); break ; 
-			}
-			
-			update(user);
-		}
-//		
+}
 
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%Unit Test Object %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+class TUserUnitTest {
+
+	private UserCtrl ctrl;
+	private int maxRetry = 10;
+
+	public TUserUnitTest() {
+		this.setCtrl(new UserCtrl());
 	}
 
-	// -------------------------------------------------------------------------------------------------
-	public static void create() {
-		Utils.trace("=========================== Create ===========================\n");
-		createOne();
-		createMany();
 
+//-------------------------------------------------------------------------------------------------
+	public void update() {
+		int userId = 3;
+		Utils.trace("=========================== Update [%d]===========================\n",userId);
+		User user = null;
+
+		try {
+			user = (User) this.getCtrl().read(userId);
+			if (user == null)
+				Utils.trace("Address null\n");
+			else {
+				Utils.trace("Before:\t%s\n", user);
+
+				// -------------------------- update ----------------------
+				user.setEmail(user.getEmail() + ".mod");
+				this.getCtrl().update(user);
+
+				user = (User) this.getCtrl().read(userId);
+				if (user != null)
+					Utils.trace("After:\t%s\n", user);
+				else
+					Utils.trace("User null\n");
+			}
+
+		} catch (Exception e) {
+			Utils.trace("catch delete %s\n", e.toString());
+		}
 	}
 
 //-------------------------------------------------------------------------------------------------
-	public static void read() {
-		Utils.trace("=========================== Read ===========================\n");
-		readMany();
-		readOne(1);
-
-	}
-
-	// -------------------------------------------------------------------------------------------------
-	public static void update(User user) {
-
-		UserCtrl userCtrl = new UserCtrl();
-		try {
-			userCtrl.update(user );
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-	}
-
-	// -------------------------------------------------------------------------------------------------
-	public static void update() {
-		int userId = 1;
-		User usrCheck ; 
-
-		UserCtrl userCtrl = new UserCtrl();
-		try {
-			usrCheck = (User) userCtrl.read(userId);
-			if (usrCheck == null)
-				Utils.trace("User null \n");
-			else {
-				Utils.trace("Before  %s\n", usrCheck);
-				usrCheck .setIsActif(false);
-				userCtrl.update(usrCheck );
-				usrCheck = (User) userCtrl.read(userId);
-				if (usrCheck != null)
-					Utils.trace("After %s\n", usrCheck);
-				else
-					Utils.trace("Address null\n");
-			}
-
-		} catch (
-
-		Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-	}
-
-	// -------------------------------------------------------------------------------------------------
-	public static void delete() {
-		int userId = 1;
-		remove(userId);
-
-	}
-
-	// -------------------------------------------------------------------------------------------------
-	public static void remove(int userId) {
+	public void delete() {
+		Utils.trace("=========================== Delete ===========================\n");
+		int addressId = 2;
 		User user = new User();
-		UserCtrl userCtrl = new UserCtrl();
 
 		try {
-			user = (User) userCtrl.read(userId);
+			user = (User) this.getCtrl().read(addressId);
 			if (user == null)
 				Utils.trace("Error : l'user n'existe pas\n");
 			else {
-				userCtrl.delete(user);
-
-				user = (User) userCtrl.read(userId);
+				Utils.trace("last time seen %s\n", user);
+				this.getCtrl().delete(user);
+				user = (User) this.getCtrl().read(addressId);
 
 				if (user != null)
 					Utils.trace("Error not remove\n");
@@ -144,59 +90,55 @@ public class TUser {
 					Utils.trace("remove ok\n");
 			}
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			Utils.trace("catch delete %s\n", e.toString());
 		}
 
 	}
 	// -------------------------------------------------------------------------------------------------
 
-	public static int createOne() {
-
+	public void createOne() {
+		Utils.trace("=========================== create One  ===========================\n");
 		User user = new User();
+		Item item = getItem(1);
+		Costumer costumer = getCostumer(1);
+
 		user = DataTest.genUser();
-		Utils.trace("%s\n", user);
-
-		UserCtrl userCtrl = new UserCtrl();
-
 		try {
-			userCtrl.create(user);
+			this.getCtrl().create(user);
+			Utils.trace("%s\n", user);
 		} catch (Exception e) {
 			Utils.trace("catch create %s\n", e.toString());
-		} finally {
-
 		}
 
-		Utils.trace("%s\n", user);
-		return user.getId();
 	}
 	// -------------------------------------------------------------------------------------------------
 
-	public static void createMany() {
-		Utils.trace("=========================== read many  ===========================\n");
-		int maxIndex = 10;
+	public void createMany(int maxUser) {
+		Utils.trace("=========================== create many  ===========================\n");
 		User user = new User();
-		UserCtrl userCtrl = new UserCtrl();
+
 		try {
-			for (int index = 0; index < maxIndex; index++) {
-				user = DataTest.genUser();
-				userCtrl.create(user);
-				Utils.trace("%s\n", user);
+				
+				for (int indexUser = 1; indexUser <= maxUser; indexUser++) {
+
+					user = DataTest.genUser();
+					this.getCtrl().create(user);
+					Utils.trace("%s\n", user);
+
 			}
 		} catch (Exception e) {
-			Utils.trace("catch create %s\n", e.toString());
-
+			Utils.trace("catch createMany %s\n", e.toString());
 		}
 	}
 
 	// -------------------------------------------------------------------------------------------------
-	public static void readMany() {
+	public void readMany() {
 		Utils.trace("=========================== read many  ===========================\n");
 
 		List<Object> userList = new ArrayList<Object>();
-		UserCtrl userCtrl = new UserCtrl();
+
 		try {
-			userList = userCtrl.list();
+			userList = this.getCtrl().list();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -205,118 +147,95 @@ public class TUser {
 				Utils.trace("%s\n", (User) object);
 			}
 		} else
-			Utils.trace("user null");
+			Utils.trace("address null");
 	}
 
-	// -------------------------------------------------------------------------------------------------
-	public static User getUser(int userId) {
+//-------------------------------------------------------------------------------------------------	
+	public void readOne(int id) {
+		Utils.trace("=========================== read One [%d] ===========================\n",id);
 
 		User user = new User();
-		UserCtrl userCtrl = new UserCtrl();
+
 		try {
-			user = (User) userCtrl.read(userId);
+			for (int index = id; index < this.getMaxRetry() + id; index++) {
+				user = (User) this.getCtrl().read(id);
+				if (user!= null)	break;
+			}
+				
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
-		return user;
-
-	}
-
-	// -------------------------------------------------------------------------------------------------
-	public static User getUser(String email) {
-
-		User user = new User();
-		UserCtrl userCtrl = new UserCtrl();
-		try {
-			user = (User) userCtrl.read(email);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-		return user;
-
-	}
-
-	// -------------------------------------------------------------------------------------------------
-	public static void readOne(String email) {
-		Utils.trace("=========================== read One by email  ===========================\n");
-
-		User user = getUser(email);
 		if (user != null)
 			Utils.trace("%s\n", user);
 		else
 			Utils.trace("user null\n");
 
 	}
+//-------------------------------------------------------------------------------------------------	
 
-	
-	// -------------------------------------------------------------------------------------------------
-	public static void readOne(int userId) {
-		Utils.trace("=========================== read One  by Id===========================\n");
-		
-		User user = getUser( userId);
-		if (user != null)
-			Utils.trace("%s\n", user);
-		else
-			Utils.trace("user null\n");
+	public Category getCategory(int categoryId) {
+		Category category = new Category();
+		CrudCtrl categoryCtrl = new StandardCrudCtrl(new Category());
+
+		try {
+			category = (Category) categoryCtrl.read(categoryId);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return category;
+	}
+
+//-------------------------------------------------------------------------------------------------	
+	public Item getItem(int id) {
+		Item item = new Item();
+		CrudCtrl itemCtrl = new StandardCrudCtrl(new Item());
+
+		try {
+			for (int index = id; index < this.getMaxRetry() + id; index++) {
+				item = (Item) itemCtrl.read(id);
+				if (item != null)
+					break;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return item;
+	}
+
+//-------------------------------------------------------------------------------------------------	
+
+	public Costumer getCostumer(int id) {
+
+		Costumer costumer = new Costumer();
+		UserCtrl costumerCtrl = new UserCtrl();
+		try {
+			for (int index = id; index < this.getMaxRetry() + id; index++) {
+				costumer = (Costumer) costumerCtrl.read(id);
+				if (costumer != null)
+					break;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return costumer;
 
 	}
-// -------------------------------------------------------------------------------------------------
-//		public static void addArticlePanier() {
-//			Utils.trace("%s\n", "ici");
-//			User user = new User();
-//			Utils.trace("%s\n",user);
-//			Article article = new Article();
-//
-//			for (int index = 10; index < 20; index ++) {
-//				user = getUser(index);
-//				if (user != null ) break; 
-//				
-//			}
-//			
-//			Utils.trace("%s\n",user);
-//		
-//			ArticlePanier  articlePanier;
-//			for (int index= 10 ; index < 20 ; index++) {
-//				
-//				article= getArticle(index);
-//				Utils.trace("%s\n",article);
-//				
-//				articlePanier = new ArticlePanier(100+index, article);
-//				
-//				user.addCartItem(articlePanier);
-//				
-//			}
-//			Utils.trace("%s\n",user);
-//			Utils.trace("%d\n",user.getCartItemList().size());
-//			
-//			for (ArticlePanier aPanier : user.getCartItemList()) {
-//				Utils.trace("%s\n",
-//						aPanier.getArticle().getName());
-//				
-//				Utils.trace("quatity %s\n",
-//						aPanier.getQuantity());
-//				
-//				Utils.trace("%s \n",
-//						aPanier.getUser().getEmail());
-//			}
-//			
-//		}
-//
-//
-//		
-////-------------------------------------------------------------------------------------------------		
-//		public static Article getArticle(int ArticleId) {
-//			Article article = new Article();
-//			IArticleDao articleDao = new ArticleDao();
-//			try {
-//				article = articleDao.getArticleById(ArticleId);
-//			} catch (Exception e) {
-//				e.printStackTrace();
-//			}
-//			return article ; 
-//
-//		}
 
+//-------------------------------------------------------------------------------------------------	
+	public UserCtrl getCtrl() {
+		return this.ctrl;
+	}
+
+	public void setCtrl(UserCtrl ctrl) {
+		this.ctrl = ctrl;
+	}
+
+	public int getMaxRetry() {
+		return maxRetry;
+	}
+
+	public void setMaxRetry(int maxRetry) {
+		this.maxRetry = maxRetry;
+	}
 }

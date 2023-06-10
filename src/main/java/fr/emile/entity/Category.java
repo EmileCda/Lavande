@@ -35,7 +35,6 @@ public class Category  implements IConstant, Serializable {
 	private String picture;
 
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "category", fetch = FetchType.LAZY)
-//	 @Transient
 	private List<Item> itemList;
 
 	public Category() {

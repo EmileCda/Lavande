@@ -40,22 +40,6 @@ class TCommentUnitTest {
 	}
 
 //-------------------------------------------------------------------------------------------------
-	public void create() {
-		Utils.trace("=========================== Create ===========================\n");
-		createOne();
-		createMany();
-
-	}
-
-//-------------------------------------------------------------------------------------------------
-	public void read() {
-		Utils.trace("=========================== Read ===========================\n");
-		readMany();
-		readOne(1);
-
-	}
-
-//-------------------------------------------------------------------------------------------------
 	public void update() {
 		int commentId = 3;
 		Utils.trace("=========================== Update [%d]===========================\n",commentId);
@@ -130,9 +114,8 @@ class TCommentUnitTest {
 	}
 	// -------------------------------------------------------------------------------------------------
 
-	public void createMany() {
+	public void createMany(int startCostumer,int maxComment) {
 		Utils.trace("=========================== create many  ===========================\n");
-		int maxComment = 10;
 		int maxItem = 59;
 		int maxIndexCostumer= 10;
 		Comment comment = new Comment();
@@ -140,7 +123,7 @@ class TCommentUnitTest {
 		Costumer costumer = new Costumer() ;
 
 		try {
-			for (int indexCostumer = 1; indexCostumer  <= maxIndexCostumer ; indexCostumer ++) {
+			for (int indexCostumer = startCostumer; indexCostumer  <= maxIndexCostumer+startCostumer ; indexCostumer ++) {
 				
 				int maxCurrentComment = Utils.randInt(0, maxComment);
 				costumer = getCostumer(indexCostumer);

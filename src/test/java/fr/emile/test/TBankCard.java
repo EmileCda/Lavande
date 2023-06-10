@@ -7,91 +7,82 @@ import fr.emile.ctrl.BankCardCtrl;
 import fr.emile.ctrl.CrudCtrl;
 import fr.emile.ctrl.StandardCrudCtrl;
 import fr.emile.ctrl.UserCtrl;
-import fr.emile.entity.Address;
-import fr.emile.entity.BankCard;
+import fr.emile.entity.Category;
 import fr.emile.entity.Costumer;
-import fr.emile.entity.User;
-
+import fr.emile.entity.BankCard;
+import fr.emile.entity.Item;
+import fr.emile.entity.BankCard;
 import fr.emile.utils.Utils;
 
 public class TBankCard {
 
 	public static void main(String[] args) {
 		Utils.trace("*************************** Begin ************************************\n");
-//		createOne();
-//		createMany();
-//		readOne();
-//		readMany();
-//		update();
-		delete();
-
+		TBankCardUnitTest unitTest = new TBankCardUnitTest();
+		unitTest.createOne();
+//		unitTest.createMany(10);
+//		unitTest.readOne(1);
+//		unitTest.readMany();
+//		unitTest.update();
+//		unitTest.delete();
 		Utils.trace("*************************** end ************************************\n");
 
 	}
 
-//-------------------------------------------------------------------------------------------------
-	public static void create() {
-		Utils.trace("=========================== Create ===========================\n");
-		createOne();
-		createMany();
+}
 
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%Unit Test Object %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+class TBankCardUnitTest {
+
+	private CrudCtrl ctrl;
+	private int maxRetry = 10;
+	public TBankCardUnitTest() {
+		this.setCtrl(new BankCardCtrl());
 	}
 
 //-------------------------------------------------------------------------------------------------
-	public static void read() {
-		Utils.trace("=========================== Read ===========================\n");
-		readMany();
-		readOne();
-
-	}
-
-//-------------------------------------------------------------------------------------------------
-	public static void update() {
-		Utils.trace("=========================== Update ===========================\n");
+	public void update() {
 		int bankCardId = 3;
+		Utils.trace("=========================== Update [%d]===========================\n", bankCardId);
 		BankCard bankCard = null;
 
-		BankCardCtrl bankCardCtrl = new BankCardCtrl();
 		try {
-			bankCard = (BankCard) bankCardCtrl.read(bankCardId);
+			bankCard = (BankCard) this.getCtrl().read(bankCardId);
 			if (bankCard == null)
-				Utils.trace("cartePaiement null\n");
+				Utils.trace("BankCard null\n");
 			else {
-				Utils.trace("Before  %s\n", bankCard);
+				Utils.trace("Before:\t%s\n", bankCard);
 
 				// -------------------------- update ----------------------
-				bankCard.setIsValid(!bankCard.getIsValid());
-				bankCardCtrl.update(bankCard);
+				bankCard.setIsValid(! bankCard.getIsValid());
+				this.getCtrl().update(bankCard);
 
-				bankCard = (BankCard) bankCardCtrl.read(bankCardId);
+				bankCard = (BankCard) this.getCtrl().read(bankCardId);
 				if (bankCard != null)
-					Utils.trace("After %s\n", bankCard);
+					Utils.trace("After:\t%s\n", bankCard);
 				else
-					Utils.trace("cartePaiement null\n");
+					Utils.trace("BankCard null\n");
 			}
 
-		} catch (
-
-		Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		} catch (Exception e) {
+			Utils.trace("catch delete %s\n", e.toString());
 		}
 	}
 
 //-------------------------------------------------------------------------------------------------
-	public static void delete() {
+	public void delete() {
 		Utils.trace("=========================== Delete ===========================\n");
-		int bankCardId = 1;
+		int bankCardId = 2;
 		BankCard bankCard = new BankCard();
-		BankCardCtrl bankCardCtrl = new BankCardCtrl();
-		try {
-			bankCard = (BankCard) bankCardCtrl.read(bankCardId);
-			if (bankCard== null)
-				Utils.trace("Error : l'cartePaiement n'existe pas\n");
-			else {
-				bankCardCtrl .delete(bankCard);
 
-				bankCard = (BankCard) bankCardCtrl.read(bankCardId);
+		try {
+			bankCard = (BankCard) this.getCtrl().read(bankCardId);
+			if (bankCard == null)
+				Utils.trace("Error : l'bankCard n'existe pas\n");
+			else {
+				Utils.trace("last time seen %s\n", bankCard);
+				this.getCtrl().delete(bankCard);
+				bankCard = (BankCard) this.getCtrl().read(bankCardId);
 
 				if (bankCard != null)
 					Utils.trace("Error not remove\n");
@@ -99,104 +90,87 @@ public class TBankCard {
 					Utils.trace("remove ok\n");
 			}
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			Utils.trace("catch delete %s\n", e.toString());
 		}
 
 	}
 	// -------------------------------------------------------------------------------------------------
 
-	public static void createOne() {
+	public void createOne() {
 		Utils.trace("=========================== create One  ===========================\n");
-
-
 		BankCard bankCard = new BankCard();
-		BankCardCtrl bankCardCtrl = new BankCardCtrl();
-		Costumer costumer = new Costumer ();
-
-		costumer = getCostumer(1);
-
+		Costumer costumer = getCostumer(1);
 		bankCard = DataTest.genBankCard(costumer);
-
 		bankCard.setCostumer(costumer);
-		costumer.addBankCard(bankCard );
-
-		Utils.trace("CB %s \n", bankCard);
-
+		costumer.addBankCard(bankCard);
 		try {
-			bankCardCtrl.create(bankCard);
+			this.getCtrl().create(bankCard);
+			Utils.trace("%s\n", bankCard);
 		} catch (Exception e) {
 			Utils.trace("catch create %s\n", e.toString());
-
 		}
 
-		Utils.trace("%s\n", bankCard);
 	}
 	// -------------------------------------------------------------------------------------------------
 
-	public static void createMany() {
+	public void createMany(int startCostumer,int maxValue) {
 		Utils.trace("=========================== create many  ===========================\n");
-		int maxIndexCostumer= 10;
-
+		int indexMaxCostumer = 10;
+		int maxBankCard= 2; 
+		Costumer costumer = new Costumer();
 		BankCard bankCard = new BankCard();
-		BankCardCtrl bankCardCtrl = new BankCardCtrl();
-		Costumer costumer = new Costumer ();
 
 		try {
+			for (int indexCostumer = startCostumer; indexCostumer <= indexMaxCostumer+startCostumer; indexCostumer++) {
 
-			for (int indexCostumer = 1; indexCostumer < maxIndexCostumer; indexCostumer++) {
-
-				int maxIndex = Utils.randInt(1, 4);
 				costumer = getCostumer(indexCostumer);
-
-				for (int index = 1; index < maxIndex; index++) {
-
+				
+				maxBankCard = Utils.randInt(1, maxValue); 
+				for (int indexBankCard = 1; indexBankCard <= maxBankCard ; indexBankCard++) {
 					bankCard = DataTest.genBankCard(costumer);
 					bankCard.setCostumer(costumer);
-
 					costumer.addBankCard(bankCard);
-					bankCardCtrl.create(bankCard);
-					if (bankCard != null) 
-						Utils.trace("CB %s \n", bankCard);
-					
+					this.getCtrl().create(bankCard);
+					Utils.trace("%s\n", bankCard);
 				}
 			}
 		} catch (Exception e) {
-			Utils.trace("catch create %s\n", e.toString());
-		} finally {
-
+			Utils.trace("catch createMany %s\n", e.toString());
 		}
 	}
 
 	// -------------------------------------------------------------------------------------------------
-	public static void readMany() {
+	public void readMany() {
 		Utils.trace("=========================== read many  ===========================\n");
 
 		List<Object> bankCardList = new ArrayList<Object>();
 
-		BankCardCtrl bankCardCtrl = new BankCardCtrl();
 		try {
-			bankCardList = bankCardCtrl.list();
+			bankCardList = this.getCtrl().list();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		if ((bankCardList.size() > 0) && (bankCardList != null)) {
 			for (Object object : bankCardList) {
-				Utils.trace("%s\n", ( BankCard)object );
+				Utils.trace("%s\n", (BankCard) object);
 			}
 		} else
-			Utils.trace("bankCardList");
+			Utils.trace("bankCard null");
 	}
 
 //-------------------------------------------------------------------------------------------------	
-	public static void readOne() {
-		Utils.trace("=========================== read One  ===========================\n");
-		int bankCardId  = 14;
+	public void readOne(int id) {
+		Utils.trace("=========================== read One [%d] ===========================\n", id);
+
 		BankCard bankCard = new BankCard();
 
-		BankCardCtrl bankCardCtrl = new BankCardCtrl();
 		try {
-			bankCard = (BankCard) bankCardCtrl.read(bankCardId);
+			for (int index = id; index < this.getMaxRetry() + id; index++) {
+				bankCard = (BankCard) this.getCtrl().read(id);
+				if (bankCard != null)
+					break;
+			}
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -208,43 +182,88 @@ public class TBankCard {
 	}
 //-------------------------------------------------------------------------------------------------	
 
-	public static Costumer getCostumer(int costumerId) {
+	public Category getCategory(int categoryId) {
+		Category category = new Category();
+		CrudCtrl categoryCtrl = new StandardCrudCtrl(new Category());
 
-		Costumer costumer= new Costumer();
-		CrudCtrl costumerCtrl = new StandardCrudCtrl(new Costumer());
 		try {
-			costumer = (Costumer ) costumerCtrl.read(costumerId);
+			category = (Category) categoryCtrl.read(categoryId);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		return category;
+	}
+
+//-------------------------------------------------------------------------------------------------	
+	public Item getItem(int id) {
+		Item item = new Item();
+		CrudCtrl itemCtrl = new StandardCrudCtrl(new Item());
+
+		try {
+			for (int index = id; index < this.getMaxRetry() + id; index++) {
+				item = (Item) itemCtrl.read(id);
+				if (item != null)
+					break;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return item;
+	}
+
+//-------------------------------------------------------------------------------------------------	
+
+	public BankCard getBankCard(int id) {
+
+		BankCard bankCard = new BankCard();
+		UserCtrl bankCardCtrl = new UserCtrl();
+		try {
+			for (int index = id; index < this.getMaxRetry() + id; index++) {
+				bankCard = (BankCard) bankCardCtrl.read(id);
+				if (bankCard != null)
+					break;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return bankCard;
+
+	}
+
+	// -------------------------------------------------------------------------------------------------
+	public Costumer getCostumer(int id) {
+
+		Costumer costumer = new Costumer();
+		UserCtrl costumerCtrl = new UserCtrl();
+		try {
+			for (int index = id; index < this.getMaxRetry() + id; index++) {
+				costumer = (Costumer) costumerCtrl.read(index);
+				if (costumer != null)
+					break;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
 		return costumer;
 
 	}
-//	// -------------------------------------------------------------------------------------------------
-	public static User getUser(int userId) {
 
-		User user = new User();
-		UserCtrl userCtrl = new UserCtrl();
-		try {
-			user = (User) userCtrl.read(userId);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return user;
-
+//-------------------------------------------------------------------------------------------------	
+	public CrudCtrl getCtrl() {
+		return this.ctrl;
 	}
-//	// -------------------------------------------------------------------------------------------------
-//
-//	public static Article getArticle(int idArticle) {
-//		Article article = new Article();
-//		IArticleDao articleDao = new ArticleDao();
-//		try {
-//			article = articleDao.getArticleById(idArticle);
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		}
-//		return article;
-//
-//	}
 
+	public void setCtrl(CrudCtrl ctrl) {
+		this.ctrl = ctrl;
+	}
+
+	public int getMaxRetry() {
+		return maxRetry;
+	}
+
+	public void setMaxRetry(int maxRetry) {
+		this.maxRetry = maxRetry;
+	}
 }

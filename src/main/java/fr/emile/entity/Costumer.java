@@ -10,7 +10,9 @@ import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
@@ -35,23 +37,29 @@ public class Costumer extends User implements IConstant, Serializable {
 	@Column(name = "phone_number")
 	private String phoneNumber;
 
+	@Column(name = "default_billing_address_id", nullable = true)
+	private int defaultBillingAddressId;
+	@Column(name = "default_delivery_address_id", nullable = true)
+	private int defaultDeliveryAddressId;
+	@Column(name = "default_bankcard_id", nullable = true)
+	private int defaultBankCardId;
+
+	
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "costumer", fetch = FetchType.LAZY)
 	private List<Address> addressList;
 
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "costumer", fetch = FetchType.LAZY)
-//	@Transient
 	private List<BankCard> bankCardList;
 
-//	@OneToMany(cascade = CascadeType.ALL, mappedBy = "costumer", fetch = FetchType.LAZY)
-	@Transient
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "costumer", fetch = FetchType.LAZY)
+//	@Transient
 	private List<CartItem> cartItemList; // meaning cart : item + quan
 
 	@OneToMany(cascade = CascadeType.DETACH, mappedBy = "costumer", fetch = FetchType.LAZY)
-//	@Transient
 	private List<Order> orderList;
 
-//	@OneToMany(cascade = CascadeType.DETACH, mappedBy = "costumer", fetch = FetchType.LAZY)
-	@Transient
+	@OneToMany(cascade = CascadeType.DETACH, mappedBy = "costumer", fetch = FetchType.LAZY)
+//	@Transient
 	private List<Comment> commentList;
 
 	public Costumer() {

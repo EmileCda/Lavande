@@ -55,9 +55,10 @@ public class BankCard  implements IConstant, Serializable {
 
 	@ManyToOne
 	@JoinColumn(name = "costumer_id", nullable = false)
-//	@Transient
 	private Costumer costumer;
 
+	
+	
 	public BankCard() {
 		this(DEFAULT_ID, DEFAULT_BANK_CARD_NUMBER, DATE_NOW, DEFAULT_BANK_CARD_CRYPTO, true, false, null);
 	}

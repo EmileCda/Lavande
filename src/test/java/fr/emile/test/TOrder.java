@@ -40,22 +40,6 @@ class TOrderUnitTest {
 	}
 
 //-------------------------------------------------------------------------------------------------
-	public void create() {
-		Utils.trace("=========================== Create ===========================\n");
-		createOne();
-		createMany();
-
-	}
-
-//-------------------------------------------------------------------------------------------------
-	public void read() {
-		Utils.trace("=========================== Read ===========================\n");
-		readMany();
-		readOne(1);
-
-	}
-
-//-------------------------------------------------------------------------------------------------
 	public void update() {
 		int orderId = 3;
 		Utils.trace("=========================== Update [%d]===========================\n",orderId);
@@ -131,19 +115,18 @@ class TOrderUnitTest {
 	}
 	// -------------------------------------------------------------------------------------------------
 
-	public void createMany() {
+	public void createMany(int startCostumer,int maxOrder) {
 		Utils.trace("=========================== create many  ===========================\n");
-		int maxOrder = 10;
-		int maxItem = 59;
+		int maxItem = 30;
 		int maxIndexCostumer= 10;
 		Order order = new Order();
 		Item item = new Item();
 		Costumer costumer = new Costumer() ;
 
 		try {
-			for (int indexCostumer = 1; indexCostumer  <= maxIndexCostumer ; indexCostumer ++) {
+			for (int indexCostumer = startCostumer; indexCostumer  <= maxIndexCostumer+startCostumer ; indexCostumer ++) {
 				
-				int maxCurrentOrder = Utils.randInt(0, maxOrder);
+				int maxCurrentOrder = Utils.randInt(1, maxOrder);
 				costumer = getCostumer(indexCostumer);
 				
 				for (int indexOrder = 1; indexOrder <= maxCurrentOrder; indexOrder++) {
@@ -152,6 +135,10 @@ class TOrderUnitTest {
 					item = getItem(Utils.randInt(1, maxItem));
 
 					order.setCostumer(costumer);
+					order.setBankCardUsed(costumer.getBankCardList().get(0));
+					order.setDeliveryAddress(costumer.getAddressList().get(0));
+					order.setBillingAddress(costumer.getAddressList().get(0));
+					
 					costumer.addOrder(order);
 					this.getCtrl().create(order);
 					Utils.trace("%s\n", order);

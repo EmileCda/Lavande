@@ -14,12 +14,12 @@ public class TParam implements IConstant{
 
 	public static void main(String[] args) {
 		Utils.trace("*************************** Begin ************************************\n");
-//		createOne();
+		createOne();
 //		createMany();
 //		readOne();
 //		readMany();
 //		update();
-		delete();/
+//		delete();
 
 		Utils.trace("*************************** end ************************************\n");
 
