@@ -18,6 +18,7 @@ import fr.emile.entity.Category;
 import fr.emile.entity.Comment;
 import fr.emile.entity.Costumer;
 import fr.emile.entity.Item;
+import fr.emile.entity.Order;
 import fr.emile.entity.Param;
 import fr.emile.entity.User;
 import fr.emile.enums.Gender;
@@ -57,6 +58,7 @@ public final class DataTest implements IConstant {
 				DATE_NOW);
 
 	}
+
 // ---------------------------------------------------------------------------------------------------
 	public static Comment genComment() {
 		return new Comment(DataTest.comment(), Utils.randInt(0, 5));
@@ -64,9 +66,10 @@ public final class DataTest implements IConstant {
 
 // ---------------------------------------------------------------------------------------------------
 	public static CartItem genCartItem() {
-		
-		return new CartItem(Utils.randInt(1, 5),null, null );
+
+		return new CartItem(Utils.randInt(1, 5), null, null);
 	}
+
 	// ---------------------------------------------------------------------------------------------------
 	public static Costumer genCostumer() {
 
@@ -92,6 +95,15 @@ public final class DataTest implements IConstant {
 		return new Item(DataTest.itemName(), DataTest.itemDescription(), Utils.randFloat(1, 100), Utils.randInt(1, 90),
 				Utils.randInt(1, 100), Utils.randInt(0, 1) > 0 ? true : false, DataTest.picUrl(), DataTest.videoUrl());
 	}
+	// ---------------------------------------------------------------------------------------------------
+
+	public static Order genOrder() {
+		return new Order(DataTest.orderNumber(), Utils.addDate(DATE_NOW, Utils.randInt(7, 10)),
+				Utils.randFloat(0, 1000), Utils.randFloat(1, 100), Utils.randFloat(1000, 2000));
+
+	}
+
+// ---------------------------------------------------------------------------------------------------
 
 ////	// ---------------------------------------------------------------------------------------------------
 //			public static Commande genCommande() {

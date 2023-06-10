@@ -46,8 +46,8 @@ public class Costumer extends User implements IConstant, Serializable {
 	@Transient
 	private List<CartItem> cartItemList; // meaning cart : item + quan
 
-//	@OneToMany(cascade = CascadeType.DETACH, mappedBy = "costumer", fetch = FetchType.LAZY)
-	@Transient
+	@OneToMany(cascade = CascadeType.DETACH, mappedBy = "costumer", fetch = FetchType.LAZY)
+//	@Transient
 	private List<Order> orderList;
 
 //	@OneToMany(cascade = CascadeType.DETACH, mappedBy = "costumer", fetch = FetchType.LAZY)

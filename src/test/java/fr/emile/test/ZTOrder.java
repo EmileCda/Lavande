@@ -1,4 +1,4 @@
-package fr.ecommerce.test;
+package fr.emile.test;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,21 +7,21 @@ import fr.ecommerce.Ctrl.implement.UserCtrl;
 
 import fr.ecommerce.Ctrl.interfaces.IUserCtrl;
 import fr.ecommerce.entity.Article;
-import fr.ecommerce.entity.Commentaire;
+import fr.ecommerce.entity.Commande;
 import fr.ecommerce.entity.User;
 import fr.ecommerce.model.dao.implement.ArticleDao;
-import fr.ecommerce.model.dao.implement.CommentaireDao;
+import fr.ecommerce.model.dao.implement.CommandeDao;
 import fr.ecommerce.model.dao.interfaces.IArticleDao;
-import fr.ecommerce.model.dao.interfaces.ICommentaireDao;
+import fr.ecommerce.model.dao.interfaces.ICommandeDao;
 import fr.ecommerce.utils.DataTest;
 import fr.ecommerce.utils.Utils;
 
-public class TCommentaire {
+public class ZTOrder {
 	
 	public static void main(String[] args) {
 		Utils.trace("*************************** Begin ************************************\n");
-//		createOne();
-		createMany();
+		createOne();
+//		createMany();
 //		readOne(1);
 //		readMany();
 //		update();
@@ -50,26 +50,26 @@ public class TCommentaire {
 //-------------------------------------------------------------------------------------------------
 	public static void update() {
 		Utils.trace("=========================== Update ===========================\n");
-		int commentaireId = 3;
-		Commentaire commentaire = null ;  
+		int commandeId = 3;
+		Commande commande = null ;  
 		
-		ICommentaireDao commentaireDao = new CommentaireDao();
+		ICommandeDao commandeDao = new CommandeDao();
 		try {
-			commentaire = commentaireDao.getCommentaireById(commentaireId);
-			if (commentaire == null )
+			commande = commandeDao.getCommandeById(commandeId);
+			if (commande == null )
 				Utils.trace("Address null\n");
 			else {
-				Utils.trace("Before  %s\n", commentaire);
+				Utils.trace("Before  %s\n", commande);
 
 				// -------------------------- update ----------------------
-				commentaire.setGrade(5);
-				commentaireDao.updateCommentaire(commentaire);
+				commande.setOrderNumber("ORDER MODIFYED $$$$$");
+				commandeDao.updateCommande(commande);
 	
-				commentaire = commentaireDao.getCommentaireById(commentaireId);
-				if (commentaire != null )
-					Utils.trace("After %s\n", commentaire);
+				commande = commandeDao.getCommandeById(commandeId);
+				if (commande != null )
+					Utils.trace("After %s\n", commande);
 				else
-					Utils.trace("commentaire null\n");
+					Utils.trace("Address null\n");
 			}
 
 		} catch (
@@ -84,24 +84,25 @@ public class TCommentaire {
 	public static void delete() {
 		Utils.trace("=========================== Delete ===========================\n");
 		int addressId = 1;
-		Commentaire commentaire = new Commentaire();
-		ICommentaireDao commentaireDao = new CommentaireDao();
+		Commande commande = new Commande();
+		ICommandeDao commandeDao = new CommandeDao();
 		try {
-			commentaire = commentaireDao.getCommentaireById(addressId);
-			if (commentaire == null) 
-				Utils.trace("Error : l'commentaire n'existe pas\n");
+			commande = commandeDao.getCommandeById(addressId);
+			if (commande == null) 
+				Utils.trace("Error : l'commande n'existe pas\n");
 			else {
-				commentaireDao.deleteCommentaire(commentaire );
+				commandeDao.deleteCommande(commande );
 
-				commentaire = commentaireDao.getCommentaireById(addressId);
+				commande = commandeDao.getCommandeById(addressId);
 
-				if (commentaire != null)
+				if (commande != null)
 					Utils.trace("Error not remove\n");
 				else
 					Utils.trace("remove ok\n");
 			}
 		} catch (Exception e) {
-				 				e.printStackTrace();
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 		}
 
 	}
@@ -110,40 +111,35 @@ public class TCommentaire {
 	public static void createOne() {
 		Utils.trace("=========================== create One  ===========================\n");
 
-		Commentaire commentaire = new Commentaire();
+		Commande commande = new Commande();
 		
-		commentaire = DataTest.genCommentaire();
+		commande = DataTest.genCommande();
 		
 		User user = getUser(1);
-		Article article = getArticle(1); 
-		commentaire.setUser(user);
-		commentaire.setItem(article);
+		commande.setUser(user);
+		user.addOrder(commande);
 		
-		user.addComment(commentaire);
-		article.addComment(commentaire);
-		
-		
-		ICommentaireDao commentaireDao= new CommentaireDao();
+		ICommandeDao commandeDao= new CommandeDao();
 
 		try {
-			commentaireDao.addCommentaire(commentaire);
+			commandeDao.addCommande(commande);
 		} catch (Exception e) {
 			Utils.trace("catch create %s\n", e.toString());
 		} finally {
 
 		}
 
-		Utils.trace("%s\n", commentaire);
+		Utils.trace("%s\n", commande);
 	}
 	//-------------------------------------------------------------------------------------------------	
 
 	public static void createMany() {
 		Utils.trace("=========================== create many  ===========================\n");
-		int maxIndex = 30;
+		int maxIndex = 3;
 		int maxUserIndex= 10;
-		Commentaire commentaire = new Commentaire();
+		Commande commande = new Commande();
 
-		ICommentaireDao commentaireDao= new CommentaireDao();
+		ICommandeDao commandeDao= new CommandeDao();
 		User user = new User() ;
 
 		try {
@@ -151,14 +147,11 @@ public class TCommentaire {
 		
 				user = getUser(indexUser);
 				for (int index = 1; index < maxIndex; index++) {
-					Article article = getArticle(1);
-					commentaire = DataTest.genCommentaire();
-					commentaire.setUser(user);
-					commentaire.setItem(article);
-					article.addComment(commentaire);
-					user.addComment(commentaire);
 					
-					commentaireDao.addCommentaire(commentaire);
+					commande = DataTest.genCommande();
+					commande.setUser(user);
+					user.addOrder(commande);
+					commandeDao.addCommande(commande);
 				}
 			}
 		} catch (Exception e) {
@@ -171,38 +164,38 @@ public class TCommentaire {
 	public static void readMany() {
 		Utils.trace("=========================== read many  ===========================\n");
 
-		List<Commentaire> commentaireList = new ArrayList<Commentaire>() ;
+		List<Commande> commandeList = new ArrayList<Commande>() ;
 
-		ICommentaireDao commentaireCtrl= new CommentaireDao();
+		ICommandeDao commandeCtrl= new CommandeDao();
 		try {
-			commentaireList = commentaireCtrl.getCommentaires();
+			commandeList = commandeCtrl.getCommandes();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		if ((commentaireList.size() >0  ) && (commentaireList != null)) {
-			for (Commentaire commentaire : commentaireList) {
-				Utils.trace("%s\n",commentaire); 
+		if ((commandeList.size() >0  ) && (commandeList != null)) {
+			for (Commande commande : commandeList) {
+				Utils.trace("%s\n",commande); 
 			}
 		}
 		else
 			Utils.trace("address null");
 	}
 //-------------------------------------------------------------------------------------------------	
-	public static void readOne(int commentaireId) {
+	public static void readOne(int commandeId) {
 		Utils.trace("=========================== read One  ===========================\n");
 
-		Commentaire commentaire = new Commentaire() ;
+		Commande commande = new Commande() ;
 
-		ICommentaireDao commentaireCtrl= new CommentaireDao();
+		ICommandeDao commandeCtrl= new CommandeDao();
 		try {
-			commentaire = commentaireCtrl.getCommentaireById(commentaireId);
+			commande = commandeCtrl.getCommandeById(commandeId);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		if (commentaire != null )
-			Utils.trace("%s\n",commentaire); 
+		if (commande != null )
+			Utils.trace("%s\n",commande); 
 		else 
-			Utils.trace("commentaire null\n");
+			Utils.trace("commande null\n");
 		
 	}
 //-------------------------------------------------------------------------------------------------	

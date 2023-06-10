@@ -30,9 +30,9 @@
 		<mapping class="fr.emile.entity.Item"></mapping>
 		<mapping class="fr.emile.entity.CartItem"></mapping>
 		<mapping class="fr.emile.entity.Comment"></mapping>
+		<mapping class="fr.emile.entity.Order"></mapping>
 <!-- 		<mapping class="fr.emile.entity.Param"></mapping> -->
 <!-- 		<mapping class="fr.emile.entity.Category"></mapping> -->
-<!-- 		<mapping class="fr.emile.entity.Order"></mapping> -->
 <!-- 		<mapping class="fr.emile.entity.CartItem"></mapping> -->
 <!-- 		<mapping class="fr.emile.entity.OrderLine"></mapping> -->
 
