@@ -15,6 +15,7 @@ import fr.emile.entity.Address;
 import fr.emile.entity.BankCard;
 import fr.emile.entity.CartItem;
 import fr.emile.entity.Category;
+import fr.emile.entity.Comment;
 import fr.emile.entity.Costumer;
 import fr.emile.entity.Item;
 import fr.emile.entity.Param;
@@ -56,7 +57,12 @@ public final class DataTest implements IConstant {
 				DATE_NOW);
 
 	}
-	// ---------------------------------------------------------------------------------------------------
+// ---------------------------------------------------------------------------------------------------
+	public static Comment genComment() {
+		return new Comment(DataTest.comment(), Utils.randInt(0, 5));
+	}
+
+// ---------------------------------------------------------------------------------------------------
 	public static CartItem genCartItem() {
 		
 		return new CartItem(Utils.randInt(1, 5),null, null );

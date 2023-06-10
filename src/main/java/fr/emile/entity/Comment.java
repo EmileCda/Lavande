@@ -99,19 +99,6 @@ public class Comment  implements IConstant {
 
 
 
-	@Override
-	public void preWrite() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void postRead() {
-		// TODO Auto-generated method stub
-		
-	}
-
-
 
 	public Costumer getCostumer() {
 		return costumer;
