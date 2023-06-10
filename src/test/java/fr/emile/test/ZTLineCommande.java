@@ -1,4 +1,4 @@
-package fr.ecommerce.test;
+package fr.emile.test;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +19,7 @@ import fr.ecommerce.model.dao.interfaces.ILigneDeCommandeDao;
 import fr.ecommerce.utils.DataTest;
 import fr.ecommerce.utils.Utils;
 
-public class TLineCommande {
+public class ZTLineCommande {
 	
 	public static void main(String[] args) {
 		Utils.trace("*************************** Begin ************************************\n");

@@ -19,6 +19,7 @@ import fr.emile.entity.Comment;
 import fr.emile.entity.Costumer;
 import fr.emile.entity.Item;
 import fr.emile.entity.Order;
+import fr.emile.entity.OrderLine;
 import fr.emile.entity.Param;
 import fr.emile.entity.User;
 import fr.emile.enums.Gender;
@@ -104,44 +105,13 @@ public final class DataTest implements IConstant {
 	}
 
 // ---------------------------------------------------------------------------------------------------
-
-////	// ---------------------------------------------------------------------------------------------------
-//			public static Commande genCommande() {
-//				
-//				return genOrder(); 
-//			}
-//
-//			// ---------------------------------------------------------------------------------------------------
-//			public static Commande genOrder() {
-//
-////		public Order( String orderNumber,Date deliveryDate, float totalDiscount,
-////				float shippingCosts, float grandTotal) {
-//		
-//		
-//		return new Commande(DataTest.orderNumber(),
-//				Utils.addDate(DATE_NOW, Utils.randInt(7, 10)),
-//				Utils.randFloat(0, 1000),
-//				Utils.randFloat(1, 100),
-//				Utils.randFloat(1000, 2000));
-//
-//	}
-//
-	// ---------------------------------------------------------------------------------------------------
-//	public static Article genArticle() {
-//
-//		return new Article(DataTest.itemName(), DataTest.itemDescription(), Utils.randFloat(1, 100), Utils.randInt(1, 90),
-//				Utils.randInt(1, 100), Utils.randInt(0, 1) > 0 ? true : false, DataTest.picUrl(), DataTest.videoUrl());
-//	}
-//
-////	// ---------------------------------------------------------------------------------------------------
-//	
-//	
-//	public static LigneDeCommande genLigneDeCommande() {
-//		
-//		return new LigneDeCommande(DEFAULT_ID, Utils.randInt(1, 10), null, null);
-//			
-//	}
-////	// ---------------------------------------------------------------------------------------------------
+	
+	public static OrderLine genOrderLine() {
+		
+		return new OrderLine(DEFAULT_ID, Utils.randInt(1, 10), null, null);
+			
+	}
+// ---------------------------------------------------------------------------------------------------
 //	public static Commentaire genCommentaire() {
 //		return DataTest.genComment();
 //	}
