@@ -13,7 +13,9 @@ import java.util.concurrent.TimeUnit;
 import fr.emile.common.IConstant;
 import fr.emile.entity.Address;
 import fr.emile.entity.BankCard;
+import fr.emile.entity.Category;
 import fr.emile.entity.Costumer;
+import fr.emile.entity.Item;
 import fr.emile.entity.Param;
 import fr.emile.entity.User;
 import fr.emile.enums.Gender;
@@ -48,8 +50,6 @@ public final class DataTest implements IConstant {
 			e.printStackTrace();
 		}
 
-//			public Param(int  functionKey, int intValue, String varcharValue256, String varcharValue4096,
-//					byte[] blobValue, Date datetimeValue) {		
 		return new Param(codeFunction, Utils.randInt(1, 100), firstname,
 				firstname + " " + firstname + " " + firstname + " " + firstname + " " + firstname + " ", code,
 				DATE_NOW);
@@ -68,22 +68,21 @@ public final class DataTest implements IConstant {
 	}
 
 // ---------------------------------------------------------------------------------------------------
-//public static Category genCategorie() {
-//	return  DataTest.genCategory();
+	public static Category genCategory() {
 
-//		}
-//			// ---------------------------------------------------------------------------------------------------
-//			public static Categorie genCategory() {
-//
-//			return new Categorie(
-//					DataTest.categoryName(), 
-//					Utils.randInt(5, 90), 
-//					Utils.randInt(0, 1) > 0 ? true : false,
-//					DataTest.picUrl());
-//
-//			}
-//
-//			// ---------------------------------------------------------------------------------------------------
+		return new Category(DataTest.categoryName(), Utils.randInt(5, 90), Utils.randInt(0, 1) > 0 ? true : false,
+				DataTest.picUrl());
+
+	}
+
+	// ---------------------------------------------------------------------------------------------------
+	public static Item genItem() {
+
+		return new Item(DataTest.itemName(), DataTest.itemDescription(), Utils.randFloat(1, 100), Utils.randInt(1, 90),
+				Utils.randInt(1, 100), Utils.randInt(0, 1) > 0 ? true : false, DataTest.picUrl(), DataTest.videoUrl());
+	}
+
+////	// ---------------------------------------------------------------------------------------------------
 //			public static Commande genCommande() {
 //				
 //				return genOrder(); 

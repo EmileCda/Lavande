@@ -19,11 +19,11 @@ public class TBankCard {
 	public static void main(String[] args) {
 		Utils.trace("*************************** Begin ************************************\n");
 //		createOne();
-		createMany();
+//		createMany();
 //		readOne();
 //		readMany();
 //		update();
-//		delete();
+		delete();
 
 		Utils.trace("*************************** end ************************************\n");
 

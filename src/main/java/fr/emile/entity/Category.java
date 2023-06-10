@@ -56,17 +56,6 @@ public class Category  implements IConstant, Serializable {
 
 	}
 
-	@Override
-	public void preWrite() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void postRead() {
-		// TODO Auto-generated method stub
-
-	}
 
 	public void addItem(Item item) {
 		initItemList();
