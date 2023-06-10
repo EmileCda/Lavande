@@ -1,4 +1,4 @@
-package fr.lotus.utils;
+package fr.emile.utils;
 
 import java.time.Duration;
 import java.time.LocalDate;
@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 import java.util.concurrent.TimeUnit;
 
-import fr.lotus.common.IConstant;
+import fr.emile.common.IConstant;
 //import fr.jasmin.entity.Address;
 //import fr.jasmin.entity.BankCard;
 //import fr.jasmin.entity.Comment;
@@ -18,9 +18,9 @@ import fr.lotus.common.IConstant;
 //import fr.jasmin.entity.User;
 //import fr.jasmin.entity.Category;
 
-import fr.lotus.enums.Gender;
-import fr.lotus.enums.Profile;
-import fr.lotus.utils.Utils;
+import fr.emile.enums.Gender;
+import fr.emile.enums.Profile;
+import fr.emile.utils.Utils;
 
 public final class Phrase implements IConstant {
 
