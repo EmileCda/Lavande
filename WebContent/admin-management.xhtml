@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<ui:composition template="/resources/template/main-template.xhtml">
+	<ui:define name="main">
+		<f:view>
+			<c:if test="#{loginBean.connected}">
+				<div class="flex-column-center">
+					<div class="row-div padding-top-3rem margin-auto">
+						<h3>#{msg['admin.management.title']}</h3>
+					</div>
+
+					<div class="add-user">
+						<h:form>
+							<h2>#{msg['add-user.title']}</h2>
+							<ui:include src="/resources/module/account.xhtml"></ui:include>
+							<div class="row-div">
+								<p>#{loginBean.promptStatus}</p>
+							</div>
+							<h:panelGroup id="panelButtons">
+								<h:panelGrid columns="3" cellpadding="0" cellspacing="8">
+
+									<h:panelGroup rendered="#{loginBean.isAdmin}">
+										<h:commandButton id="addUser"
+											value="#{msg['create-user.add']}"
+											class="border-radius height-3rem padding-1rem"
+											action="#{loginBean.addUser}" />
+									</h:panelGroup>
+
+									<h:panelGroup rendered="#{!loginBean.isConnected}">
+										<h:commandButton id="addCostumer"
+											value="#{msg['create-user.add']}"
+											class="border-radius height-3rem padding-1rem"
+											action="#{loginBean.addCostumer}" />
+									</h:panelGroup>
+
+
+									<h:panelGroup rendered="#{msg['cheat.mode']}">
+										<h:commandButton value="#{msg['cheat.name']}"
+											action="#{loginBean.cheatGenUser}" />
+									</h:panelGroup>
+								</h:panelGrid>
+							</h:panelGroup>
+						</h:form>
+					</div>
+				</div>
+				</c:if>
+		</f:view>
+
+	</ui:define>
+</ui:composition>
+
+</html>

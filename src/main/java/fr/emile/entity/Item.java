@@ -221,6 +221,22 @@ public class Item  implements IConstant, Serializable {
 	public void setCartItemList(List<CartItem> cartItemList) {
 		this.cartItemList = cartItemList;
 	}
+	public List<OrderLine> getOrderLineList() {
+		return orderLineList;
+	}
+
+	public void setOrderLineList(List<OrderLine> orderLineList) {
+		this.orderLineList = orderLineList;
+	}
+	
+	public String toItemLabel() {
+		return String.format("%s \t%.2f€, \t-%d%%, \tstock:%d, \t%svendable, \timg:%s, \tvid :%s",
+				getName(),  getPrice(), getDiscount(), getInventory(), 
+				isSalable()?"":"non-",
+						getDescription(),
+				getPicture(), getVideo());
+
+	}
 
 	@Override
 	public String toString() {
@@ -231,13 +247,6 @@ public class Item  implements IConstant, Serializable {
 
 	}
 
-	public List<OrderLine> getOrderLineList() {
-		return orderLineList;
-	}
-
-	public void setOrderLineList(List<OrderLine> orderLineList) {
-		this.orderLineList = orderLineList;
-	}
 
 
 

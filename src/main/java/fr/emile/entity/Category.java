@@ -41,6 +41,12 @@ public class Category  implements IConstant, Serializable {
 		this(DEFAULT_ID, DEFAULT_NAME, DEFAULT_DISCOUNT, false, DEFAULT_PIC);
 	}
 
+
+	public Category(Category copy) {
+		this(copy.getId(), copy.getName(), copy.getDiscount(), copy.isDiscountCumulative(), copy.getPicture());
+		this.setItemList(copy.getItemList());
+	}
+
 	public Category(String name, int discount, boolean isDiscountCumulative, String picture) {
 		this(DEFAULT_ID, name, discount, isDiscountCumulative, picture);
 	}

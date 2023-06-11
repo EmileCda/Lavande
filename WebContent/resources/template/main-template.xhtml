@@ -7,20 +7,20 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets">
 
 <h:head>
-	<h:outputStylesheet name="ecommerce.css" library="css" />
+	<h:outputStylesheet name="style.css" library="css" />
 	<f:loadBundle basename="webPage" var="msg" />
 <!-- 	<h:outputStylesheet library="webjars" name="font-awesome/6.4.0/css/fontawesome.css" /> -->
 </h:head>
 
 <h:body>
 	<div class="main-page-container">
-		<header class="header"> <ui:insert name="header">
+		<header class="flex-column-center header "> <ui:insert name="header">
 			<ui:include src="/resources/template/header.xhtml" />
 		</ui:insert> </header>
-		<main class="main"> <ui:insert name="main">
+		<main class="flex-column-center main"> <ui:insert name="main">
 			<ui:include src="/resources/template/content.xhtml" />
 		</ui:insert> </main>
-		<footer class="footer"> <ui:insert name="footer">
+		<footer class="flex-column-center footer"> <ui:insert name="footer">
 			<ui:include src="/resources/template/footer.xhtml">
 			</ui:include>
 		</ui:insert> </footer>

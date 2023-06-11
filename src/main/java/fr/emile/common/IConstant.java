@@ -87,17 +87,17 @@ public interface IConstant {
 
 //-------------- web page ------------------------------------------------	
 	
-	public final String CLIENT_HOME 	="procurement-management.xhtml";
-	public final String STOREKEEPER_HOME= "item-management.xhtml";
-	public final String ADMIN_HOME  	= "admin-management.xhtml";
-	public final String ADD_USER  		= "add-user.xhtml";
-	public final String ADMIN_MANAGEMENT= "admin-management.xhtml";
-	public final String CART  			= "cart.xhtml";
-	public final String CONFIRM  		= "confirm.xhtml";
-	public final String CREATE_USER  	= "create-user.xhtml";
-	public final String HOME  			= "home.xhtml";
-	public final String ITEM  			= "item.xhtml";
-	public final String ORDER_HISTORY  	= "order-history.xhtml";
-	public final String POURCHASE_VALIDATED  = "purchase-validated.xhtml";
+	public final String COSTUMER_HOME 		= "procurement-management.xhtml";
+	public final String STOREKEEPER_HOME	= "item-management.xhtml";
+	public final String ADMIN_HOME  		= "admin-management.xhtml";
+	public final String ADD_USER  			= "add-user.xhtml";
+	public final String ADMIN_MANAGEMENT	= "admin-management.xhtml";
+	public final String CART  				= "cart.xhtml";
+	public final String CONFIRM  			= "confirm.xhtml";
+	public final String CREATE_USER  		= "create-user.xhtml";
+	public final String HOME  				= "home.xhtml";
+	public final String ITEM  				= "item.xhtml";
+	public final String ORDER_HISTORY  		= "order-history.xhtml";
+	public final String POURCHASE_VALIDATED = "purchase-validated.xhtml";
 
 }

@@ -67,7 +67,13 @@ public class Costumer extends User implements IConstant, Serializable {
 				DEFAULT_EMAIL, DEFAULT_PASSWORD, true);
 
 	}
-
+	public Costumer(Costumer copy) {
+		
+		this(copy.getId(), copy.getGender(), copy.getFirstname(), 
+				copy.getLastname(), copy.getBirthdate(), copy.getPhoneNumber(), 
+				copy.getProfile(), copy.getEmail(), copy.getPassword(), copy.getIsActif());
+		
+	}
 	public Costumer(Gender gender, String firstname, String lastname, Date birthdate, String phoneNumber,
 			Profile profile, String email, String password) {
 
@@ -154,6 +160,16 @@ public class Costumer extends User implements IConstant, Serializable {
 		if (this.getCartItemList() == null)
 			this.setCartItemList(new ArrayList<CartItem>());
 
+	}
+
+	public void clean() {
+		super.clean();
+		this.setGender(DEFAULT_GENDER);
+		this.setFirstname("");
+		this.setLastname("");
+		this.setBirthdate(DATE_NOW);
+		this.setPhoneNumber("");
+		
 	}
 
 	public Gender getGender() {

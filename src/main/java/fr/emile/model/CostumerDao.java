@@ -3,7 +3,9 @@ package fr.emile.model;
 import org.hibernate.query.Query;
 
 import fr.emile.common.IConstant;
+import fr.emile.ctrl.UserCtrl;
 import fr.emile.entity.Costumer;
+import fr.emile.entity.User;
 import fr.emile.utils.Utils;
 
 public class CostumerDao extends CrudDao implements IConstant {
@@ -16,18 +18,22 @@ public class CostumerDao extends CrudDao implements IConstant {
 
 //-------------------------------------------------------------------------------------------------	
 	public Costumer read(String email) {
-		Costumer costumer = null;
+		Costumer costumerRetreive = null;
+		User userRetreive = new User();
+		User user= null;
+		UserCtrl userCtrl = new UserCtrl() ;
+		
 		try {
-			String  stringQuery = "FROM costumer c WHERE c.email = :email";
-			Query<Costumer> query = this.getSession().createQuery(stringQuery, Costumer.class);
-			query.setParameter("email", email);
-			costumer = query.uniqueResult(); 
+				userRetreive= (User) userCtrl.read(email);
+				if (userRetreive != null) {
+					costumerRetreive  = (Costumer) this.read(userRetreive.getId());
+					
+				}
+		
 		} catch (Exception e) {
-			Utils.trace("catch  read(String email) %s \n", e.toString());
-
-		} finally {
+			Utils.trace("ereur read email %s\n", e.toString());
 		}
-		return costumer;
+		return costumerRetreive;
 	}
 	
 

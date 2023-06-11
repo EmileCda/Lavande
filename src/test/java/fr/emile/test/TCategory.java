@@ -18,8 +18,8 @@ public class TCategory {
 		Utils.trace("*************************** Begin ************************************\n");
 		TCategoryUnitTest unitTest = new TCategoryUnitTest();
 //		unitTest.createOne();
-		unitTest.createMany(10);
-//		unitTest.readOne(1);
+//		unitTest.createMany(10);
+		unitTest.readOne(2);
 //		unitTest.readMany();
 //		unitTest.update();
 //		unitTest.delete();
