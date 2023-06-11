@@ -1,4 +1,4 @@
-package fr.lotus.entity;
+package fr.emile.entity;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -17,12 +17,11 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
-import fr.lotus.common.IConstant;
-import fr.lotus.model.implement.ClassDao;
+import fr.emile.common.IConstant;
 
 @Entity
 @Table(name = "item")
-public class Item extends ClassDao implements IConstant, Serializable {
+public class Item  implements IConstant, Serializable {
 
 	private static final long serialVersionUID = 1L;
 	@Id
@@ -40,7 +39,6 @@ public class Item extends ClassDao implements IConstant, Serializable {
 
 	@ManyToOne
 	@JoinColumn(name = "category_id" ,nullable = false)
-//	@Transient
 	private Category category;
 	
 	
@@ -48,8 +46,8 @@ public class Item extends ClassDao implements IConstant, Serializable {
 //	@Transient
 	private List<Comment> commentList;
 
-	@OneToMany(cascade = CascadeType.DETACH, mappedBy = "item", fetch = FetchType.LAZY)
-//	@Transient
+//	@OneToMany(cascade = CascadeType.DETACH, mappedBy = "item", fetch = FetchType.LAZY)
+	@Transient
 	private List<CartItem > cartItemList;
 
 	@OneToMany(cascade = CascadeType.DETACH, mappedBy = "item", fetch = FetchType.LAZY)
@@ -211,18 +209,7 @@ public class Item extends ClassDao implements IConstant, Serializable {
 		this.commentList = commentList;
 	}
 
-	@Override
-	public void preWrite() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void postRead() {
-		// TODO Auto-generated method stub
-
-	}
-
+	
 	public void setCommentList(List<Comment> commentList) {
 		this.commentList = commentList;
 	}

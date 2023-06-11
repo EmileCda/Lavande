@@ -1,4 +1,4 @@
-package fr.lotus.entity;
+package fr.emile.entity;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -15,13 +15,12 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
-import fr.lotus.common.IConstant;
-import fr.lotus.model.implement.ClassDao;
-import fr.lotus.utils.Utils;
+import fr.emile.common.IConstant;
+import fr.emile.utils.Utils;
 
 @Entity
 @Table(name = "category")
-public class Category extends ClassDao implements IConstant, Serializable {
+public class Category  implements IConstant, Serializable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -36,7 +35,6 @@ public class Category extends ClassDao implements IConstant, Serializable {
 	private String picture;
 
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "category", fetch = FetchType.LAZY)
-//	 @Transient
 	private List<Item> itemList;
 
 	public Category() {
@@ -57,17 +55,6 @@ public class Category extends ClassDao implements IConstant, Serializable {
 
 	}
 
-	@Override
-	public void preWrite() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void postRead() {
-		// TODO Auto-generated method stub
-
-	}
 
 	public void addItem(Item item) {
 		initItemList();

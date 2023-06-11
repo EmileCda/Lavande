@@ -1,14 +1,14 @@
-package fr.lotus.model.implement;
+package fr.emile.model;
 
 import org.hibernate.query.Query;
 
-import fr.lotus.common.IConstant;
-import fr.lotus.entity.User;
-import fr.lotus.utils.Utils;
+import fr.emile.common.IConstant;
+import fr.emile.entity.User;
+import fr.emile.utils.Utils;
 
 public class UserDao extends CrudDao implements IConstant {
 
-	private 		User user;  
+
 
 	public UserDao() {
 		super(new User());
@@ -22,8 +22,6 @@ public class UserDao extends CrudDao implements IConstant {
 			Query<User> query = this.getSession().createQuery(stringQuery, User.class);
 			query.setParameter("email", email);
 			user = query.uniqueResult(); 
-			if (user != null)
-				user.postRead();
 		} catch (Exception e) {
 			Utils.trace("catch  read(String email) %s \n", e.toString());
 
@@ -33,14 +31,5 @@ public class UserDao extends CrudDao implements IConstant {
 	}
 	
 
-//-------------------------------------------------------------------------------------------------	
-	public  User getUser() {
-		return user;
-	}
-
-//-------------------------------------------------------------------------------------------------	
-	public void setUser(User user) {
-		this.user = user;
-	}
 
 }

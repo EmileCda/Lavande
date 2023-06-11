@@ -1,4 +1,4 @@
-package fr.lotus.entity;
+package fr.emile.entity;
 
 import java.io.Serializable;
 
@@ -17,15 +17,14 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import fr.lotus.common.IConstant;
-import fr.lotus.model.implement.ClassDao;
+import fr.emile.common.IConstant;
 
 
 @Entity
 @Inheritance(strategy=InheritanceType.JOINED)
 @DiscriminatorColumn(name="item_type")
 @Table(name="pickup_item")
-public abstract class PickupItem  extends ClassDao implements IConstant, Serializable {
+public abstract class PickupItem implements IConstant, Serializable {
 	
 	
 	private static final long serialVersionUID = 1L;
@@ -36,11 +35,10 @@ public abstract class PickupItem  extends ClassDao implements IConstant, Seriali
 	private int quantity;
 	
 	
-	@ManyToOne
+	@OneToOne
 	@JoinColumn(name = "item_id", nullable = false)
 	private Item item;
 
-	
 	
 	
 	
@@ -60,12 +58,6 @@ public abstract class PickupItem  extends ClassDao implements IConstant, Seriali
 
 	
 
-	@Override
-	public  void preWrite() {} ;
-
-	@Override
-	public void postRead(){} ;
-	
 	
 	
 	

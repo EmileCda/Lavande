@@ -8,17 +8,18 @@ import fr.emile.ctrl.StandardCrudCtrl;
 import fr.emile.ctrl.UserCtrl;
 import fr.emile.entity.Category;
 import fr.emile.entity.Costumer;
+import fr.emile.entity.Address;
 import fr.emile.entity.Item;
-import fr.emile.entity.User;
+import fr.emile.entity.Address;
 import fr.emile.utils.Utils;
 
-public class TUser {
+public class TAddress {
 
 	public static void main(String[] args) {
 		Utils.trace("*************************** Begin ************************************\n");
-		TUserUnitTest unitTest = new TUserUnitTest();
+		TAddressUnitTest unitTest = new TAddressUnitTest();
 		unitTest.createOne();
-		unitTest.createMany(2);
+//		unitTest.createMany(31,10);
 //		unitTest.readOne(1);
 //		unitTest.readMany();
 //		unitTest.update();
@@ -30,38 +31,37 @@ public class TUser {
 }
 
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%Unit Test Object %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-class TUserUnitTest {
+class TAddressUnitTest {
 
-	private UserCtrl ctrl;
+	private CrudCtrl ctrl;
 	private int maxRetry = 10;
 
-	public TUserUnitTest() {
-		this.setCtrl(new UserCtrl());
+	public TAddressUnitTest() {
+		this.setCtrl(new StandardCrudCtrl(new Address()));
 	}
-
 
 //-------------------------------------------------------------------------------------------------
 	public void update() {
-		int userId = 3;
-		Utils.trace("=========================== Update [%d]===========================\n",userId);
-		User user = null;
+		int addressId = 3;
+		Utils.trace("=========================== Update [%d]===========================\n", addressId);
+		Address address = null;
 
 		try {
-			user = (User) this.getCtrl().read(userId);
-			if (user == null)
+			address = (Address) this.getCtrl().read(addressId);
+			if (address == null)
 				Utils.trace("Address null\n");
 			else {
-				Utils.trace("Before:\t%s\n", user);
+				Utils.trace("Before:\t%s\n", address);
 
 				// -------------------------- update ----------------------
-				user.setEmail(user.getEmail() + ".mod");
-				this.getCtrl().update(user);
+				address.setStreetNumber(address.getStreetNumber() + 2);
+				this.getCtrl().update(address);
 
-				user = (User) this.getCtrl().read(userId);
-				if (user != null)
-					Utils.trace("After:\t%s\n", user);
+				address = (Address) this.getCtrl().read(addressId);
+				if (address != null)
+					Utils.trace("After:\t%s\n", address);
 				else
-					Utils.trace("User null\n");
+					Utils.trace("Address null\n");
 			}
 
 		} catch (Exception e) {
@@ -73,18 +73,18 @@ class TUserUnitTest {
 	public void delete() {
 		Utils.trace("=========================== Delete ===========================\n");
 		int addressId = 2;
-		User user = new User();
+		Address address = new Address();
 
 		try {
-			user = (User) this.getCtrl().read(addressId);
-			if (user == null)
-				Utils.trace("Error : l'user n'existe pas\n");
+			address = (Address) this.getCtrl().read(addressId);
+			if (address == null)
+				Utils.trace("Error : l'address n'existe pas\n");
 			else {
-				Utils.trace("last time seen %s\n", user);
-				this.getCtrl().delete(user);
-				user = (User) this.getCtrl().read(addressId);
+				Utils.trace("last time seen %s\n", address);
+				this.getCtrl().delete(address);
+				address = (Address) this.getCtrl().read(addressId);
 
-				if (user != null)
+				if (address != null)
 					Utils.trace("Error not remove\n");
 				else
 					Utils.trace("remove ok\n");
@@ -98,14 +98,14 @@ class TUserUnitTest {
 
 	public void createOne() {
 		Utils.trace("=========================== create One  ===========================\n");
-		User user = new User();
-		Item item = getItem(1);
+		Address address = new Address();
 		Costumer costumer = getCostumer(1);
-
-		user = DataTest.genUser();
+		address = DataTest.genAddress();
+		address.setCostumer(costumer);
+		costumer.addAddress(address);
 		try {
-			this.getCtrl().create(user);
-			Utils.trace("%s\n", user);
+			this.getCtrl().create(address);
+			Utils.trace("%s\n", address);
 		} catch (Exception e) {
 			Utils.trace("catch create %s\n", e.toString());
 		}
@@ -113,18 +113,26 @@ class TUserUnitTest {
 	}
 	// -------------------------------------------------------------------------------------------------
 
-	public void createMany(int maxUser) {
+	public void createMany(int startCostumer, int maxValue) {
 		Utils.trace("=========================== create many  ===========================\n");
-		User user = new User();
+		int indexMaxCostumer = 10;
+		int maxAddress= 2; 
+		Costumer costumer = new Costumer();
+		Address address = new Address();
 
 		try {
+			for (int indexCostumer = startCostumer; indexCostumer <= indexMaxCostumer+startCostumer; indexCostumer++) {
+
+				costumer = getCostumer(indexCostumer);
 				
-				for (int indexUser = 1; indexUser <= maxUser; indexUser++) {
-
-					user = DataTest.genUser();
-					this.getCtrl().create(user);
-					Utils.trace("%s\n", user);
-
+				maxAddress = Utils.randInt(1, maxValue); 
+				for (int indexAddress = 1; indexAddress <= maxAddress ; indexAddress++) {
+					address = DataTest.genAddress();
+					address.setCostumer(costumer);
+					costumer.addAddress(address);
+					this.getCtrl().create(address);
+					Utils.trace("%s\n", address);
+				}
 			}
 		} catch (Exception e) {
 			Utils.trace("catch createMany %s\n", e.toString());
@@ -135,16 +143,16 @@ class TUserUnitTest {
 	public void readMany() {
 		Utils.trace("=========================== read many  ===========================\n");
 
-		List<Object> userList = new ArrayList<Object>();
+		List<Object> addressList = new ArrayList<Object>();
 
 		try {
-			userList = this.getCtrl().list();
+			addressList = this.getCtrl().list();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		if ((userList.size() > 0) && (userList != null)) {
-			for (Object object : userList) {
-				Utils.trace("%s\n", (User) object);
+		if ((addressList.size() > 0) && (addressList != null)) {
+			for (Object object : addressList) {
+				Utils.trace("%s\n", (Address) object);
 			}
 		} else
 			Utils.trace("address null");
@@ -152,23 +160,24 @@ class TUserUnitTest {
 
 //-------------------------------------------------------------------------------------------------	
 	public void readOne(int id) {
-		Utils.trace("=========================== read One [%d] ===========================\n",id);
+		Utils.trace("=========================== read One [%d] ===========================\n", id);
 
-		User user = new User();
+		Address address = new Address();
 
 		try {
 			for (int index = id; index < this.getMaxRetry() + id; index++) {
-				user = (User) this.getCtrl().read(id);
-				if (user!= null)	break;
+				address = (Address) this.getCtrl().read(id);
+				if (address != null)
+					break;
 			}
-				
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		if (user != null)
-			Utils.trace("%s\n", user);
+		if (address != null)
+			Utils.trace("%s\n", address);
 		else
-			Utils.trace("user null\n");
+			Utils.trace("address null\n");
 
 	}
 //-------------------------------------------------------------------------------------------------	
@@ -204,13 +213,32 @@ class TUserUnitTest {
 
 //-------------------------------------------------------------------------------------------------	
 
+	public Address getAddress(int id) {
+
+		Address address = new Address();
+		UserCtrl addressCtrl = new UserCtrl();
+		try {
+			for (int index = id; index < this.getMaxRetry() + id; index++) {
+				address = (Address) addressCtrl.read(id);
+				if (address != null)
+					break;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return address;
+
+	}
+
+	// -------------------------------------------------------------------------------------------------
 	public Costumer getCostumer(int id) {
 
 		Costumer costumer = new Costumer();
 		UserCtrl costumerCtrl = new UserCtrl();
 		try {
 			for (int index = id; index < this.getMaxRetry() + id; index++) {
-				costumer = (Costumer) costumerCtrl.read(id);
+				costumer = (Costumer) costumerCtrl.read(index);
 				if (costumer != null)
 					break;
 			}
@@ -223,11 +251,11 @@ class TUserUnitTest {
 	}
 
 //-------------------------------------------------------------------------------------------------	
-	public UserCtrl getCtrl() {
+	public CrudCtrl getCtrl() {
 		return this.ctrl;
 	}
 
-	public void setCtrl(UserCtrl ctrl) {
+	public void setCtrl(CrudCtrl ctrl) {
 		this.ctrl = ctrl;
 	}
 

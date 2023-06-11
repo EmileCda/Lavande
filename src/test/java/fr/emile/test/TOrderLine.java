@@ -9,17 +9,18 @@ import fr.emile.ctrl.UserCtrl;
 import fr.emile.entity.Category;
 import fr.emile.entity.Costumer;
 import fr.emile.entity.Item;
-import fr.emile.entity.User;
+import fr.emile.entity.Order;
+import fr.emile.entity.OrderLine;
 import fr.emile.utils.Utils;
 
-public class TUser {
+public class TOrderLine {
 
 	public static void main(String[] args) {
 		Utils.trace("*************************** Begin ************************************\n");
-		TUserUnitTest unitTest = new TUserUnitTest();
+		TOrderLineUnitTest unitTest = new TOrderLineUnitTest();
 		unitTest.createOne();
-		unitTest.createMany(2);
-//		unitTest.readOne(1);
+//		unitTest.createMany(10);
+//		unitTest.readOne(45);
 //		unitTest.readMany();
 //		unitTest.update();
 //		unitTest.delete();
@@ -30,38 +31,37 @@ public class TUser {
 }
 
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%Unit Test Object %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-class TUserUnitTest {
+class TOrderLineUnitTest {
 
-	private UserCtrl ctrl;
+	private CrudCtrl ctrl;
 	private int maxRetry = 10;
 
-	public TUserUnitTest() {
-		this.setCtrl(new UserCtrl());
+	public TOrderLineUnitTest() {
+		this.setCtrl(new StandardCrudCtrl(new OrderLine()));
 	}
-
 
 //-------------------------------------------------------------------------------------------------
 	public void update() {
-		int userId = 3;
-		Utils.trace("=========================== Update [%d]===========================\n",userId);
-		User user = null;
+		int orderLineId = 50;
+		Utils.trace("=========================== Update [%d]===========================\n",orderLineId);
+		OrderLine orderLine = null;
 
 		try {
-			user = (User) this.getCtrl().read(userId);
-			if (user == null)
+			orderLine = (OrderLine) this.getCtrl().read(orderLineId);
+			if (orderLine == null)
 				Utils.trace("Address null\n");
 			else {
-				Utils.trace("Before:\t%s\n", user);
+				Utils.trace("Before:\t%s\n", orderLine);
 
 				// -------------------------- update ----------------------
-				user.setEmail(user.getEmail() + ".mod");
-				this.getCtrl().update(user);
+				orderLine.setQuantity(orderLine.getQuantity()+1);
+				this.getCtrl().update(orderLine);
 
-				user = (User) this.getCtrl().read(userId);
-				if (user != null)
-					Utils.trace("After:\t%s\n", user);
+				orderLine = (OrderLine) this.getCtrl().read(orderLineId);
+				if (orderLine != null)
+					Utils.trace("After:\t%s\n", orderLine);
 				else
-					Utils.trace("User null\n");
+					Utils.trace("OrderLine null\n");
 			}
 
 		} catch (Exception e) {
@@ -72,19 +72,19 @@ class TUserUnitTest {
 //-------------------------------------------------------------------------------------------------
 	public void delete() {
 		Utils.trace("=========================== Delete ===========================\n");
-		int addressId = 2;
-		User user = new User();
+		int addressId = 50;
+		OrderLine orderLine = new OrderLine();
 
 		try {
-			user = (User) this.getCtrl().read(addressId);
-			if (user == null)
-				Utils.trace("Error : l'user n'existe pas\n");
+			orderLine = (OrderLine) this.getCtrl().read(addressId);
+			if (orderLine == null)
+				Utils.trace("Error : l'orderLine n'existe pas\n");
 			else {
-				Utils.trace("last time seen %s\n", user);
-				this.getCtrl().delete(user);
-				user = (User) this.getCtrl().read(addressId);
+				Utils.trace("last time seen %s\n", orderLine);
+				this.getCtrl().delete(orderLine);
+				orderLine = (OrderLine) this.getCtrl().read(addressId);
 
-				if (user != null)
+				if (orderLine != null)
 					Utils.trace("Error not remove\n");
 				else
 					Utils.trace("remove ok\n");
@@ -98,14 +98,20 @@ class TUserUnitTest {
 
 	public void createOne() {
 		Utils.trace("=========================== create One  ===========================\n");
-		User user = new User();
+		OrderLine orderLine = new OrderLine();
+		OrderLine orderLineCrea = new OrderLine();
 		Item item = getItem(1);
-		Costumer costumer = getCostumer(1);
+//		OrderLineLine orderLineLine= getOrderLineLine(1);
+		Order order = getOrder(1);
 
-		user = DataTest.genUser();
+		orderLine = DataTest.genOrderLine();
+		orderLine.setOrder(order);
+		orderLine.setItem(item);
+		order.addOrderLine(orderLine);
+		item.addOrderLine(orderLine);
 		try {
-			this.getCtrl().create(user);
-			Utils.trace("%s\n", user);
+			orderLineCrea= (OrderLine) this.getCtrl().create(orderLine);
+			if (orderLineCrea != null) Utils.trace("%s\n", orderLineCrea);
 		} catch (Exception e) {
 			Utils.trace("catch create %s\n", e.toString());
 		}
@@ -113,18 +119,37 @@ class TUserUnitTest {
 	}
 	// -------------------------------------------------------------------------------------------------
 
-	public void createMany(int maxUser) {
+	public void createMany(int maxOrderLine) {
 		Utils.trace("=========================== create many  ===========================\n");
-		User user = new User();
+		int maxOrder = 80;
+		int maxItem = 100;
+
+		Item item = new Item();
+		Order order = new Order() ; 
+		OrderLine orderLine = new OrderLine();
+		OrderLine orderLineCrea = new OrderLine();
+
 
 		try {
+			for (int indexOrder  = 1; indexOrder<= maxOrder; indexOrder++) {
 				
-				for (int indexUser = 1; indexUser <= maxUser; indexUser++) {
+				int maxCurrentOrderLine = Utils.randInt(0, maxOrderLine);
+				order = getOrder(indexOrder);
+				if (order != null) Utils.trace("%s\n",order);else Utils.trace("order %d null \n",indexOrder);
 
-					user = DataTest.genUser();
-					this.getCtrl().create(user);
-					Utils.trace("%s\n", user);
+				for (int indexOrderLine = 1; indexOrderLine <= maxCurrentOrderLine; indexOrderLine++) {
 
+					orderLine = DataTest.genOrderLine();
+					item = getItem(Utils.randInt(1, maxItem));
+
+					orderLine.setOrder(order);
+					orderLine.setItem(item);
+					order.addOrderLine(orderLine);
+					item.addOrderLine(orderLine);
+					orderLineCrea= (OrderLine) this.getCtrl().create(orderLine);
+					if (orderLineCrea != null) Utils.trace("%s\n", orderLineCrea);
+					else  Utils.trace("orderLineCrea = null \n");
+				}
 			}
 		} catch (Exception e) {
 			Utils.trace("catch createMany %s\n", e.toString());
@@ -135,16 +160,16 @@ class TUserUnitTest {
 	public void readMany() {
 		Utils.trace("=========================== read many  ===========================\n");
 
-		List<Object> userList = new ArrayList<Object>();
+		List<Object> orderLineList = new ArrayList<Object>();
 
 		try {
-			userList = this.getCtrl().list();
+			orderLineList = this.getCtrl().list();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		if ((userList.size() > 0) && (userList != null)) {
-			for (Object object : userList) {
-				Utils.trace("%s\n", (User) object);
+		if ((orderLineList.size() > 0) && (orderLineList != null)) {
+			for (Object object : orderLineList) {
+				Utils.trace("%s\n", (OrderLine) object);
 			}
 		} else
 			Utils.trace("address null");
@@ -154,21 +179,21 @@ class TUserUnitTest {
 	public void readOne(int id) {
 		Utils.trace("=========================== read One [%d] ===========================\n",id);
 
-		User user = new User();
+		OrderLine orderLine = new OrderLine();
 
 		try {
 			for (int index = id; index < this.getMaxRetry() + id; index++) {
-				user = (User) this.getCtrl().read(id);
-				if (user!= null)	break;
+				orderLine = (OrderLine) this.getCtrl().read(index);
+				if (orderLine!= null)	break;
 			}
 				
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		if (user != null)
-			Utils.trace("%s\n", user);
+		if (orderLine != null)
+			Utils.trace("%s\n", orderLine);
 		else
-			Utils.trace("user null\n");
+			Utils.trace("orderLine null\n");
 
 	}
 //-------------------------------------------------------------------------------------------------	
@@ -192,7 +217,7 @@ class TUserUnitTest {
 
 		try {
 			for (int index = id; index < this.getMaxRetry() + id; index++) {
-				item = (Item) itemCtrl.read(id);
+				item = (Item) itemCtrl.read(index );
 				if (item != null)
 					break;
 			}
@@ -203,6 +228,24 @@ class TUserUnitTest {
 	}
 
 //-------------------------------------------------------------------------------------------------	
+	public Order getOrder(int id) {
+		Order  order = new Order ();
+		CrudCtrl orderCtrl = new StandardCrudCtrl(new Order ());
+
+		try {
+			for (int index = id; index < this.getMaxRetry() + id; index++) {
+				order  = (Order ) orderCtrl.read(index );
+				if (order != null)
+					break;
+			}
+		} catch (Exception e) {
+			
+			e.printStackTrace();
+		}
+		return order ;
+	}
+
+//-------------------------------------------------------------------------------------------------	
 
 	public Costumer getCostumer(int id) {
 
@@ -210,7 +253,7 @@ class TUserUnitTest {
 		UserCtrl costumerCtrl = new UserCtrl();
 		try {
 			for (int index = id; index < this.getMaxRetry() + id; index++) {
-				costumer = (Costumer) costumerCtrl.read(id);
+				costumer = (Costumer) costumerCtrl.read(index );
 				if (costumer != null)
 					break;
 			}
@@ -223,11 +266,11 @@ class TUserUnitTest {
 	}
 
 //-------------------------------------------------------------------------------------------------	
-	public UserCtrl getCtrl() {
+	public CrudCtrl getCtrl() {
 		return this.ctrl;
 	}
 
-	public void setCtrl(UserCtrl ctrl) {
+	public void setCtrl(CrudCtrl ctrl) {
 		this.ctrl = ctrl;
 	}
 

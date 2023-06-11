@@ -1,4 +1,4 @@
-package fr.lotus.utils;
+package fr.emile.utils;
 
 import java.text.Normalizer;
 import java.text.ParseException;
@@ -8,7 +8,7 @@ import java.time.ZoneId;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import fr.lotus.common.IConstant;
+
 
 public final class Utils implements IUtils {
 	private static boolean verboseMode = true;
@@ -58,7 +58,7 @@ public final class Utils implements IUtils {
 	// ------------------------------------------------------------------------------------------------
 	public static String date2String(Date date) {
 
-		return date2String(date, fr.lotus.common.IConstant.DATE_FORMAT);
+		return date2String(date,DATE_FORMAT);
 
 	}
 
@@ -76,7 +76,7 @@ public final class Utils implements IUtils {
 // create date from a string format
 	public static Date string2Date(String dateString) {
 
-		return string2Date(dateString, fr.lotus.common.IConstant.DATE_FORMAT);
+		return string2Date(dateString,DATE_FORMAT);
 	}
 
 // ------------------------------------------------------------------------------------------------

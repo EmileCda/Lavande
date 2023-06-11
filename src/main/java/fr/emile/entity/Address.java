@@ -1,4 +1,4 @@
-package fr.lotus.entity;
+package fr.emile.entity;
 
 import java.io.Serializable;
 
@@ -11,13 +11,13 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import fr.lotus.common.IConstant;
-import fr.lotus.model.implement.ClassDao;
+import fr.emile.common.IConstant;
+
 
 
 @Entity
 @Table(name = "address")
-public final class Address extends ClassDao implements IConstant, Serializable {
+public  class Address implements IConstant, Serializable {
 
 	private static final long serialVersionUID = 1L;
 	

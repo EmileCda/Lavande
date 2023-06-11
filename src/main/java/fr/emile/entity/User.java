@@ -1,7 +1,6 @@
-package fr.lotus.entity;
+package fr.emile.entity;
 
 import java.io.Serializable;
-import java.io.UnsupportedEncodingException;
 
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
@@ -12,15 +11,12 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
-import javax.persistence.MappedSuperclass;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
-import fr.lotus.common.IConstant;
-import fr.lotus.enums.Profile;
-import fr.lotus.model.implement.ClassDao;
-import fr.lotus.utils.Encryption;
-import fr.lotus.utils.Utils;
+import fr.emile.common.IConstant;
+import fr.emile.enums.Profile;
+
 
 
 @Entity
@@ -28,7 +24,7 @@ import fr.lotus.utils.Utils;
 @DiscriminatorColumn(name="user_type")
 @DiscriminatorValue("type-user")
 @Table(name="user")
-public class User extends ClassDao  implements IConstant,Serializable {
+public class User implements IConstant,Serializable {
 
 	private static final long serialVersionUID = 1L;
 	@Id
@@ -66,23 +62,23 @@ public class User extends ClassDao  implements IConstant,Serializable {
 	}
 
 
-	public void preWrite(){
-		try {
-			this.setPasswordEncrpted(Encryption.encrypt(this.getPassword()));
-		} catch (UnsupportedEncodingException e) {
-			Utils.trace("catch test encrypt" + e.toString());
-		}
-	}
-
-	public void postRead(){
-		
-		
-		this.setPassword(Encryption.decrypt(this.getPasswordEncrpted()));
-		
-		
-	}
-	
-	
+//	public void preWrite(){
+//		try {
+//			this.setPasswordEncrpted(Code.encrypt(this.getPassword()));
+//		} catch (UnsupportedEncodingException e) {
+//			Utils.trace("catch test encrypt" + e.toString());
+//		}
+//	}
+//
+//	public void postRead(){
+//		
+//		
+//		this.setPassword(Encryption.decrypt(this.getPasswordEncrpted()));
+//		
+//		
+//	}
+//	
+//	
 	public int getId() {
 		return id;
 	}

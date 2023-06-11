@@ -1,7 +1,6 @@
-package fr.lotus.entity;
+package fr.emile.entity;
 
 import java.io.Serializable;
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -11,15 +10,17 @@ import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
-import fr.lotus.common.IConstant;
-import fr.lotus.enums.Gender;
-import fr.lotus.enums.Profile;
-import fr.lotus.utils.Encryption;
-import fr.lotus.utils.Utils;
+import fr.emile.common.IConstant;
+import fr.emile.enums.Gender;
+import fr.emile.enums.Profile;
+
+import fr.emile.utils.Utils;
 
 @Entity
 @DiscriminatorValue("type-costumer")
@@ -36,6 +37,14 @@ public class Costumer extends User implements IConstant, Serializable {
 	@Column(name = "phone_number")
 	private String phoneNumber;
 
+	@Column(name = "default_billing_address_id", nullable = true)
+	private int defaultBillingAddressId;
+	@Column(name = "default_delivery_address_id", nullable = true)
+	private int defaultDeliveryAddressId;
+	@Column(name = "default_bankcard_id", nullable = true)
+	private int defaultBankCardId;
+
+	
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "costumer", fetch = FetchType.LAZY)
 	private List<Address> addressList;
 
@@ -45,12 +54,10 @@ public class Costumer extends User implements IConstant, Serializable {
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "costumer", fetch = FetchType.LAZY)
 //	@Transient
 	private List<CartItem> cartItemList; // meaning cart : item + quan
-	
+
 	@OneToMany(cascade = CascadeType.DETACH, mappedBy = "costumer", fetch = FetchType.LAZY)
-	@Transient
 	private List<Order> orderList;
-	
-	
+
 	@OneToMany(cascade = CascadeType.DETACH, mappedBy = "costumer", fetch = FetchType.LAZY)
 //	@Transient
 	private List<Comment> commentList;
@@ -120,21 +127,20 @@ public class Costumer extends User implements IConstant, Serializable {
 	}
 
 	public void initBankCardList() {
-		if (this.getBankCardList() == null) 
+		if (this.getBankCardList() == null)
 			this.setBankCardList(new ArrayList<BankCard>());
 
 	}
 
 	public void initAddressList() {
-		if (this.getAddressList() == null) 
+		if (this.getAddressList() == null)
 			this.setAddressList(new ArrayList<Address>());
 
 	}
 
 	public void initOrderList() {
-		if (this.getOrderList() == null) 
+		if (this.getOrderList() == null)
 			this.setOrderList(new ArrayList<Order>());
-		
 
 	}
 
@@ -145,30 +151,8 @@ public class Costumer extends User implements IConstant, Serializable {
 	}
 
 	public void initCartItemList() {
-		if (this.getCartItemList() == null) 
+		if (this.getCartItemList() == null)
 			this.setCartItemList(new ArrayList<CartItem>());
-		
-
-	}
-
-	public void preWrite() {
-		super.preWrite();
-		for (Address address : this.getAddressList()) {
-			address.preWrite();
-		}
-
-		for (BankCard bankCard : this.getBankCardList()) {
-			bankCard.preWrite();
-		}
-
-	}
-
-	public void postRead() {
-		super.postRead();
-
-		for (BankCard bankCard : this.getBankCardList()) {
-			bankCard.postRead();
-		}
 
 	}
 
@@ -261,19 +245,22 @@ public class Costumer extends User implements IConstant, Serializable {
 				getGender().getId() == 0 ? "" : getGender().getTitle() + " ", getFirstname(), getLastname(),
 				getGender().getId() == 2 ? "e" : "", Utils.date2String(getBirthdate()), getPhoneNumber());
 
-		stringReturn += "Address" + "\n";
+		if (this.getAddressList().size() > 0) {
+			stringReturn += "Address" + "\n";
 
-		for (Address address : this.getAddressList()) {
+			for (Address address : this.getAddressList()) {
 
-			stringReturn += "\t" + address.toString() + "\n";
+				stringReturn += "\t" + address.toString() + "\n";
 
+			}
 		}
-		stringReturn += "BankCard" + "\n";
-		for (BankCard bankcard : this.getBankCardList()) {
-			stringReturn += "\t" + bankcard.toString() + "\n";
+		if (this.getBankCardList().size() > 0) {
+			stringReturn += "BankCard" + "\n";
+			for (BankCard bankcard : this.getBankCardList()) {
+				stringReturn += "\t" + bankcard.toString() + "\n";
 
+			}
 		}
-
 		return stringReturn;
 	}
 

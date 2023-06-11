@@ -1,4 +1,4 @@
-package fr.lotus.entity;
+package fr.emile.entity;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -8,12 +8,12 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import fr.lotus.common.IConstant;
-import fr.lotus.model.implement.ClassDao;
+import fr.emile.common.IConstant;
+
 
 @Entity
 @Table(name = "comment")
-public class Comment  extends ClassDao implements IConstant {
+public class Comment  implements IConstant {
 
 	private static final long serialVersionUID = 1L;
 	
@@ -97,19 +97,6 @@ public class Comment  extends ClassDao implements IConstant {
 	}
 
 
-
-
-	@Override
-	public void preWrite() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void postRead() {
-		// TODO Auto-generated method stub
-		
-	}
 
 
 

@@ -1,229 +1,260 @@
-package fr.ecommerce.test;
+package fr.emile.test;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import fr.ecommerce.Ctrl.implement.UserCtrl;
-
-import fr.ecommerce.Ctrl.interfaces.IUserCtrl;
-import fr.ecommerce.entity.Article;
-import fr.ecommerce.entity.Commande;
-import fr.ecommerce.entity.User;
-import fr.ecommerce.model.dao.implement.ArticleDao;
-import fr.ecommerce.model.dao.implement.CommandeDao;
-import fr.ecommerce.model.dao.interfaces.IArticleDao;
-import fr.ecommerce.model.dao.interfaces.ICommandeDao;
-import fr.ecommerce.utils.DataTest;
-import fr.ecommerce.utils.Utils;
+import fr.emile.ctrl.CrudCtrl;
+import fr.emile.ctrl.StandardCrudCtrl;
+import fr.emile.ctrl.UserCtrl;
+import fr.emile.entity.Category;
+import fr.emile.entity.Costumer;
+import fr.emile.entity.Item;
+import fr.emile.entity.Order;
+import fr.emile.utils.Utils;
 
 public class TOrder {
-	
+
 	public static void main(String[] args) {
 		Utils.trace("*************************** Begin ************************************\n");
-		createOne();
-//		createMany();
-//		readOne(1);
-//		readMany();
-//		update();
-//		delete();
-
+		TOrderUnitTest unitTest = new TOrderUnitTest();
+//		unitTest.createOne();
+//		unitTest.createMany();
+//		unitTest.readOne(1);
+//		unitTest.readMany();
+//		unitTest.update();
+		unitTest.delete();
 		Utils.trace("*************************** end ************************************\n");
 
 	}
 
-//-------------------------------------------------------------------------------------------------
-	public static void create() {
-		Utils.trace("=========================== Create ===========================\n");
-		createOne();
-		createMany();
+}
 
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%Unit Test Object %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+class TOrderUnitTest {
+
+	private CrudCtrl ctrl;
+	private int maxRetry = 10;
+
+	public TOrderUnitTest() {
+		this.setCtrl(new StandardCrudCtrl(new Order()));
 	}
 
 //-------------------------------------------------------------------------------------------------
-	public static void read() {
-		Utils.trace("=========================== Read ===========================\n");
-		readMany();
-		readOne(1);
+	public void update() {
+		int orderId = 3;
+		Utils.trace("=========================== Update [%d]===========================\n",orderId);
+		Order order = null;
 
-	}
-
-//-------------------------------------------------------------------------------------------------
-	public static void update() {
-		Utils.trace("=========================== Update ===========================\n");
-		int commandeId = 3;
-		Commande commande = null ;  
-		
-		ICommandeDao commandeDao = new CommandeDao();
 		try {
-			commande = commandeDao.getCommandeById(commandeId);
-			if (commande == null )
+			order = (Order) this.getCtrl().read(orderId);
+			if (order == null)
 				Utils.trace("Address null\n");
 			else {
-				Utils.trace("Before  %s\n", commande);
+				Utils.trace("Before:\t%s\n", order);
 
 				// -------------------------- update ----------------------
-				commande.setOrderNumber("ORDER MODIFYED $$$$$");
-				commandeDao.updateCommande(commande);
-	
-				commande = commandeDao.getCommandeById(commandeId);
-				if (commande != null )
-					Utils.trace("After %s\n", commande);
+				order.setOrderNumber("**"+ order.getOrderNumber()+"**");
+				this.getCtrl().update(order);
+
+				order = (Order) this.getCtrl().read(orderId);
+				if (order != null)
+					Utils.trace("After:\t%s\n", order);
 				else
-					Utils.trace("Address null\n");
+					Utils.trace("Order null\n");
 			}
 
-		} catch (
-
-				Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+		} catch (Exception e) {
+			Utils.trace("catch delete %s\n", e.toString());
 		}
 	}
 
 //-------------------------------------------------------------------------------------------------
-	public static void delete() {
+	public void delete() {
 		Utils.trace("=========================== Delete ===========================\n");
-		int addressId = 1;
-		Commande commande = new Commande();
-		ICommandeDao commandeDao = new CommandeDao();
+		int addressId = 2;
+		Order order = new Order();
+
 		try {
-			commande = commandeDao.getCommandeById(addressId);
-			if (commande == null) 
-				Utils.trace("Error : l'commande n'existe pas\n");
+			order = (Order) this.getCtrl().read(addressId);
+			if (order == null)
+				Utils.trace("Error : l'order n'existe pas\n");
 			else {
-				commandeDao.deleteCommande(commande );
+				Utils.trace("last time seen %s\n", order);
+				this.getCtrl().delete(order);
+				order = (Order) this.getCtrl().read(addressId);
 
-				commande = commandeDao.getCommandeById(addressId);
-
-				if (commande != null)
+				if (order != null)
 					Utils.trace("Error not remove\n");
 				else
 					Utils.trace("remove ok\n");
 			}
 		} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			Utils.trace("catch delete %s\n", e.toString());
 		}
 
 	}
-	//-------------------------------------------------------------------------------------------------	
+	// -------------------------------------------------------------------------------------------------
 
-	public static void createOne() {
+	public void createOne() {
 		Utils.trace("=========================== create One  ===========================\n");
+		Order order = new Order();
+		Order orderCrea = new Order();
+//		OrderLine orderLine= getOrderLine(1);
+		Costumer costumer = getCostumer(1);
 
-		Commande commande = new Commande();
-		
-		commande = DataTest.genCommande();
-		
-		User user = getUser(1);
-		commande.setUser(user);
-		user.addOrder(commande);
-		
-		ICommandeDao commandeDao= new CommandeDao();
-
+		order = DataTest.genOrder();
+		order.setCostumer(costumer);
+//		order.setOrderLine(orderLine);
 		try {
-			commandeDao.addCommande(commande);
+			orderCrea= (Order) this.getCtrl().create(order);
+			if (orderCrea != null) Utils.trace("%s\n", orderCrea);
 		} catch (Exception e) {
 			Utils.trace("catch create %s\n", e.toString());
-		} finally {
-
 		}
 
-		Utils.trace("%s\n", commande);
 	}
-	//-------------------------------------------------------------------------------------------------	
+	// -------------------------------------------------------------------------------------------------
 
-	public static void createMany() {
+	public void createMany(int startCostumer,int maxOrder) {
 		Utils.trace("=========================== create many  ===========================\n");
-		int maxIndex = 3;
-		int maxUserIndex= 10;
-		Commande commande = new Commande();
-
-		ICommandeDao commandeDao= new CommandeDao();
-		User user = new User() ;
+		int maxItem = 30;
+		int maxIndexCostumer= 10;
+		Order order = new Order();
+		Item item = new Item();
+		Costumer costumer = new Costumer() ;
 
 		try {
-			for (int indexUser = 1; indexUser< maxUserIndex; indexUser++) {
-		
-				user = getUser(indexUser);
-				for (int index = 1; index < maxIndex; index++) {
+			for (int indexCostumer = startCostumer; indexCostumer  <= maxIndexCostumer+startCostumer ; indexCostumer ++) {
+				
+				int maxCurrentOrder = Utils.randInt(1, maxOrder);
+				costumer = getCostumer(indexCostumer);
+				
+				for (int indexOrder = 1; indexOrder <= maxCurrentOrder; indexOrder++) {
+
+					order = DataTest.genOrder();
+					item = getItem(Utils.randInt(1, maxItem));
+
+					order.setCostumer(costumer);
+					order.setBankCardUsed(costumer.getBankCardList().get(0));
+					order.setDeliveryAddress(costumer.getAddressList().get(0));
+					order.setBillingAddress(costumer.getAddressList().get(0));
 					
-					commande = DataTest.genCommande();
-					commande.setUser(user);
-					user.addOrder(commande);
-					commandeDao.addCommande(commande);
+					costumer.addOrder(order);
+					this.getCtrl().create(order);
+					Utils.trace("%s\n", order);
+
 				}
 			}
 		} catch (Exception e) {
-			Utils.trace("catch create %s\n", e.toString());
-		} finally {
-
+			Utils.trace("catch createMany %s\n", e.toString());
 		}
 	}
-	//-------------------------------------------------------------------------------------------------	
-	public static void readMany() {
+
+	// -------------------------------------------------------------------------------------------------
+	public void readMany() {
 		Utils.trace("=========================== read many  ===========================\n");
 
-		List<Commande> commandeList = new ArrayList<Commande>() ;
+		List<Object> orderList = new ArrayList<Object>();
 
-		ICommandeDao commandeCtrl= new CommandeDao();
 		try {
-			commandeList = commandeCtrl.getCommandes();
+			orderList = this.getCtrl().list();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		if ((commandeList.size() >0  ) && (commandeList != null)) {
-			for (Commande commande : commandeList) {
-				Utils.trace("%s\n",commande); 
+		if ((orderList.size() > 0) && (orderList != null)) {
+			for (Object object : orderList) {
+				Utils.trace("%s\n", (Order) object);
 			}
-		}
-		else
+		} else
 			Utils.trace("address null");
 	}
+
 //-------------------------------------------------------------------------------------------------	
-	public static void readOne(int commandeId) {
-		Utils.trace("=========================== read One  ===========================\n");
+	public void readOne(int id) {
+		Utils.trace("=========================== read One [%d] ===========================\n",id);
 
-		Commande commande = new Commande() ;
+		Order order = new Order();
 
-		ICommandeDao commandeCtrl= new CommandeDao();
 		try {
-			commande = commandeCtrl.getCommandeById(commandeId);
+			for (int index = id; index < this.getMaxRetry() + id; index++) {
+				order = (Order) this.getCtrl().read(id);
+				if (order!= null)	break;
+			}
+				
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		if (commande != null )
-			Utils.trace("%s\n",commande); 
-		else 
-			Utils.trace("commande null\n");
-		
+		if (order != null)
+			Utils.trace("%s\n", order);
+		else
+			Utils.trace("order null\n");
+
 	}
 //-------------------------------------------------------------------------------------------------	
-	
-	public static User getUser(int userId) {
-		
-		User user = new User();
-		IUserCtrl userCtrl = new UserCtrl();
+
+	public Category getCategory(int categoryId) {
+		Category category = new Category();
+		CrudCtrl categoryCtrl = new StandardCrudCtrl(new Category());
+
 		try {
-			user = userCtrl.getUserById(userId);
+			category = (Category) categoryCtrl.read(categoryId);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return user ; 
-
+		return category;
 	}
-	//-------------------------------------------------------------------------------------------------	
-	
-	public static Article getArticle(int idArticle) {
-		Article article = new Article() ;
-		IArticleDao articleDao = new ArticleDao();
+
+//-------------------------------------------------------------------------------------------------	
+	public Item getItem(int id) {
+		Item item = new Item();
+		CrudCtrl itemCtrl = new StandardCrudCtrl(new Item());
+
 		try {
-			article = articleDao.getArticleById(idArticle);
+			for (int index = id; index < this.getMaxRetry() + id; index++) {
+				item = (Item) itemCtrl.read(id);
+				if (item != null)
+					break;
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return article  ; 
-		
+		return item;
 	}
 
+//-------------------------------------------------------------------------------------------------	
+
+	public Costumer getCostumer(int id) {
+
+		Costumer costumer = new Costumer();
+		UserCtrl costumerCtrl = new UserCtrl();
+		try {
+			for (int index = id; index < this.getMaxRetry() + id; index++) {
+				costumer = (Costumer) costumerCtrl.read(id);
+				if (costumer != null)
+					break;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return costumer;
+
+	}
+
+//-------------------------------------------------------------------------------------------------	
+	public CrudCtrl getCtrl() {
+		return this.ctrl;
+	}
+
+	public void setCtrl(CrudCtrl ctrl) {
+		this.ctrl = ctrl;
+	}
+
+	public int getMaxRetry() {
+		return maxRetry;
+	}
+
+	public void setMaxRetry(int maxRetry) {
+		this.maxRetry = maxRetry;
+	}
 }

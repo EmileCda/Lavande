@@ -1,5 +1,5 @@
 
-package fr.lotus.enums;
+package fr.emile.enums;
 
 public enum Profile {
 

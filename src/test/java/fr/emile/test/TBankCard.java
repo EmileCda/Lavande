@@ -3,22 +3,24 @@ package fr.emile.test;
 import java.util.ArrayList;
 import java.util.List;
 
+import fr.emile.ctrl.BankCardCtrl;
 import fr.emile.ctrl.CrudCtrl;
 import fr.emile.ctrl.StandardCrudCtrl;
 import fr.emile.ctrl.UserCtrl;
 import fr.emile.entity.Category;
 import fr.emile.entity.Costumer;
+import fr.emile.entity.BankCard;
 import fr.emile.entity.Item;
-import fr.emile.entity.User;
+import fr.emile.entity.BankCard;
 import fr.emile.utils.Utils;
 
-public class TUser {
+public class TBankCard {
 
 	public static void main(String[] args) {
 		Utils.trace("*************************** Begin ************************************\n");
-		TUserUnitTest unitTest = new TUserUnitTest();
+		TBankCardUnitTest unitTest = new TBankCardUnitTest();
 		unitTest.createOne();
-		unitTest.createMany(2);
+//		unitTest.createMany(10);
 //		unitTest.readOne(1);
 //		unitTest.readMany();
 //		unitTest.update();
@@ -30,38 +32,36 @@ public class TUser {
 }
 
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%Unit Test Object %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-class TUserUnitTest {
+class TBankCardUnitTest {
 
-	private UserCtrl ctrl;
+	private CrudCtrl ctrl;
 	private int maxRetry = 10;
-
-	public TUserUnitTest() {
-		this.setCtrl(new UserCtrl());
+	public TBankCardUnitTest() {
+		this.setCtrl(new BankCardCtrl());
 	}
-
 
 //-------------------------------------------------------------------------------------------------
 	public void update() {
-		int userId = 3;
-		Utils.trace("=========================== Update [%d]===========================\n",userId);
-		User user = null;
+		int bankCardId = 3;
+		Utils.trace("=========================== Update [%d]===========================\n", bankCardId);
+		BankCard bankCard = null;
 
 		try {
-			user = (User) this.getCtrl().read(userId);
-			if (user == null)
-				Utils.trace("Address null\n");
+			bankCard = (BankCard) this.getCtrl().read(bankCardId);
+			if (bankCard == null)
+				Utils.trace("BankCard null\n");
 			else {
-				Utils.trace("Before:\t%s\n", user);
+				Utils.trace("Before:\t%s\n", bankCard);
 
 				// -------------------------- update ----------------------
-				user.setEmail(user.getEmail() + ".mod");
-				this.getCtrl().update(user);
+				bankCard.setIsValid(! bankCard.getIsValid());
+				this.getCtrl().update(bankCard);
 
-				user = (User) this.getCtrl().read(userId);
-				if (user != null)
-					Utils.trace("After:\t%s\n", user);
+				bankCard = (BankCard) this.getCtrl().read(bankCardId);
+				if (bankCard != null)
+					Utils.trace("After:\t%s\n", bankCard);
 				else
-					Utils.trace("User null\n");
+					Utils.trace("BankCard null\n");
 			}
 
 		} catch (Exception e) {
@@ -72,19 +72,19 @@ class TUserUnitTest {
 //-------------------------------------------------------------------------------------------------
 	public void delete() {
 		Utils.trace("=========================== Delete ===========================\n");
-		int addressId = 2;
-		User user = new User();
+		int bankCardId = 2;
+		BankCard bankCard = new BankCard();
 
 		try {
-			user = (User) this.getCtrl().read(addressId);
-			if (user == null)
-				Utils.trace("Error : l'user n'existe pas\n");
+			bankCard = (BankCard) this.getCtrl().read(bankCardId);
+			if (bankCard == null)
+				Utils.trace("Error : l'bankCard n'existe pas\n");
 			else {
-				Utils.trace("last time seen %s\n", user);
-				this.getCtrl().delete(user);
-				user = (User) this.getCtrl().read(addressId);
+				Utils.trace("last time seen %s\n", bankCard);
+				this.getCtrl().delete(bankCard);
+				bankCard = (BankCard) this.getCtrl().read(bankCardId);
 
-				if (user != null)
+				if (bankCard != null)
 					Utils.trace("Error not remove\n");
 				else
 					Utils.trace("remove ok\n");
@@ -98,14 +98,14 @@ class TUserUnitTest {
 
 	public void createOne() {
 		Utils.trace("=========================== create One  ===========================\n");
-		User user = new User();
-		Item item = getItem(1);
+		BankCard bankCard = new BankCard();
 		Costumer costumer = getCostumer(1);
-
-		user = DataTest.genUser();
+		bankCard = DataTest.genBankCard(costumer);
+		bankCard.setCostumer(costumer);
+		costumer.addBankCard(bankCard);
 		try {
-			this.getCtrl().create(user);
-			Utils.trace("%s\n", user);
+			this.getCtrl().create(bankCard);
+			Utils.trace("%s\n", bankCard);
 		} catch (Exception e) {
 			Utils.trace("catch create %s\n", e.toString());
 		}
@@ -113,18 +113,26 @@ class TUserUnitTest {
 	}
 	// -------------------------------------------------------------------------------------------------
 
-	public void createMany(int maxUser) {
+	public void createMany(int startCostumer,int maxValue) {
 		Utils.trace("=========================== create many  ===========================\n");
-		User user = new User();
+		int indexMaxCostumer = 10;
+		int maxBankCard= 2; 
+		Costumer costumer = new Costumer();
+		BankCard bankCard = new BankCard();
 
 		try {
+			for (int indexCostumer = startCostumer; indexCostumer <= indexMaxCostumer+startCostumer; indexCostumer++) {
+
+				costumer = getCostumer(indexCostumer);
 				
-				for (int indexUser = 1; indexUser <= maxUser; indexUser++) {
-
-					user = DataTest.genUser();
-					this.getCtrl().create(user);
-					Utils.trace("%s\n", user);
-
+				maxBankCard = Utils.randInt(1, maxValue); 
+				for (int indexBankCard = 1; indexBankCard <= maxBankCard ; indexBankCard++) {
+					bankCard = DataTest.genBankCard(costumer);
+					bankCard.setCostumer(costumer);
+					costumer.addBankCard(bankCard);
+					this.getCtrl().create(bankCard);
+					Utils.trace("%s\n", bankCard);
+				}
 			}
 		} catch (Exception e) {
 			Utils.trace("catch createMany %s\n", e.toString());
@@ -135,40 +143,41 @@ class TUserUnitTest {
 	public void readMany() {
 		Utils.trace("=========================== read many  ===========================\n");
 
-		List<Object> userList = new ArrayList<Object>();
+		List<Object> bankCardList = new ArrayList<Object>();
 
 		try {
-			userList = this.getCtrl().list();
+			bankCardList = this.getCtrl().list();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		if ((userList.size() > 0) && (userList != null)) {
-			for (Object object : userList) {
-				Utils.trace("%s\n", (User) object);
+		if ((bankCardList.size() > 0) && (bankCardList != null)) {
+			for (Object object : bankCardList) {
+				Utils.trace("%s\n", (BankCard) object);
 			}
 		} else
-			Utils.trace("address null");
+			Utils.trace("bankCard null");
 	}
 
 //-------------------------------------------------------------------------------------------------	
 	public void readOne(int id) {
-		Utils.trace("=========================== read One [%d] ===========================\n",id);
+		Utils.trace("=========================== read One [%d] ===========================\n", id);
 
-		User user = new User();
+		BankCard bankCard = new BankCard();
 
 		try {
 			for (int index = id; index < this.getMaxRetry() + id; index++) {
-				user = (User) this.getCtrl().read(id);
-				if (user!= null)	break;
+				bankCard = (BankCard) this.getCtrl().read(id);
+				if (bankCard != null)
+					break;
 			}
-				
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		if (user != null)
-			Utils.trace("%s\n", user);
+		if (bankCard != null)
+			Utils.trace("%s\n", bankCard);
 		else
-			Utils.trace("user null\n");
+			Utils.trace("bankCard null\n");
 
 	}
 //-------------------------------------------------------------------------------------------------	
@@ -204,13 +213,32 @@ class TUserUnitTest {
 
 //-------------------------------------------------------------------------------------------------	
 
+	public BankCard getBankCard(int id) {
+
+		BankCard bankCard = new BankCard();
+		UserCtrl bankCardCtrl = new UserCtrl();
+		try {
+			for (int index = id; index < this.getMaxRetry() + id; index++) {
+				bankCard = (BankCard) bankCardCtrl.read(id);
+				if (bankCard != null)
+					break;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return bankCard;
+
+	}
+
+	// -------------------------------------------------------------------------------------------------
 	public Costumer getCostumer(int id) {
 
 		Costumer costumer = new Costumer();
 		UserCtrl costumerCtrl = new UserCtrl();
 		try {
 			for (int index = id; index < this.getMaxRetry() + id; index++) {
-				costumer = (Costumer) costumerCtrl.read(id);
+				costumer = (Costumer) costumerCtrl.read(index);
 				if (costumer != null)
 					break;
 			}
@@ -223,11 +251,11 @@ class TUserUnitTest {
 	}
 
 //-------------------------------------------------------------------------------------------------	
-	public UserCtrl getCtrl() {
+	public CrudCtrl getCtrl() {
 		return this.ctrl;
 	}
 
-	public void setCtrl(UserCtrl ctrl) {
+	public void setCtrl(CrudCtrl ctrl) {
 		this.ctrl = ctrl;
 	}
 

@@ -1,4 +1,4 @@
-package fr.lotus.utils;
+package fr.emile.utils;
 
 import java.util.Date;
 

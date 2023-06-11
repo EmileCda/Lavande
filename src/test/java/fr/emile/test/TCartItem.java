@@ -9,20 +9,20 @@ import fr.emile.ctrl.UserCtrl;
 import fr.emile.entity.Category;
 import fr.emile.entity.Costumer;
 import fr.emile.entity.Item;
-import fr.emile.entity.User;
+import fr.emile.entity.CartItem;
 import fr.emile.utils.Utils;
 
-public class TUser {
+public class TCartItem {
 
 	public static void main(String[] args) {
 		Utils.trace("*************************** Begin ************************************\n");
-		TUserUnitTest unitTest = new TUserUnitTest();
-		unitTest.createOne();
-		unitTest.createMany(2);
+		TCartItemUnitTest unitTest = new TCartItemUnitTest();
+//		unitTest.createOne(3);
+//		unitTest.createMany();
 //		unitTest.readOne(1);
 //		unitTest.readMany();
 //		unitTest.update();
-//		unitTest.delete();
+		unitTest.delete();
 		Utils.trace("*************************** end ************************************\n");
 
 	}
@@ -30,38 +30,37 @@ public class TUser {
 }
 
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%Unit Test Object %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-class TUserUnitTest {
+class TCartItemUnitTest {
 
-	private UserCtrl ctrl;
+	private CrudCtrl ctrl;
 	private int maxRetry = 10;
 
-	public TUserUnitTest() {
-		this.setCtrl(new UserCtrl());
+	public TCartItemUnitTest() {
+		this.setCtrl(new StandardCrudCtrl(new CartItem()));
 	}
-
 
 //-------------------------------------------------------------------------------------------------
 	public void update() {
-		int userId = 3;
-		Utils.trace("=========================== Update [%d]===========================\n",userId);
-		User user = null;
+		int cartItemId = 3;
+		Utils.trace("=========================== Update [%d]===========================\n",cartItemId);
+		CartItem cartItem = null;
 
 		try {
-			user = (User) this.getCtrl().read(userId);
-			if (user == null)
+			cartItem = (CartItem) this.getCtrl().read(cartItemId);
+			if (cartItem == null)
 				Utils.trace("Address null\n");
 			else {
-				Utils.trace("Before:\t%s\n", user);
+				Utils.trace("Before:\t%s\n", cartItem);
 
 				// -------------------------- update ----------------------
-				user.setEmail(user.getEmail() + ".mod");
-				this.getCtrl().update(user);
+				cartItem.setQuantity(cartItem.getQuantity()*2);
+				this.getCtrl().update(cartItem);
 
-				user = (User) this.getCtrl().read(userId);
-				if (user != null)
-					Utils.trace("After:\t%s\n", user);
+				cartItem = (CartItem) this.getCtrl().read(cartItemId);
+				if (cartItem != null)
+					Utils.trace("After:\t%s\n", cartItem);
 				else
-					Utils.trace("User null\n");
+					Utils.trace("CartItem null\n");
 			}
 
 		} catch (Exception e) {
@@ -73,18 +72,18 @@ class TUserUnitTest {
 	public void delete() {
 		Utils.trace("=========================== Delete ===========================\n");
 		int addressId = 2;
-		User user = new User();
+		CartItem cartItem = new CartItem();
 
 		try {
-			user = (User) this.getCtrl().read(addressId);
-			if (user == null)
-				Utils.trace("Error : l'user n'existe pas\n");
+			cartItem = (CartItem) this.getCtrl().read(addressId);
+			if (cartItem == null)
+				Utils.trace("Error : l'cartItem n'existe pas\n");
 			else {
-				Utils.trace("last time seen %s\n", user);
-				this.getCtrl().delete(user);
-				user = (User) this.getCtrl().read(addressId);
+				Utils.trace("last time seen %s\n", cartItem);
+				this.getCtrl().delete(cartItem);
+				cartItem = (CartItem) this.getCtrl().read(addressId);
 
-				if (user != null)
+				if (cartItem != null)
 					Utils.trace("Error not remove\n");
 				else
 					Utils.trace("remove ok\n");
@@ -98,14 +97,16 @@ class TUserUnitTest {
 
 	public void createOne() {
 		Utils.trace("=========================== create One  ===========================\n");
-		User user = new User();
+		CartItem cartItem = new CartItem();
 		Item item = getItem(1);
 		Costumer costumer = getCostumer(1);
 
-		user = DataTest.genUser();
+		cartItem = DataTest.genCartItem();
+		cartItem.setCostumer(costumer);
+		cartItem.setItem(item);
 		try {
-			this.getCtrl().create(user);
-			Utils.trace("%s\n", user);
+			this.getCtrl().create(cartItem);
+			Utils.trace("%s\n", cartItem);
 		} catch (Exception e) {
 			Utils.trace("catch create %s\n", e.toString());
 		}
@@ -113,18 +114,33 @@ class TUserUnitTest {
 	}
 	// -------------------------------------------------------------------------------------------------
 
-	public void createMany(int maxUser) {
+	public void createMany(int startCostumer,int maxCartItem) {
 		Utils.trace("=========================== create many  ===========================\n");
-		User user = new User();
+		int maxItem = 59;
+		int maxIndexCostumer= 10;
+		CartItem cartItem = new CartItem();
+		Item item = new Item();
+		Costumer costumer = new Costumer() ;
 
 		try {
+			for (int indexCostumer = startCostumer; indexCostumer  <= maxIndexCostumer+startCostumer ; indexCostumer ++) {
 				
-				for (int indexUser = 1; indexUser <= maxUser; indexUser++) {
+				int maxCurrentCartItem = Utils.randInt(0, maxCartItem);
+				costumer = getCostumer(indexCostumer);
+				
+				for (int indexCartItem = 1; indexCartItem <= maxCurrentCartItem; indexCartItem++) {
 
-					user = DataTest.genUser();
-					this.getCtrl().create(user);
-					Utils.trace("%s\n", user);
+					cartItem = DataTest.genCartItem();
+					item = getItem(Utils.randInt(1, maxItem));
 
+					cartItem.setCostumer(costumer);
+					cartItem.setItem(item);
+					costumer.addCartItem(cartItem);
+					item.addCartItem(cartItem);
+					this.getCtrl().create(cartItem);
+					Utils.trace("%s\n", cartItem);
+
+				}
 			}
 		} catch (Exception e) {
 			Utils.trace("catch createMany %s\n", e.toString());
@@ -135,16 +151,16 @@ class TUserUnitTest {
 	public void readMany() {
 		Utils.trace("=========================== read many  ===========================\n");
 
-		List<Object> userList = new ArrayList<Object>();
+		List<Object> cartItemList = new ArrayList<Object>();
 
 		try {
-			userList = this.getCtrl().list();
+			cartItemList = this.getCtrl().list();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		if ((userList.size() > 0) && (userList != null)) {
-			for (Object object : userList) {
-				Utils.trace("%s\n", (User) object);
+		if ((cartItemList.size() > 0) && (cartItemList != null)) {
+			for (Object object : cartItemList) {
+				Utils.trace("%s\n", (CartItem) object);
 			}
 		} else
 			Utils.trace("address null");
@@ -154,21 +170,21 @@ class TUserUnitTest {
 	public void readOne(int id) {
 		Utils.trace("=========================== read One [%d] ===========================\n",id);
 
-		User user = new User();
+		CartItem cartItem = new CartItem();
 
 		try {
 			for (int index = id; index < this.getMaxRetry() + id; index++) {
-				user = (User) this.getCtrl().read(id);
-				if (user!= null)	break;
+				cartItem = (CartItem) this.getCtrl().read(id);
+				if (cartItem!= null)	break;
 			}
 				
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		if (user != null)
-			Utils.trace("%s\n", user);
+		if (cartItem != null)
+			Utils.trace("%s\n", cartItem);
 		else
-			Utils.trace("user null\n");
+			Utils.trace("cartItem null\n");
 
 	}
 //-------------------------------------------------------------------------------------------------	
@@ -223,11 +239,11 @@ class TUserUnitTest {
 	}
 
 //-------------------------------------------------------------------------------------------------	
-	public UserCtrl getCtrl() {
+	public CrudCtrl getCtrl() {
 		return this.ctrl;
 	}
 
-	public void setCtrl(UserCtrl ctrl) {
+	public void setCtrl(CrudCtrl ctrl) {
 		this.ctrl = ctrl;
 	}
 

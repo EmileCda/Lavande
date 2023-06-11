@@ -9,16 +9,16 @@ import fr.emile.ctrl.UserCtrl;
 import fr.emile.entity.Category;
 import fr.emile.entity.Costumer;
 import fr.emile.entity.Item;
-import fr.emile.entity.User;
+import fr.emile.entity.Comment;
 import fr.emile.utils.Utils;
 
-public class TUser {
+public class TComment {
 
 	public static void main(String[] args) {
 		Utils.trace("*************************** Begin ************************************\n");
-		TUserUnitTest unitTest = new TUserUnitTest();
+		TCommentUnitTest unitTest = new TCommentUnitTest();
 		unitTest.createOne();
-		unitTest.createMany(2);
+//		unitTest.createMany();
 //		unitTest.readOne(1);
 //		unitTest.readMany();
 //		unitTest.update();
@@ -30,38 +30,37 @@ public class TUser {
 }
 
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%Unit Test Object %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-class TUserUnitTest {
+class TCommentUnitTest {
 
-	private UserCtrl ctrl;
+	private CrudCtrl ctrl;
 	private int maxRetry = 10;
 
-	public TUserUnitTest() {
-		this.setCtrl(new UserCtrl());
+	public TCommentUnitTest() {
+		this.setCtrl(new StandardCrudCtrl(new Comment()));
 	}
-
 
 //-------------------------------------------------------------------------------------------------
 	public void update() {
-		int userId = 3;
-		Utils.trace("=========================== Update [%d]===========================\n",userId);
-		User user = null;
+		int commentId = 3;
+		Utils.trace("=========================== Update [%d]===========================\n",commentId);
+		Comment comment = null;
 
 		try {
-			user = (User) this.getCtrl().read(userId);
-			if (user == null)
+			comment = (Comment) this.getCtrl().read(commentId);
+			if (comment == null)
 				Utils.trace("Address null\n");
 			else {
-				Utils.trace("Before:\t%s\n", user);
+				Utils.trace("Before:\t%s\n", comment);
 
 				// -------------------------- update ----------------------
-				user.setEmail(user.getEmail() + ".mod");
-				this.getCtrl().update(user);
+				comment.setGrade(comment.getGrade()+1);
+				this.getCtrl().update(comment);
 
-				user = (User) this.getCtrl().read(userId);
-				if (user != null)
-					Utils.trace("After:\t%s\n", user);
+				comment = (Comment) this.getCtrl().read(commentId);
+				if (comment != null)
+					Utils.trace("After:\t%s\n", comment);
 				else
-					Utils.trace("User null\n");
+					Utils.trace("Comment null\n");
 			}
 
 		} catch (Exception e) {
@@ -73,18 +72,18 @@ class TUserUnitTest {
 	public void delete() {
 		Utils.trace("=========================== Delete ===========================\n");
 		int addressId = 2;
-		User user = new User();
+		Comment comment = new Comment();
 
 		try {
-			user = (User) this.getCtrl().read(addressId);
-			if (user == null)
-				Utils.trace("Error : l'user n'existe pas\n");
+			comment = (Comment) this.getCtrl().read(addressId);
+			if (comment == null)
+				Utils.trace("Error : l'comment n'existe pas\n");
 			else {
-				Utils.trace("last time seen %s\n", user);
-				this.getCtrl().delete(user);
-				user = (User) this.getCtrl().read(addressId);
+				Utils.trace("last time seen %s\n", comment);
+				this.getCtrl().delete(comment);
+				comment = (Comment) this.getCtrl().read(addressId);
 
-				if (user != null)
+				if (comment != null)
 					Utils.trace("Error not remove\n");
 				else
 					Utils.trace("remove ok\n");
@@ -98,14 +97,16 @@ class TUserUnitTest {
 
 	public void createOne() {
 		Utils.trace("=========================== create One  ===========================\n");
-		User user = new User();
+		Comment comment = new Comment();
 		Item item = getItem(1);
 		Costumer costumer = getCostumer(1);
 
-		user = DataTest.genUser();
+		comment = DataTest.genComment();
+		comment.setCostumer(costumer);
+		comment.setItem(item);
 		try {
-			this.getCtrl().create(user);
-			Utils.trace("%s\n", user);
+			this.getCtrl().create(comment);
+			Utils.trace("%s\n", comment);
 		} catch (Exception e) {
 			Utils.trace("catch create %s\n", e.toString());
 		}
@@ -113,18 +114,33 @@ class TUserUnitTest {
 	}
 	// -------------------------------------------------------------------------------------------------
 
-	public void createMany(int maxUser) {
+	public void createMany(int startCostumer,int maxComment) {
 		Utils.trace("=========================== create many  ===========================\n");
-		User user = new User();
+		int maxItem = 59;
+		int maxIndexCostumer= 10;
+		Comment comment = new Comment();
+		Item item = new Item();
+		Costumer costumer = new Costumer() ;
 
 		try {
+			for (int indexCostumer = startCostumer; indexCostumer  <= maxIndexCostumer+startCostumer ; indexCostumer ++) {
 				
-				for (int indexUser = 1; indexUser <= maxUser; indexUser++) {
+				int maxCurrentComment = Utils.randInt(0, maxComment);
+				costumer = getCostumer(indexCostumer);
+				
+				for (int indexComment = 1; indexComment <= maxCurrentComment; indexComment++) {
 
-					user = DataTest.genUser();
-					this.getCtrl().create(user);
-					Utils.trace("%s\n", user);
+					comment = DataTest.genComment();
+					item = getItem(Utils.randInt(1, maxItem));
 
+					comment.setCostumer(costumer);
+					comment.setItem(item);
+					costumer.addComment(comment);
+					item.addComment(comment);
+					this.getCtrl().create(comment);
+					Utils.trace("%s\n", comment);
+
+				}
 			}
 		} catch (Exception e) {
 			Utils.trace("catch createMany %s\n", e.toString());
@@ -135,16 +151,16 @@ class TUserUnitTest {
 	public void readMany() {
 		Utils.trace("=========================== read many  ===========================\n");
 
-		List<Object> userList = new ArrayList<Object>();
+		List<Object> commentList = new ArrayList<Object>();
 
 		try {
-			userList = this.getCtrl().list();
+			commentList = this.getCtrl().list();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		if ((userList.size() > 0) && (userList != null)) {
-			for (Object object : userList) {
-				Utils.trace("%s\n", (User) object);
+		if ((commentList.size() > 0) && (commentList != null)) {
+			for (Object object : commentList) {
+				Utils.trace("%s\n", (Comment) object);
 			}
 		} else
 			Utils.trace("address null");
@@ -154,21 +170,21 @@ class TUserUnitTest {
 	public void readOne(int id) {
 		Utils.trace("=========================== read One [%d] ===========================\n",id);
 
-		User user = new User();
+		Comment comment = new Comment();
 
 		try {
 			for (int index = id; index < this.getMaxRetry() + id; index++) {
-				user = (User) this.getCtrl().read(id);
-				if (user!= null)	break;
+				comment = (Comment) this.getCtrl().read(id);
+				if (comment!= null)	break;
 			}
 				
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		if (user != null)
-			Utils.trace("%s\n", user);
+		if (comment != null)
+			Utils.trace("%s\n", comment);
 		else
-			Utils.trace("user null\n");
+			Utils.trace("comment null\n");
 
 	}
 //-------------------------------------------------------------------------------------------------	
@@ -223,11 +239,11 @@ class TUserUnitTest {
 	}
 
 //-------------------------------------------------------------------------------------------------	
-	public UserCtrl getCtrl() {
+	public CrudCtrl getCtrl() {
 		return this.ctrl;
 	}
 
-	public void setCtrl(UserCtrl ctrl) {
+	public void setCtrl(CrudCtrl ctrl) {
 		this.ctrl = ctrl;
 	}
 

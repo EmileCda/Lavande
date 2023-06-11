@@ -1,4 +1,4 @@
-package fr.lotus.entity;
+package fr.emile.entity;
 
 import java.io.Serializable;
 
@@ -12,7 +12,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import fr.lotus.common.IConstant;
+import fr.emile.common.IConstant;
+import fr.emile.entity.PickupItem;
 
 
 @Entity
