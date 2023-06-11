@@ -74,7 +74,7 @@ public class Item  implements IConstant, Serializable {
 		this.setPrice(price);
 		this.setDiscount(discount);
 		this.setInventory(inventory);
-		this.setSalable(isSalable);
+		this.setIsSalable(isSalable);
 		this.setPicture(picture);
 		this.setVideo(video);
 		this.setCategory(category);
@@ -169,11 +169,11 @@ public class Item  implements IConstant, Serializable {
 		this.inventory = inventory;
 	}
 
-	public boolean isSalable() {
+	public boolean getIsSalable() {
 		return isSalable;
 	}
 
-	public void setSalable(boolean isSalable) {
+	public void setIsSalable(boolean isSalable) {
 		this.isSalable = isSalable;
 	}
 
@@ -232,7 +232,7 @@ public class Item  implements IConstant, Serializable {
 	public String toItemLabel() {
 		return String.format("%s \t%.2f€, \t-%d%%, \tstock:%d, \t%svendable, \timg:%s, \tvid :%s",
 				getName(),  getPrice(), getDiscount(), getInventory(), 
-				isSalable()?"":"non-",
+				getIsSalable()?"":"non-",
 						getDescription(),
 				getPicture(), getVideo());
 
@@ -242,7 +242,7 @@ public class Item  implements IConstant, Serializable {
 	public String toString() {
 		return String.format("Id[%d] %s : %s %.2f€, -%d %%, stock:%d, %svendable, img:%s, vid :%s",
 				getId(), getName(), getDescription(), getPrice(), getDiscount(), getInventory(), 
-				isSalable()?"":"non-",
+				getIsSalable()?"":"non-",
 				getPicture(), getVideo());
 
 	}

@@ -31,12 +31,9 @@
 
 </h:panelGroup>
 <h:panelGroup rendered="#{loginBean.user.profile eq loginBean.profileStoreKeeper}">
-	<div class="row-div">
-		<p>loginBeanoooooooooooooooéélééé</p>
-	</div>
 	<h:form>
 
-<h:dataTable id="datatable" value="#{itemManagementBean.currentCategorie.itemList}" var="oneItem"
+<h:dataTable id="datatable" value="#{itemManagementBean.currentCategory.itemList}" var="oneItem"
 		styleClass="item-table" headerClass="item-table-header"
 		rowClasses="item-table-odd-row,item-table-even-row">
 
@@ -54,12 +51,12 @@
 		</h:column>
 		
 		<h:column>
-			<f:facet name="header">#{msg['userlist.update']}</f:facet>
+			<f:facet name="header">#{msg['item-by-category.update']}</f:facet>
 			<h:commandLink value="#{msg['item-by-category.update']}"
-				action="#{itemManagementBean.updateItem(oneItem)}" />
+				action="#{itemManagementBean.modifyItem(oneItem)}" />
 		</h:column>
 		<h:column>
-			<f:facet name="header">#{msg['userlist.delete']}</f:facet>
+			<f:facet name="header">#{msg['item-by-category.delete']}</f:facet>
 			<h:commandLink value="#{msg['item-by-category.delete']}"
 				action="#{itemManagementBean.deleteItem(oneItem)}" />
 		</h:column>

@@ -120,6 +120,16 @@ public class Category  implements IConstant, Serializable {
 	public void setItemList(List<Item> itemList) {
 		this.itemList = itemList;
 	}
+	
+	
+	public void clean() {
+		this.setId(DEFAULT_ID);
+		this.setName("");
+		this.setDiscount(0);
+		this.setDiscountCumulative(false);
+		this.setPicture("");
+		this.setItemList(null);
+	}
 
 	@Override
 	public String toString() {

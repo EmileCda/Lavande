@@ -132,6 +132,13 @@ public class Costumer extends User implements IConstant, Serializable {
 
 	}
 
+	public boolean  removeCartItem(CartItem cartItemToRemove) {
+
+		return this.getCartItemList().remove(cartItemToRemove);
+
+	}
+		
+
 	public void initBankCardList() {
 		if (this.getBankCardList() == null)
 			this.setBankCardList(new ArrayList<BankCard>());

@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+
+<ui:composition>
+	<h:form>
+
+		<fieldset class="flex-row-center border-radius padding-1rem">
+			<legend>
+				<h:outputLabel value="#{msg['new-item.title']}" />
+			</legend>
+			<div class="flex-column-center">
+				<h:inputText value="#{itemManagementBean.itemToUpdate.id}"
+					required="true" a:placeholder="#{msg['new-item.id']}"
+					requiredMessage="#{msg['new-item.prompt.id']}" id="NI_itemId"
+					class="border-radius height-4rem padding-1rem margin-auto" />
+				<h:message for="NI_itemId" class="message" />
+				<h:inputText value="#{itemManagementBean.itemToUpdate.name}"
+					required="true" a:placeholder="#{msg['new-item.name']}"
+					requiredMessage="#{msg['new-item.prompt.name']}" id="NI_name"
+					class="border-radius height-4rem padding-1rem margin-auto" />
+				<h:message for="NI_name" class="message" />
+				<h:inputText value="#{itemManagementBean.itemToUpdate.description}"
+					required="true" a:placeholder="#{msg['new-item.description']}"
+					requiredMessage="#{msg['new-item.prompt.description']}"
+					id="NI_description"
+					class="border-radius height-4rem padding-1rem margin-auto" />
+				<h:message for="NI_description" class="message" />
+				<h:inputText value="#{itemManagementBean.itemToUpdate.price}"
+					required="true" a:placeholder="#{msg['new-item.price']}"
+					requiredMessage="#{msg['new-item.prompt.price']}" id="NI_price"
+					class="border-radius height-4rem padding-1rem margin-auto" />
+				<h:message for="NI_price" class="message" />
+				<h:inputText value="#{itemManagementBean.itemToUpdate.discount}"
+					required="true" a:placeholder="#{msg['new-item.discount']}"
+					requiredMessage="#{msg['new-item.prompt.discount']}"
+					id="NI_discount"
+					class="border-radius height-4rem padding-1rem margin-auto" />
+				<h:message for="NI_discount" class="message" />
+
+			</div>
+			<div class="flex-column-center justify-start">
+				<h:inputText value="#{itemManagementBean.itemToUpdate.inventory}"
+					required="true" a:placeholder="#{msg['new-item.inventory']}"
+					requiredMessage="#{msg['new-item.prompt.inventory']}"
+					id="NI_inventory"
+					class="border-radius height-4rem padding-1rem margin-auto" />
+				<h:message for="NI_inventory" class="message" />
+				<h:inputText value="#{itemManagementBean.itemToUpdate.picture}"
+					required="true" a:placeholder="#{msg['new-item.picture']}"
+					requiredMessage="#{msg['new-item.prompt.picture']}" id="NI_picture"
+					class="border-radius height-4rem padding-1rem margin-auto" />
+				<h:message for="NI_picture" class="message" />
+				<h:inputText value="#{itemManagementBean.itemToUpdate.video}"
+					required="true" a:placeholder="#{msg['new-item.video']}"
+					requiredMessage="#{msg['new-item.prompt.video']}" id="NI_video"
+					class="border-radius height-4rem padding-1rem margin-auto" />
+				<h:message for="NI_video" class="video" />
+
+
+				<fieldset class="border-radius  padding-1rem margin-auto">
+					<legend>
+						<h:outputLabel value="#{msg['new-item.is-sallable']}" />
+					</legend>
+					<h:selectOneRadio id="NI_isSalable" required="true"
+						layout="pageDirection"
+						value="#{itemManagementBean.itemToUpdate.isSalable}"
+						requiredMessage="#{msg['new-item.prompt.is-sallable']}">
+						<f:selectItem itemLabel="#{msg['new-item.is-not-sallable']}"
+							itemValue="#{itemManagementBean.falseValue}" />
+						<f:selectItem itemLabel="#{msg['new-item.is-sallable']}"
+							itemValue="#{itemManagementBean.trueValue}" />
+					</h:selectOneRadio>
+					<h:message for="NI_isSalable" class="message"></h:message>
+				</fieldset>
+
+
+			</div>
+		</fieldset>
+		<div class="flex-colum-center margin-auto padding-1rem">
+			<h:commandLink action="#{itemManagementBean.updateItem}"
+				class="border-radius  padding-1rem button-header">
+				<h:outputText value="#{msg['new-item.update']}"></h:outputText>
+			</h:commandLink>
+
+
+			<h:panelGroup rendered="#{msg['cheat.mode']}">
+				<h:commandLink action="#{itemManagementBean.cheatCodeItem}"
+					class="border-radius  padding-1rem button-header">
+					<h:outputText value="#{msg['cheat.name']}"></h:outputText>
+				</h:commandLink>
+
+			</h:panelGroup>
+		</div>
+	</h:form>
+</ui:composition>
+
+</html>
+
+

@@ -14,6 +14,81 @@
 				<div class="row-div padding-top-3rem margin-auto">
 					<h3>#{msg['cart.title']}</h3>
 				</div>
+				
+				<h:dataTable id="cartTable" value="#{loginBean.costumer.cartItemList}"
+					var="oneCartItem" styleClass="cartTable"
+					headerClass="cartTable-header"
+					rowClasses="cartTable-odd-row,cartTable-even-row">
+					<h:column>
+						<f:facet name="header">#{msg['cart.quantity']}</f:facet>
+						<h:inputText value="#{oneCartItem.quantity}" size="3">
+							<f:convertNumber integerOnly="true" type="number" />
+						</h:inputText>
+					</h:column>
+					
+					<h:column>
+						<f:facet name="header">#{msg['cart.prixBrute']}</f:facet>
+						<h:outputText size="3" style="display:block;width:100px"
+							value="#{oneCartItem.quantity * oneCartItem.article.price}">
+							<f:convertNumber minFractionDigits="2" currencySymbol="€" type="currency" />
+						</h:outputText>
+					</h:column>
+					<h:column>
+						<f:facet name="header">#{msg['cart.reduction']}</f:facet>
+						<h:outputText size="3" style="display:block;width:100px"
+							value="#{oneCartItem.item.discount
+							* oneCartItem.quantity 
+							* oneCartItem.item.price/100}"><f:convertNumber minFractionDigits="2"  currencySymbol="€" type="currency" />
+						</h:outputText>
+
+					</h:column>
+					
+					<h:column>
+						<f:facet name="header">#{msg['cart.nom']}</f:facet>
+						<h:outputLabel value="#{oneCartItem.item.name}" />
+
+					</h:column>
+					<h:column>
+						<f:facet name="header">#{msg['cart.description']}</f:facet>
+						<h:outputLabel value="#{oneCartItem.item.description}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">#{msg['cart.prix']}</f:facet>
+						<h:outputText value="#{oneCartItem.item.price}">
+						<f:convertNumber minFractionDigits="2"  currencySymbol="€" type="currency" />
+						</h:outputText>
+					</h:column>
+					<h:column>
+						<f:facet name="header">#{msg['cart.discount']}</f:facet>
+<!-- 						<h:outputText value="#{oneCartItem.article.discount}"/> -->
+						<h:outputText value="-#{oneCartItem.item.discount}%">
+						
+						</h:outputText>
+					</h:column>
+					<h:column>
+						<f:facet name="header">#{msg['cart.stock']}</f:facet>
+						<h:outputLabel value="#{oneCartItem.item.inventory}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">#{msg['cart.salable']}</f:facet>
+						<h:outputLabel value="#{oneCartItem.item.isSalable}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">#{msg['cart.photo']}</f:facet>
+						<h:outputLabel value="#{oneCartItem.item.picture}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">#{msg['cart.video']}</f:facet>
+						<h:outputLabel value="#{oneCartItem.item.video}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">#{msg['cart.delete-item']}</f:facet>
+						<h:commandLink value="#{msg['cart.delete-item']}"
+							action="#{itemManagementBean.deleteItem(oneCartItem)}" />
+					</h:column>
+				</h:dataTable>
+				
+				
 			</f:view>
 		</div>
 	</ui:define>
