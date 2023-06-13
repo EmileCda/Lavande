@@ -35,6 +35,9 @@ public class OrderLine extends PickupItem implements IConstant, Serializable {
 				DEFAULT_QUANTITY,null,null);
 		
 	}
+	public OrderLine( int quantity, Item item, Order order) {
+		this(DEFAULT_ID,quantity, item, order) ;
+	}
 	public OrderLine(int id, int quantity, Item item, Order order) {
 		this.setId ( id);
 		this.setQuantity ( quantity);

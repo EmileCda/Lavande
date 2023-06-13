@@ -230,7 +230,7 @@ public class Item  implements IConstant, Serializable {
 	}
 	
 	public String toItemLabel() {
-		return String.format("%s \t%.2f€, \t-%d%%, \tstock:%d, \t%svendable, \timg:%s, \tvid :%s",
+		return String.format("%s \t%.2f€, \t-%d%%, \tstock:%d, \t%svendable,%s \timg:%s, \tvid :%s",
 				getName(),  getPrice(), getDiscount(), getInventory(), 
 				getIsSalable()?"":"non-",
 						getDescription(),

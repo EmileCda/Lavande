@@ -15,8 +15,8 @@ public class TItem {
 		Utils.trace("*************************** Begin ************************************\n");
 		TItemUnitTest unitTest = new TItemUnitTest();
 //		unitTest.createOne();
-		unitTest.createMany(10);
-//		unitTest.readOne(1);
+//		unitTest.createMany(10);
+		unitTest.readOne(1);
 //		unitTest.readMany();
 //		unitTest.update();
 //		unitTest.delete();

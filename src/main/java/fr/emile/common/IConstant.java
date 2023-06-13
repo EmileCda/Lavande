@@ -23,6 +23,9 @@ public interface IConstant {
 		public final Date DATE_NOW = new Date();
 
 		
+		public final int DEFAULT_SHIPPING_COST = 10 ; 
+		public final int STANDARD_DELIVERY_TIME = 10 ; 
+		
 //	************************************* Below is obsolete;  for trash *******************************
 	// common to all class 
 	

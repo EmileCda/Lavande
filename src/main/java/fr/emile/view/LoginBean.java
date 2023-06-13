@@ -61,8 +61,8 @@ public class LoginBean extends MasterBean implements IConstant {
 	// %%%%%%%%%%%%%%%%%%%%%%%%%% action %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	public String onTest() {
 		this.resetPromptStatus();
-		String pageReturn = STOREKEEPER_HOME;
-		this.getUser().setProfile(this.getProfileStoreKeeper());
+		String pageReturn = COSTUMER_HOME;
+		this.getUser().setProfile(this.getProfileCostumer());
 
 		return pageReturn;
 	}

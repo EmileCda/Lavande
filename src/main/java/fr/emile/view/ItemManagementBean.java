@@ -25,7 +25,7 @@ public class ItemManagementBean extends MasterBean implements IConstant {
 	Category currentCategory;
 	Category categoryToUpdate;
 	Item itemToUpdate;
-	List<String> pickUpItemList;
+	
 	boolean falseValue = false;
 	boolean trueValue = true;
 
@@ -51,6 +51,7 @@ public class ItemManagementBean extends MasterBean implements IConstant {
 		this.cleanPromptStatus();
 		int categoryId = (int) eventCategoryList.getNewValue();
 		this.setCurrentCategory(categoryId);
+		this.setCategoryToUpdate(this.getCurrentCategory());
 	}
 
 // %%%%%%%%%%%%%%%%%%%%%%%%%% action %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -86,29 +87,6 @@ public class ItemManagementBean extends MasterBean implements IConstant {
 
 // %%%%%%%%%%%%%%%%%%%%%%%%%% action %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-	public String addItemToCart() {
-		String pageReturn = null;
-
-		Item item = new Item();
-		CartItem cartItem;
-
-		for (String itemStringId : this.getPickUpItemList()) {
-
-			int itemId = Integer.parseInt(itemStringId);
-			if (itemId > 0) {
-				item = getItem(itemId);
-				cartItem = new CartItem(1, this.loginBean.getCostumer(), item);
-				this.getLoginBean().getCostumer().addCartItem(cartItem);
-			}
-		}
-		this.getPickUpItemList().clear(); // clear the list once transfered in user.cartItemList
-		this.getLoginBean()
-				.setLabelCart(String.format("%d", this.getLoginBean().getCostumer().getCartItemList().size()));
-		return pageReturn;
-
-	}
-
-	// %%%%%%%%%%%%%%%%%%%%%%%%%%_action_%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 	public String deleteItem(Item item) {
 
@@ -176,7 +154,7 @@ public class ItemManagementBean extends MasterBean implements IConstant {
 	}
 
 	// -+-+-+-+-+-+-+-+-+-+-+-+-+_processing_-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-	public Item getItem(int itemId) {
+	public Item ZgetItem(int itemId) {
 
 		for (Item item : this.getCurrentCategory().getItemList()) {
 
@@ -252,13 +230,7 @@ public class ItemManagementBean extends MasterBean implements IConstant {
 		this.loginBean = loginBean;
 	}
 
-	public List<String> getPickUpItemList() {
-		return pickUpItemList;
-	}
 
-	public void setPickUpItemList(List<String> pickUpItemList) {
-		this.pickUpItemList = pickUpItemList;
-	}
 
 	public boolean getFalseValue() {
 		return falseValue;
