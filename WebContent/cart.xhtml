@@ -89,13 +89,17 @@
 						</h:column>
 						<h:column>
 							<f:facet name="header">#{msg['cart.delete-item']}</f:facet>
-							<h:button value="#{msg['cart.delete-item']}"
+							<h:commandButton value="#{msg['cart.delete-item']}"
+							styleClass="border-radius height-2rem submit-button"
 								action="#{purchaseBean.deleteItem(oneCartItem)}" />
 						</h:column>
 					</h:dataTable>
-							<h:button value="#{msg['cart.validate']}"
+							<h:commandButton value="#{msg['cart.validate']}"
 							styleClass="border-radius height-4rem submit-button"
-								action="#{purchaseBean.}" />
+								action="#{purchaseBean.ValidateCart
+								}" />
+								
+								
 				</h:form>
 
 

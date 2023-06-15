@@ -286,5 +286,23 @@ public class Costumer extends User implements IConstant, Serializable {
 		}
 		return stringReturn;
 	}
+	public int getDefaultBillingAddressId() {
+		return defaultBillingAddressId;
+	}
+	public void setDefaultBillingAddressId(int defaultBillingAddressId) {
+		this.defaultBillingAddressId = defaultBillingAddressId;
+	}
+	public int getDefaultDeliveryAddressId() {
+		return defaultDeliveryAddressId;
+	}
+	public void setDefaultDeliveryAddressId(int defaultDeliveryAddressId) {
+		this.defaultDeliveryAddressId = defaultDeliveryAddressId;
+	}
+	public int getDefaultBankCardId() {
+		return defaultBankCardId;
+	}
+	public void setDefaultBankCardId(int defaultBankCardId) {
+		this.defaultBankCardId = defaultBankCardId;
+	}
 
 }

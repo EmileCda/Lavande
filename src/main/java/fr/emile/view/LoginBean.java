@@ -61,7 +61,9 @@ public class LoginBean extends MasterBean implements IConstant {
 	// %%%%%%%%%%%%%%%%%%%%%%%%%% action %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	public String onTest() {
 		this.resetPromptStatus();
-		String pageReturn = COSTUMER_HOME;
+		String pageReturn = COSTUMER_HOME;	
+		this.setCostumer(this.readOneCostumer(40));
+//		this.settingCostumer(this.readOneCostumer(40));
 		this.getUser().setProfile(this.getProfileCostumer());
 
 		return pageReturn;
@@ -246,6 +248,26 @@ public class LoginBean extends MasterBean implements IConstant {
 	}
 
 	// -------------------------------------------------------------------------------------------------
+	public Costumer readOneCostumer (int id) {
+		int maxRetry = 10 ; 
+		Costumer costumer = null; 
+		CostumerCtrl costumerCtrl =new CostumerCtrl();
+		
+		try {
+			for (int index = id; index < maxRetry+ id; index++) {
+				costumer = (Costumer) costumerCtrl.read(id);
+				if (costumer != null)
+					break;
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return costumer; 
+	}
+
+	// -------------------------------------------------------------------------------------------------
+	
 
 	public User getUser() {
 		return user;

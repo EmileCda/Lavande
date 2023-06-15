@@ -9,10 +9,12 @@ import javax.faces.bean.SessionScoped;
 import javax.faces.event.ValueChangeEvent;
 
 import fr.emile.common.IConstant;
+import fr.emile.ctrl.CostumerCtrl;
 import fr.emile.ctrl.CrudCtrl;
 import fr.emile.ctrl.StandardCrudCtrl;
 import fr.emile.entity.CartItem;
 import fr.emile.entity.Category;
+import fr.emile.entity.Costumer;
 import fr.emile.entity.Item;
 import fr.emile.entity.Order;
 import fr.emile.entity.OrderLine;
@@ -42,31 +44,37 @@ public class PurchaseBean extends MasterBean implements IConstant {
 	public String deleteItem(CartItem cartItem) {
 		String pageReturn = null;
 		String message = "";
+		message = String.format("%s remove ",  cartItem.getItem().getName());
+		Utils.trace(String.format("%s remove", cartItem.getItem().getName()));
 		boolean result = this.getLoginBean().getCostumer().removeCartItem(cartItem);
-		message = String.format("%s remove %", result ? "success" : "error", cartItem.getItem().getName());
+		Utils.trace("String.format( %b",result );
+		message = String.format("%s", result ? "success" : "error");
 		this.getLoginBean().setPromptStatus(message);
 		return pageReturn;
 	}
 
-	// %%%%%%%%%%%%%%%%%%%%%%%%%% action
-	// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+// %%%%%%%%%%%%%%%%%%%%%%%%%%_action_%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 	public String ValidateCart() {
-		String pageReturn = null;
+		String pageReturn = POURCHASE_VALIDATED;
 		float grossGrandTotal = 0;
 		float totalDiscount = 0;
 		float grossPrice = 0;
 		int currentShippingCost = DEFAULT_SHIPPING_COST;
 		order.setCostumer(this.getLoginBean().getCostumer());
-Utils.trace("%s\n", order);
+		Utils.trace("%s\n", order);
 		this.getLoginBean().getCostumer().addOrder(order);
 
 		if (this.getOrder() == null)
 			this.setOrder(new Order());
 
 		this.getOrder().setShippingCosts(DEFAULT_SHIPPING_COST);
+//		int nbCartItem = this.getLoginBean().getCostumer().getCartItemList().size();
+		
+		
 		for (CartItem cartItem : this.getLoginBean().getCostumer().getCartItemList()) {
 			OrderLine orderLine = new OrderLine(cartItem.getQuantity(), cartItem.getItem(), order);
+			Utils.trace("%s\n",cartItem);
 			this.getOrder().addOrderLine(orderLine);
 			currentShippingCost += 1;
 			grossPrice = cartItem.getItem().getPrice() * cartItem.getQuantity();
@@ -80,22 +88,34 @@ Utils.trace("%s\n", order);
 			totalDiscount += itemDiscount;
 
 		}
+		this.getLoginBean().getCostumer().getCartItemList().clear();
+		this.updateCostumer();
+		
 		order.setOrderNumber(order.generateOrderNumber());
 		order.setCreateDate(DATE_NOW);
 		order.setDeliveryDate(Utils.addDate(this.getOrder().getCreateDate(), STANDARD_DELIVERY_TIME));
 		order.setTotalDiscount(totalDiscount);
 		order.setShippingCosts(currentShippingCost);
 		order.setGrandTotal(grossGrandTotal - totalDiscount);
-		order.setDeliveryAddress(this.getLoginBean().getCostumer().getAddressList().get(0));
-		order.setBillingAddress(this.getLoginBean().getCostumer().getAddressList().get(0));
-		order.setBankCardUsed(this.getLoginBean().getCostumer().getBankCardList().get(0));
+		int nbCard = this.getLoginBean().getCostumer().getAddressList().size();
+		if (nbCard >0)	order.setDeliveryAddress(this.getLoginBean().getCostumer().getAddressList().get(0));
+		else {
+			this.getLoginBean().setPromptStatus("%s","pas de carte");
+			return pageReturn;
+		}
+		
+		int nbAddress = this.getLoginBean().getCostumer().getAddressList().size();
+		if (nbAddress>0) {
+			order.setBillingAddress(this.getLoginBean().getCostumer().getAddressList().get(0));
+			order.setBankCardUsed(this.getLoginBean().getCostumer().getBankCardList().get(0));
+		}
+		else this.getLoginBean().setPromptStatus("%s","no address");
 
-		Utils.trace("%s\n",order);
+		Utils.trace("%s\n", order);
 		return pageReturn;
 	}
 
-	// %%%%%%%%%%%%%%%%%%%%%%%%%% action
-	// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	// %%%%%%%%%%%%%%%%%%%%%%%%%%_action_%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 	public String addItemToCart() {
 		String pageReturn = null;
@@ -117,6 +137,19 @@ Utils.trace("%s\n", order);
 				.setLabelCart(String.format("%d", this.getLoginBean().getCostumer().getCartItemList().size()));
 		return pageReturn;
 
+	}
+
+	// -+-+-+-+-+-+-+-+-+-+-+-+-+_processing_-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+	
+	public void updateCostumer() {
+
+		CostumerCtrl costumerCtrl =new CostumerCtrl();
+		try {
+			costumerCtrl.update(this.getLoginBean().getCostumer());
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 // -+-+-+-+-+-+-+-+-+-+-+-+-+_processing_-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+

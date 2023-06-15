@@ -72,17 +72,18 @@ class TCostumerUnitTest {
 //-------------------------------------------------------------------------------------------------
 	public void delete() {
 		Utils.trace("=========================== Delete ===========================\n");
-		int addressId = 2;
+		int id = 2;
 		Costumer costumer = new Costumer();
 
 		try {
-			costumer = (Costumer) this.getCtrl().read(addressId);
+			costumer = (Costumer) this.getCtrl().read(id);
 			if (costumer == null)
 				Utils.trace("Error : l'costumer n'existe pas\n");
 			else {
 				Utils.trace("last time seen %s\n", costumer);
 				this.getCtrl().delete(costumer);
-				costumer = (Costumer) this.getCtrl().read(addressId);
+				costumer = (Costumer) this.getCtrl().read(id
+						);
 
 				if (costumer != null)
 					Utils.trace("Error not remove\n");
