@@ -20,9 +20,9 @@ public class TCostumer {
 		TCostumerUnitTest unitTest = new TCostumerUnitTest();
 //		unitTest.createOne();
 //		unitTest.createMany(10);
-//		unitTest.readOne(1);
+		unitTest.readOne(76);
 //		unitTest.readMany();
-		unitTest.update();
+//		unitTest.update();
 //		unitTest.delete();
 		Utils.trace("*************************** end ************************************\n");
 

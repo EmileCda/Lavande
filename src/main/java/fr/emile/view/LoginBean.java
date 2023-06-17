@@ -4,10 +4,13 @@ import java.util.ResourceBundle;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import javax.faces.event.ValueChangeEvent;
 
 import fr.emile.common.IConstant;
 import fr.emile.ctrl.CostumerCtrl;
 import fr.emile.ctrl.UserCtrl;
+import fr.emile.entity.Address;
+import fr.emile.entity.BankCard;
 import fr.emile.entity.Costumer;
 import fr.emile.entity.User;
 import fr.emile.enums.Gender;
@@ -35,6 +38,24 @@ public class LoginBean extends MasterBean implements IConstant {
 	private Profile profileAdmin;
 	private Profile profileStoreKeeper;
 	private String labelCart;
+	private BankCard currentBankCard;
+	private Address currentAddress;
+
+	public BankCard getCurrentBankCard() {
+		return currentBankCard;
+	}
+
+	public void setCurrentBankCard(BankCard currentBankCard) {
+		this.currentBankCard = currentBankCard;
+	}
+
+	public Address getCurrentAddress() {
+		return currentAddress;
+	}
+
+	public void setCurrentAddress(Address currentAddress) {
+		this.currentAddress = currentAddress;
+	}
 
 	private ResourceBundle msg;
 
@@ -51,6 +72,8 @@ public class LoginBean extends MasterBean implements IConstant {
 		this.setProfileAdmin(Profile.MANAGER);
 		this.setProfileCostumer(Profile.COSTUMER);
 		this.setProfileStoreKeeper(Profile.STORE_KEEPER);
+		this.setCurrentBankCard(new BankCard());
+		this.setCurrentAddress(new Address());
 
 	}
 
@@ -59,6 +82,26 @@ public class LoginBean extends MasterBean implements IConstant {
 		this.resetPromptStatus();
 		String pageReturn = CREATE_BANKCARD;
 
+		return pageReturn;
+	}
+
+	// %%%%%%%%%%%%%%%%%%%%%%%%%% action %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	public String bankCardChange(ValueChangeEvent eventCategoryList) {
+		this.resetPromptStatus();
+		String pageReturn = SETTING;
+		int cardId = (int) eventCategoryList.getNewValue();
+		Utils.trace("cardId : %d\n", cardId);
+		for (BankCard bankCard : this.getCostumer().getBankCardList()) {
+			Utils.trace("cardId : %d\n", bankCard.getId());
+			if (bankCard.getId() == cardId) {
+				Utils.trace("bankCard : %s\n", bankCard);
+				this.setCurrentBankCard(bankCard);
+				Utils.trace("bankCard current: %s\n", this.getCurrentBankCard());
+				break;
+			}
+		}
+
+		Utils.trace("bankCard current: %s\n", this.getCurrentBankCard());
 		return pageReturn;
 	}
 
@@ -94,7 +137,41 @@ public class LoginBean extends MasterBean implements IConstant {
 
 	}
 
-	// %%%%%%%%%%%%%%%%%%%%%%%%%% action %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	// %%%%%%%%%%%%%%%%%%%%%%%%%%_action_%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	public String setting() {
+		this.resetPromptStatus();
+		String pageReturn = SETTING;
+		Utils.trace("%s\n", "String setting");
+
+		if (this.getUser().getProfile() == Profile.COSTUMER) {
+			this.setSettingCostumer(this.getCostumer());
+			Utils.trace("%s\n", this.getCurrentBankCard());
+			if ((this.getSettingCostumer().getBankCardList().size() > 0) && (this.getCurrentBankCard().getId() <=0))
+				this.setCurrentBankCard(this.getSettingCostumer().getBankCardList().get(0));
+
+			if ((this.getSettingCostumer().getAddressList().size() > 0) && (this.getCurrentAddress().getId() <=0))
+				this.setCurrentAddress(this.getSettingCostumer().getAddressList().get(0));
+
+			this.setPromptStatus("Setting %s %s %s", this.getSettingCostumer().getProfile().getName(),
+					this.getSettingCostumer().getFirstname(), this.getSettingCostumer().getLastname());
+
+			Utils.trace("current bankcard %s\n", this.getCurrentBankCard());
+			Utils.trace("current Address %s\n", this.getCurrentAddress());
+
+		} else {
+			this.getSettingCostumer().setId(this.getUser().getId());
+			this.getSettingCostumer().setPassword(this.getUser().getPassword());
+			this.getSettingCostumer().setProfile(this.getUser().getProfile());
+			this.setPromptStatus("Setting %s %s", this.getSettingCostumer().getProfile().getName(),
+					this.getSettingCostumer().getEmail());
+
+		}
+
+		return pageReturn;
+
+	}
+
+	// %%%%%%%%%%%%%%%%%%%%%%%%%%_action_%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	public String updateUser() {
 		this.resetPromptStatus();
 		String pageReturn = null;
@@ -102,7 +179,7 @@ public class LoginBean extends MasterBean implements IConstant {
 		return pageReturn;
 	}
 
-	// %%%%%%%%%%%%%%%%%%%%%%%%%% action %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+// %%%%%%%%%%%%%%%%%%%%%%%%%%_action_%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	public String addCostumer() {
 		this.resetPromptStatus();
 		String pageReturn = COSTUMER_HOME;
@@ -128,7 +205,7 @@ public class LoginBean extends MasterBean implements IConstant {
 
 	}
 
-	// %%%%%%%%%%%%%%%%%%%%%%%%%% action %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+// %%%%%%%%%%%%%%%%%%%%%%%%%%_action_%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	public String checkUser() throws Exception {
 		String pageReturn = HOME;
 		this.resetPromptStatus();
@@ -215,7 +292,6 @@ public class LoginBean extends MasterBean implements IConstant {
 			e.printStackTrace();
 		} finally {
 			this.setCostumer(costumer);
-			Utils.trace("costumer %s\n" , costumer);
 		}
 	}
 

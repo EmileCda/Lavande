@@ -65,6 +65,13 @@ public class BankCard  implements IConstant, Serializable {
 		this(DEFAULT_ID, DEFAULT_BANK_CARD_NUMBER, DATE_NOW, DEFAULT_BANK_CARD_CRYPTO, true, false, null);
 	}
 
+	public BankCard(BankCard copy) {
+
+		this(copy.getId(), copy.getCardNumber(), copy.getExpiryDate(), copy.getCrypto(), 
+				copy.getIsValid(), copy.getIsDeleted(), copy.getCostumer());
+
+	}
+
 	public BankCard(String cardNumber, Date expiryDate, String crypto, Costumer costumer) {
 
 		this(DEFAULT_ID, cardNumber, expiryDate, crypto, true, false, costumer);

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<ui:composition template="/resources/template/main-template.xhtml">
+	<ui:define name="main">
+		<div class="add-user">
+				<h2>#{msg['user-setting.title']}</h2>
+				<div class="row-div">
+					<p>#{addUserBean.promptStatus}</p>
+
+					<h:outputLabel value="#{loginBean.currentBankCard.cardNumber}" />
+				</div>
+<!-- 				<ui:include src="/resources/module/user-setting.xhtml"></ui:include> -->
+				<h:panelGroup
+					rendered="#{loginBean.user.profile eq loginBean.profileCostumer}">
+
+<!-- 					<ui:include src="/resources/module/costumer-setting.xhtml"></ui:include> -->
+					<ui:include src="/resources/module/bankcard-management.xhtml"></ui:include>
+<!-- 					<ui:include src="/resources/module/address-management.xhtml"></ui:include> -->
+
+				</h:panelGroup>
+
+		</div>
+	</ui:define>
+</ui:composition>
+
+</html>

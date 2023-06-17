@@ -11,25 +11,25 @@
 
 <ui:composition>
 	<div class="flex-column-center">
-	<h:panelGrid columns="1" cellpadding="0" cellspacing="8">
 
-		<h:panelGroup rendered="#{loginBean.user.profile eq loginBean.profileAdmin}">
+		<h:panelGroup
+			rendered="#{loginBean.user.profile eq loginBean.profileAdmin}">
 			<fieldset class="fieldset">
 				<legend>
 					<h:outputLabel value="#{msg['account.profile']}" />
 				</legend>
-					<h:selectOneRadio id="profile"
-						value="#{loginBean.settingCostumer.profile}" required="true"
-						requiredMessage="#{msg['account.prompt.profile']}">
-						<f:selectItem itemLabel="#{loginBean.profileAdmin.name}"
-							itemValue="#{loginBean.profileAdmin}" />
-						<f:selectItem itemLabel="#{loginBean.profileStoreKeeper.name}"
-							itemValue="#{loginBean.profileStoreKeeper}" />
-						<f:selectItem itemLabel="#{loginBean.profileCostumer.name}"
-							itemValue="#{loginBean.profileCostumer}" />
-					</h:selectOneRadio>
+				<h:selectOneRadio id="profile"
+					value="#{loginBean.settingCostumer.profile}" required="true"
+					requiredMessage="#{msg['account.prompt.profile']}">
+					<f:selectItem itemLabel="#{loginBean.profileAdmin.name}"
+						itemValue="#{loginBean.profileAdmin}" />
+					<f:selectItem itemLabel="#{loginBean.profileStoreKeeper.name}"
+						itemValue="#{loginBean.profileStoreKeeper}" />
+					<f:selectItem itemLabel="#{loginBean.profileCostumer.name}"
+						itemValue="#{loginBean.profileCostumer}" />
+				</h:selectOneRadio>
 			</fieldset>
-			<h:message for="profile" style="color:red"></h:message>
+			<h:message for="profile" class="message"></h:message>
 		</h:panelGroup>
 
 		<h:panelGroup rendered="#{loginBean.isCostumer}">
@@ -48,7 +48,7 @@
 					</h:selectOneRadio>
 				</h:panelGrid>
 			</fieldset>
-			<h:message for="genre" style="color:red"></h:message>
+			<h:message for="genre" class="message"></h:message>
 			<h:inputText id="lastname"
 				value="#{loginBean.settingCostumer.firstname}" required="true"
 				a:placeholder="#{msg['account.firstname']}"
@@ -57,7 +57,7 @@
 				<f:validateLength minimum="2" maximum="20" />
 				<f:validateRegex pattern="^[a-zA-Z-\s]*"></f:validateRegex>
 			</h:inputText>
-			<h:message for="lastname" style="color:red"></h:message>
+			<h:message for="lastname" class="message"></h:message>
 
 			<h:inputText id="firstname"
 				value="#{loginBean.settingCostumer.lastname}" required="true"
@@ -67,7 +67,7 @@
 				<f:validateLength minimum="2" maximum="100" />
 				<f:validateRegex pattern="^[a-zA-Z-\s]*"></f:validateRegex>
 			</h:inputText>
-			<h:message for="firstname" style="color:red"></h:message>
+			<h:message for="firstname" class="message"></h:message>
 
 
 			<h:inputText id="phone"
@@ -78,7 +78,7 @@
 				<f:validateLength minimum="8" maximum="15" />
 			</h:inputText>
 
-			<h:message for="phone" style="color:red"></h:message>
+			<h:message for="phone" class="message"></h:message>
 
 			<h:inputText id="birthdate"
 				value="#{loginBean.settingCostumer.birthdate}"
@@ -88,7 +88,7 @@
 				<f:convertDateTime pattern="dd/MM/yyyy"></f:convertDateTime>
 					(jj/mm/aaaa)
 				</h:inputText>
-			<h:message for="birthdate" style="color:red"></h:message>
+			<h:message for="birthdate" class="message"></h:message>
 
 
 		</h:panelGroup>
@@ -100,7 +100,7 @@
 			requiredMessage="#{msg['account.prompt.email']}">
 			<f:validateLength minimum="8" maximum="100" />
 		</h:inputText>
-		<h:message for="email" style="color:red"></h:message>
+		<h:message for="email" class="message"></h:message>
 
 		<h:inputSecret id="password"
 			value="#{loginBean.settingCostumer.password}"
@@ -110,7 +110,7 @@
 			<f:validateLength minimum="8" maximum="100" />
 			<!-- 			<f:validateRegex pattern="^[a-z]{1,}[A-Z]{1,}[0-9]{1,}[@%!-+?]{1,}*"></f:validateRegex> -->
 		</h:inputSecret>
-		<h:message for="password" style="color:red"></h:message>
+		<h:message for="password" class="message"></h:message>
 
 		<h:inputSecret id="password-confirmation"
 			a:placeholder="#{msg['account.re-password']}"
@@ -120,8 +120,7 @@
 			<f:validateLength minimum="8" maximum="100" />
 			<!-- 			<f:validateRegex pattern="^[a-z]{1,}[A-Z]{1,}[0-9]{1,}[@%!-+?]{1,}*"></f:validateRegex> -->
 		</h:inputSecret>
-		<h:message for="password-confirmation" style="color:red"></h:message>
-	</h:panelGrid>
+		<h:message for="password-confirmation" class="message"></h:message>
 	</div>
 </ui:composition>
 
