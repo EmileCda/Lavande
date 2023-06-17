@@ -90,16 +90,15 @@
 						<h:column>
 							<f:facet name="header">#{msg['cart.delete-item']}</f:facet>
 							<h:commandButton value="#{msg['cart.delete-item']}"
-							styleClass="border-radius height-2rem submit-button"
+								styleClass="border-radius height-2rem submit-button"
 								action="#{purchaseBean.deleteItem(oneCartItem)}" />
 						</h:column>
 					</h:dataTable>
-							<h:commandButton value="#{msg['cart.validate']}"
-							styleClass="border-radius height-4rem submit-button"
-								action="#{purchaseBean.ValidateCart
-								}" />
-								
-								
+					<h:commandButton value="#{msg['cart.validate']}"
+						styleClass="border-radius height-4rem submit-button"
+						action="#{purchaseBean.validateCart}" />
+
+
 				</h:form>
 
 

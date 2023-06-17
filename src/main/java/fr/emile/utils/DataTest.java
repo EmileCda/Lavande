@@ -128,15 +128,13 @@ public final class DataTest implements IConstant {
 	public static BankCard genBankCardNoName() {
 
 		BankCard myBankCard = new BankCard();
-		int bin = Utils.randInt(111111, 999999);
-		int digit3 = Utils.randInt(0, 999);
-		int digit8 = Utils.randInt(11111111, 99999999);
+		String crypto = String.format("%03d", Utils.randInt(0, 999));
 
-		myBankCard.setCardNumber(String.format("%06d%08d", bin, digit8));
+		myBankCard.setCardNumber(DataTest.bankCardNumber());
 		Date startDate = Utils.string2Date("01/01/2023", "dd/MM/yyyy");
 		Date endDate = Utils.string2Date("01/01/2025", "dd/MM/yyyy");
 		myBankCard.setExpiryDate(DataTest.date(startDate, endDate));
-		myBankCard.setCrypto(String.format("%03d", digit3));
+		myBankCard.setCrypto(crypto );
 
 		return myBankCard;
 	}
@@ -237,11 +235,11 @@ public final class DataTest implements IConstant {
 	// ---------------------------------------------------------------------------------------------------
 	public static String bankCardNumber() {
 
-		int bin = Utils.randInt(111111, 999999);
-		int digit8 = Utils.randInt(0, 99999999);
+		int bin = Utils.randInt(0, 99999);
+		int digit9 = Utils.randInt(0, 999999999);
+		int lunh = Utils.randInt(0, 9);
 
-		return (String.format("%06d%08d", bin, digit8));
-
+		return (String.format("4%05d%09d%01d", bin, digit9,lunh));
 	}
 
 	// ---------------------------------------------------------------------------------------------------

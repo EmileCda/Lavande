@@ -48,12 +48,8 @@ public class UserCtrl extends CrudCtrl implements IClassCtrl {
 	public User  read(String email) throws Exception {
 		User user = new User(); 
 		UserDao UserDao= new UserDao();
-		Utils.trace("%s\n",email);
 		user= UserDao.read(email.toLowerCase());
-		
-		if (user != null) Utils.trace("%s\n",user);
 		user = (User) postRead(user);
-		if (user != null) Utils.trace("%s\n",user);
 		return user;
 	}
 	

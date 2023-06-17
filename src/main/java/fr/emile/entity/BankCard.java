@@ -43,6 +43,8 @@ public class BankCard  implements IConstant, Serializable {
 	private java.sql.Date expiryDateSql; // java date
 	@Transient
 	private Date expiryDate; // java date
+	@Transient
+	private String expiryDateTxt; // java date
 
 	@Column(name = "crypto_encrypted")
 	private byte[] cryptoEncrypted; //  encrypted cryptoGrame
@@ -195,6 +197,17 @@ public class BankCard  implements IConstant, Serializable {
 	public java.sql.Date getExpiryDateSql() {
 		return expiryDateSql;
 	}
+	public String getExpiryDateTxt() {
+		this.expiryDateTxt= Utils.date2String(getExpiryDate(),"MM/yy");
+		
+		return this.expiryDateTxt; 
+	}
+
+	public void setExpiryDateTxt(String expiryDateTxt) {
+		this.expiryDateTxt = expiryDateTxt;
+		this.setExpiryDate(Utils.string2Date(expiryDateTxt, "MM/yy"));
+		
+	}
 
 	public void setExpiryDateSql(java.sql.Date expiryDateSql) {
 		this.expiryDateSql = expiryDateSql;
@@ -210,10 +223,13 @@ public class BankCard  implements IConstant, Serializable {
 
 	@Override
 	public String toString() {
+		String genderTitle = ""; 
+		if (getOwnerGender() != null) genderTitle = getOwnerGender().getId()>2?"":getOwnerGender().getTitle()+" ";
 		return String.format(
 				"Id[%d] %s%s %s %s exp:%s, {%s}  %s %s",
-				getId(), getOwnerGender().getId()>2?"":getOwnerGender().getTitle()+" ",
-				getOwnerFirstname(), getOwnerLastname(), 
+				getId(),genderTitle, 
+				getOwnerFirstname ()!=null ? getOwnerFirstname() :"" , 
+				getOwnerLastname ()!=null ? getOwnerLastname() :"" , 
 				getCardNumber(), 
 				Utils.date2String(getExpiryDate(),"MM/yy"),
 				getCrypto(), (isValid()?"":"non-")+"valide", (isDeleted()?"":"non-")+"effacée");

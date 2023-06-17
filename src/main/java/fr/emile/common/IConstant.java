@@ -102,5 +102,9 @@ public interface IConstant {
 	public final String ITEM  				= "item.xhtml";
 	public final String ORDER_HISTORY  		= "order-history.xhtml";
 	public final String POURCHASE_VALIDATED = "purchase-validated.xhtml";
+	public final String CREATE_BANKCARD		= "create-bankcard.xhtml";
+	public final String CREATE_ADDRESS		= "create-Address.xhtml";
+	
+	
 
 }

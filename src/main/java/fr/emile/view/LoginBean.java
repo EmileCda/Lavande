@@ -25,8 +25,8 @@ public class LoginBean extends MasterBean implements IConstant {
 	private Profile currentProfile;
 	private boolean isConnected;
 	private String welcome;
-	private Gender male;	
-	private Gender female;	
+	private Gender male;
+	private Gender female;
 	private boolean isAdmin;
 	private boolean isStoreKeeper;
 	private boolean isCostumerZ;
@@ -44,27 +44,20 @@ public class LoginBean extends MasterBean implements IConstant {
 		this.getUser().clean();
 		this.setSettingCostumer(new Costumer());
 		this.getSettingCostumer().clean();
-		this.setCostumer (new Costumer ());
+		this.setCostumer(new Costumer());
 		this.getCostumer().clean();
 		this.setFemale(Gender.FEMALE);
 		this.setMale(Gender.MALE);
 		this.setProfileAdmin(Profile.MANAGER);
 		this.setProfileCostumer(Profile.COSTUMER);
 		this.setProfileStoreKeeper(Profile.STORE_KEEPER);
-		
 
-	
-	
-	
 	}
 
 	// %%%%%%%%%%%%%%%%%%%%%%%%%% action %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	public String onTest() {
 		this.resetPromptStatus();
-		String pageReturn = COSTUMER_HOME;	
-		this.setCostumer(this.readOneCostumer(40));
-//		this.settingCostumer(this.readOneCostumer(40));
-		this.getUser().setProfile(this.getProfileCostumer());
+		String pageReturn = CREATE_BANKCARD;
 
 		return pageReturn;
 	}
@@ -82,17 +75,15 @@ public class LoginBean extends MasterBean implements IConstant {
 	public String addUser() {
 		this.resetPromptStatus();
 		String pageReturn = ADMIN_HOME;
-		User userToAdd = new User(this.getSettingCostumer().getProfile(),
-				this.getSettingCostumer().getEmail(),
-				this.getSettingCostumer().getPassword(),true);
+		User userToAdd = new User(this.getSettingCostumer().getProfile(), this.getSettingCostumer().getEmail(),
+				this.getSettingCostumer().getPassword(), true);
 		UserCtrl userCtrl = new UserCtrl();
 
 		try {
 			User newUser = (User) userCtrl.create(userToAdd);
 
-			this.setPromptStatus(String.format("User [%s] %s added", 
-								newUser.getProfile().getName(),  
-								newUser.getEmail()));
+			this.setPromptStatus(
+					String.format("User [%s] %s added", newUser.getProfile().getName(), newUser.getEmail()));
 		} catch (Exception e) {
 			Utils.trace("catch addUser%s\n", e.toString());
 		}
@@ -104,6 +95,14 @@ public class LoginBean extends MasterBean implements IConstant {
 	}
 
 	// %%%%%%%%%%%%%%%%%%%%%%%%%% action %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	public String updateUser() {
+		this.resetPromptStatus();
+		String pageReturn = null;
+
+		return pageReturn;
+	}
+
+	// %%%%%%%%%%%%%%%%%%%%%%%%%% action %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	public String addCostumer() {
 		this.resetPromptStatus();
 		String pageReturn = COSTUMER_HOME;
@@ -111,14 +110,13 @@ public class LoginBean extends MasterBean implements IConstant {
 		try {
 			this.getSettingCostumer().setProfile(Profile.COSTUMER);
 			Costumer newCostumer = new Costumer();
-			newCostumer= (Costumer) costumerCtrl.create(this.getSettingCostumer());
+			newCostumer = (Costumer) costumerCtrl.create(this.getSettingCostumer());
 			this.setCostumer(new Costumer(newCostumer));
-			User newUser = new User(this.getSettingCostumer().getProfile(),
-					this.getSettingCostumer().getEmail(),
-					this.getSettingCostumer().getPassword(),true);
+			User newUser = new User(this.getSettingCostumer().getProfile(), this.getSettingCostumer().getEmail(),
+					this.getSettingCostumer().getPassword(), true);
 			this.setUser(newUser);
-			this.setIsConnected (true);
-			
+			this.setIsConnected(true);
+
 		} catch (Exception e) {
 			Utils.trace("catch addUser%s\n", e.toString());
 		}
@@ -132,56 +130,48 @@ public class LoginBean extends MasterBean implements IConstant {
 
 	// %%%%%%%%%%%%%%%%%%%%%%%%%% action %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	public String checkUser() throws Exception {
-		Utils.trace("checkUser()\n");
 		String pageReturn = HOME;
 		this.resetPromptStatus();
-		Utils.trace("checkUser()\n");
 
 		if (!isAccountCorrect())
 			return pageReturn;
-		Utils.trace("checkUser()\n");
 
 		this.setConnected(true);
-		Utils.trace("checkUser()\n");
-
 
 		switch (this.getUser().getProfile()) {
 
 		case MANAGER:
 			pageReturn = ADMIN_HOME;
-			initWelcomeMessage(this.getUser().getProfile().getName(),this.user.getEmail());
+			initWelcomeMessage(this.getUser().getProfile().getName(), this.user.getEmail());
 
 			break;
 		case STORE_KEEPER:
 			pageReturn = STOREKEEPER_HOME;
-			initWelcomeMessage(this.getUser().getProfile().getName(),this.user.getEmail());
+			initWelcomeMessage(this.getUser().getProfile().getName(), this.user.getEmail());
 			break;
 		default: // default value is costumer (no rights on the app)
 			initCostumer();
-			this.initWelcomeMessage(this.getCostumer().getProfile().getName(),this.getCostumer().getFirstname());
+			this.initWelcomeMessage(this.getCostumer().getProfile().getName(), this.getCostumer().getFirstname());
 			pageReturn = COSTUMER_HOME;
 			break;
 		}
-		Utils.trace("checkUser :%s :%s \n", pageReturn, this.getUser().getProfile().getName());
 		this.getUser().setPassword("");// cleaning input
-		
 
 		return pageReturn;
-		
+
 	}
 
-	//-------------------------------------------------------------------------------------------------		
-		public void cheatGenUser() {
-			
-			this.setSettingCostumer(DataTest.genCostumer());
-			
-		}
+	// -------------------------------------------------------------------------------------------------
+	public void cheatGenUser() {
 
-		//-------------------------------------------------------------------------------------------------		
-			private boolean isAccountCorrect() {
+		this.setSettingCostumer(DataTest.genCostumer());
+
+	}
+
+	// -------------------------------------------------------------------------------------------------
+	private boolean isAccountCorrect() {
 
 		User userRetreive = new User();
-		Utils.trace("checkUser() :%s \n", getUser().getEmail());
 
 		if (getUser() == null) {
 			this.setPromptStatus(this.getMsg().getString("login.erreur") + "1");
@@ -216,7 +206,6 @@ public class LoginBean extends MasterBean implements IConstant {
 
 //-------------------------------------------------------------------------------------------------		
 	private void initCostumer() {
-
 		CostumerCtrl costumerCtrl = new CostumerCtrl();
 		Costumer costumer = null;
 		try {
@@ -226,6 +215,7 @@ public class LoginBean extends MasterBean implements IConstant {
 			e.printStackTrace();
 		} finally {
 			this.setCostumer(costumer);
+			Utils.trace("costumer %s\n" , costumer);
 		}
 	}
 
@@ -243,18 +233,18 @@ public class LoginBean extends MasterBean implements IConstant {
 		this.setIsAdmin(false);
 		this.setIsCostumer(false);
 		this.setIsStoreKeeper(false);
-		return 0 ; 
+		return 0;
 
 	}
 
 	// -------------------------------------------------------------------------------------------------
-	public Costumer readOneCostumer (int id) {
-		int maxRetry = 10 ; 
-		Costumer costumer = null; 
-		CostumerCtrl costumerCtrl =new CostumerCtrl();
-		
+	public Costumer readOneCostumer(int id) {
+		int maxRetry = 10;
+		Costumer costumer = null;
+		CostumerCtrl costumerCtrl = new CostumerCtrl();
+
 		try {
-			for (int index = id; index < maxRetry+ id; index++) {
+			for (int index = id; index < maxRetry + id; index++) {
 				costumer = (Costumer) costumerCtrl.read(id);
 				if (costumer != null)
 					break;
@@ -263,11 +253,10 @@ public class LoginBean extends MasterBean implements IConstant {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return costumer; 
+		return costumer;
 	}
 
 	// -------------------------------------------------------------------------------------------------
-	
 
 	public User getUser() {
 		return user;
@@ -376,11 +365,11 @@ public class LoginBean extends MasterBean implements IConstant {
 	}
 
 	public void setIsCostumer(boolean isCostumer) {
-		if (this.getUser() == null)	this.isCostumerZ = false;
+		if (this.getUser() == null)
+			this.isCostumerZ = false;
 		else
 			this.isCostumerZ = this.getUser().getProfile() == Profile.COSTUMER;
 	}
-
 
 	public Costumer getSettingCostumer() {
 		return settingCostumer;
@@ -398,11 +387,9 @@ public class LoginBean extends MasterBean implements IConstant {
 		this.passwordConfirmation = passwordConfirmation;
 	}
 
-	public void initWelcomeMessage( String profile,String name) {
+	public void initWelcomeMessage(String profile, String name) {
 
-		this.setWelcome(String.format("%s [%s] %s" , 
-				this.getMsg().getString("home.welcome"),
-				profile,name));
+		this.setWelcome(String.format("%s [%s] %s", this.getMsg().getString("home.welcome"), profile, name));
 	}
 
 	public Gender getMale() {

@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<ui:composition template="/resources/template/main-template.xhtml">
+	<ui:define name="main">
+		<div class="flex-column-center home">
+			<div class="row-div padding-top-2rem">
+				<h3>#{msg['create-bankcard.title']}</h3>
+			</div>
+			<f:view>
+				<h:form class="flex-column-center">
+					<h:inputText id="lastname"
+						value="#{purchaseBean.bankcardUsed.ownerFirstname}"
+						required="true"
+						a:placeholder="#{msg['create-bankcard.firstname']}"
+						class="border-radius height-3rem padding-1rem"
+						requiredMessage="#{msg['create-bankcard.prompt.firstname']}">
+						<f:validateLength minimum="2" maximum="20" />
+						<f:validateRegex pattern="^[a-zA-Z-\s]*"></f:validateRegex>
+					</h:inputText>
+					<h:message for="lastname" style="message"></h:message>
+
+					<h:inputText id="firstname"
+						value="#{purchaseBean.bankcardUsed.ownerLastname}" required="true"
+						a:placeholder="#{msg['create-bankcard.lastname']}"
+						class="border-radius height-3rem padding-1rem"
+						requiredMessage="#{msg['account.prompt.firstname']}">
+						<f:validateLength minimum="2" maximum="100" />
+						<f:validateRegex pattern="^[a-zA-Z-\s]*"></f:validateRegex>
+					</h:inputText>
+					<h:message for="firstname" style="message"></h:message>
+
+					<h:inputText id="cardNumber"
+						value="#{purchaseBean.bankcardUsed.cardNumber}" required="true"
+						a:placeholder="#{msg['create-bankcard.card-number']}"
+						class="border-radius height-3rem padding-1rem"
+						requiredMessage="#{msg['create-bankcard.prompt.cardNumber']}">
+						<f:validateLength minimum="12" maximum="16" />
+						<f:validateRegex pattern="(^4[0-9]{12}(?:[0-9]{3})?$)"></f:validateRegex>
+					</h:inputText>
+					<h:message for="cardNumber" style="message"></h:message>
+
+					<h:inputText id="expiryDate"
+						value="#{purchaseBean.bankcardUsed.expiryDateTxt}" required="true"
+						a:placeholder="#{msg['create-bankcard.expiry']}"
+						class="border-radius height-3rem padding-1rem"
+						requiredMessage="#{msg['account.prompt.expiry']}">
+					<f:validateRegex
+						pattern="^(0[1-9]|1[0-2])\/?([0-9]{4}|[0-9]{2})$"></f:validateRegex>
+					</h:inputText>
+					<h:message for="expiryDate" style="message"></h:message>
+					<div class="row-div">
+						<p>#{loginBean.promptStatus}</p>
+					</div>
+
+
+					<div class="row-div padding-top-2rem">
+						<h:commandButton id="submitConnection"
+							value="#{msg['create-bankcard.submit']}"
+							styleClass="border-radius height-4rem submit-button"
+							action="#{purchaseBean.addBankCard}" />
+					</div>
+					<h:panelGroup rendered="#{msg['cheat.mode']}">
+						<h:commandLink action="#{purchaseBean.cheatCodeBankCard}"
+							class="border-radius  padding-1rem button-header">
+							<h:outputText value="#{msg['cheat.name']}"></h:outputText>
+						</h:commandLink>
+
+					</h:panelGroup>
+				</h:form>
+
+			</f:view>
+		</div>
+	</ui:define>
+</ui:composition>
+
+</html>

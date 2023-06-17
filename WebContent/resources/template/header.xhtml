@@ -86,6 +86,11 @@
 							<h:outputText value="#{msg['menu.addUser']}"></h:outputText>
 						</h:commandLink>
 					</h:panelGroup></li>
+				<li><h:panelGroup rendered="#{loginBean.isConnected}">
+						<h:commandLink action="/user-setting.xhtml">
+							<h:outputText value="#{msg['menu.userSetting']}"></h:outputText>
+						</h:commandLink>
+					</h:panelGroup></li>
 				<li><h:panelGroup rendered="#{loginBean.isAdmin}">
 						<h:commandLink action="/admin-management.xhtml">
 							<h:outputText value="#{msg['menu.admin']}"></h:outputText>

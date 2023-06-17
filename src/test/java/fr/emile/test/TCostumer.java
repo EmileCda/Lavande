@@ -19,10 +19,10 @@ public class TCostumer {
 		Utils.trace("*************************** Begin ************************************\n");
 		TCostumerUnitTest unitTest = new TCostumerUnitTest();
 //		unitTest.createOne();
-		unitTest.createMany(10);
+//		unitTest.createMany(10);
 //		unitTest.readOne(1);
 //		unitTest.readMany();
-//		unitTest.update();
+		unitTest.update();
 //		unitTest.delete();
 		Utils.trace("*************************** end ************************************\n");
 
@@ -42,7 +42,7 @@ class TCostumerUnitTest {
 
 //-------------------------------------------------------------------------------------------------
 	public void update() {
-		int costumerId = 3;
+		int costumerId = 30;
 		Utils.trace("=========================== Update [%d]===========================\n",costumerId);
 		Costumer costumer = null;
 
