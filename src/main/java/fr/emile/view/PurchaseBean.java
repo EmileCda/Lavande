@@ -25,6 +25,7 @@ import fr.emile.entity.OrderLine;
 import fr.emile.entity.User;
 import fr.emile.utils.DataTest;
 import fr.emile.utils.Utils;
+import net.bytebuddy.asm.Advice.This;
 
 @ManagedBean
 @SessionScoped
@@ -35,6 +36,8 @@ public class PurchaseBean extends MasterBean implements IConstant {
 	BankCard bankcardUsed;
 	Address deliveryAddress;
 	Address billingAdddress;
+	String OrderDate;
+	String deliveryDate;
 
 	@ManagedProperty(value = "#{itemManagementBean}")
 	private ItemManagementBean itemManagementBean;
@@ -67,11 +70,11 @@ public class PurchaseBean extends MasterBean implements IConstant {
 		String pageReturn = null;
 
 		if (this.getLoginBean().getCostumer() != null) {
-			Utils.trace("size avant :%d\n",this.getLoginBean().getCostumer().getBankCardList().size());
+			Utils.trace("size avant :%d\n", this.getLoginBean().getCostumer().getBankCardList().size());
 			this.getBankcardUsed().setCostumer(this.getLoginBean().getCostumer());
 			this.getLoginBean().getCostumer().addBankCard(this.getBankcardUsed());
-			Utils.trace("size apres :%d\n",this.getLoginBean().getCostumer().getBankCardList().size());
-		
+			Utils.trace("size apres :%d\n", this.getLoginBean().getCostumer().getBankCardList().size());
+
 			CrudCtrl bankCardCtrl = new BankCardCtrl();
 			try {
 				Utils.trace("BankcardUsed gender :%s\n", this.getBankcardUsed().getOwnerGender());
@@ -80,8 +83,8 @@ public class PurchaseBean extends MasterBean implements IConstant {
 			} catch (Exception e) {
 				Utils.trace("catch create %s\n", e.toString());
 			}
-			
-		}	
+
+		}
 		return pageReturn;
 
 	}
@@ -90,7 +93,7 @@ public class PurchaseBean extends MasterBean implements IConstant {
 	public String cheatCodeBankCard() {
 		this.getLoginBean().cleanPromptStatus();
 		String pageReturn = null;
-		if (this.getLoginBean().getCostumer().getId() >0) {
+		if (this.getLoginBean().getCostumer().getId() > 0) {
 			Utils.trace("Costumer :%s\n", this.getLoginBean().getCostumer());
 			this.setBankcardUsed(DataTest.genBankCard(this.getLoginBean().getCostumer()));
 			Utils.trace("BankcardUsed :%s\n", this.getBankcardUsed());
@@ -132,59 +135,105 @@ public class PurchaseBean extends MasterBean implements IConstant {
 	public String transformeCartItem() {
 
 		String pageReturn = POURCHASE_VALIDATED;
-		float grossGrandTotal = 0;
-		float totalDiscount = 0;
-		float grossPrice = 0;
+		float grosGrandTotal = 0;
+		float netGrandTotal = 0;
 		int currentShippingCost = DEFAULT_SHIPPING_COST;
-		order.setCostumer(this.getLoginBean().getCostumer());
-		Utils.trace("%s\n", order);
-		this.getLoginBean().getCostumer().addOrder(order);
+		this.getOrder().setCostumer(this.getLoginBean().getCostumer());
+		Utils.trace("%s\n", this.getOrder());
+		this.getLoginBean().getCostumer().addOrder(this.getOrder());
 
 		if (this.getOrder() == null)
 			this.setOrder(new Order());
+		this.getOrder().setCostumer(this.getLoginBean().getCostumer());
+		Utils.trace("%s\n", this.getOrder());
+		this.getLoginBean().getCostumer().addOrder(this.getOrder());
 
 		this.getOrder().setShippingCosts(DEFAULT_SHIPPING_COST);
 //		int nbCartItem = this.getLoginBean().getCostumer().getCartItemList().size();
 
 		for (CartItem cartItem : this.getLoginBean().getCostumer().getCartItemList()) {
-			OrderLine orderLine = new OrderLine(cartItem.getQuantity(), cartItem.getItem(), order);
+			OrderLine orderLine = new OrderLine(cartItem.getQuantity(), cartItem.getItem(), this.getOrder());
 			Utils.trace("%s\n", cartItem);
+			orderLine.calculate();
 			this.getOrder().addOrderLine(orderLine);
 			currentShippingCost += 1;
-			grossPrice = cartItem.getItem().getPrice() * cartItem.getQuantity();
-			grossGrandTotal += grossPrice;
 
-			float itemDiscount = grossPrice * orderLine.getItem().getDiscount() / 100;
-
-			if (orderLine.getItem().getCategory().isDiscountCumulative())
-				itemDiscount = itemDiscount * orderLine.getItem().getCategory().getDiscount() / 100;
-
-			totalDiscount += itemDiscount;
+			grosGrandTotal += orderLine.getGrossCost();
+			netGrandTotal += orderLine.getNetCost();
 
 		}
 		this.getLoginBean().getCostumer().getCartItemList().clear();
 		this.updateCostumer();
 
-		order.setOrderNumber(order.generateOrderNumber());
-		order.setCreateDate(DATE_NOW);
-		order.setDeliveryDate(Utils.addDate(this.getOrder().getCreateDate(), STANDARD_DELIVERY_TIME));
-		order.setTotalDiscount(totalDiscount);
-		order.setShippingCosts(currentShippingCost);
-		order.setGrandTotal(grossGrandTotal - totalDiscount);
-		int nbCard = this.getLoginBean().getCostumer().getAddressList().size();
-		if (nbCard > 0)
-			order.setDeliveryAddress(this.getLoginBean().getCostumer().getAddressList().get(0));
-		else {
-			this.getLoginBean().setPromptStatus("%s", "pas de carte");
-			return pageReturn;
+		this.getOrder().setOrderNumber(order.generateOrderNumber());
+		this.getOrder().setCreateDate(DATE_NOW);
+		this.getOrder().setDeliveryDate(Utils.addDate(this.getOrder().getCreateDate(), STANDARD_DELIVERY_TIME));
+		this.getOrder().setTotalDiscount(grosGrandTotal - netGrandTotal);
+		this.getOrder().setShippingCosts(currentShippingCost);
+		this.getOrder().setGrandTotal(netGrandTotal);
+
+		if (this.getLoginBean().getCostumer().getDefaultBillingAddressId() <= 0) {
+
+			if (this.getLoginBean().getCostumer().getAddressList().size() > 0) {
+				this.getOrder().setBillingAddress(this.getLoginBean().getCostumer().getAddressList().get(0));
+			} else {
+				this.getLoginBean().setPromptStatus("%s", "pas d'adresse");
+				return pageReturn;
+			}
 		}
 
-		int nbAddress = this.getLoginBean().getCostumer().getAddressList().size();
-		if (nbAddress > 0) {
-			order.setBillingAddress(this.getLoginBean().getCostumer().getAddressList().get(0));
-			order.setBankCardUsed(this.getLoginBean().getCostumer().getBankCardList().get(0));
-		} else
-			this.getLoginBean().setPromptStatus("%s", "no address");
+		if (this.getLoginBean().getCostumer().getDefaultDeliveryAddressId() <= 0) {
+
+			if (this.getLoginBean().getCostumer().getAddressList().size() > 0) {
+				this.getOrder().setDeliveryAddress(this.getLoginBean().getCostumer().getAddressList().get(0));
+			} else {
+				this.getLoginBean().setPromptStatus("%s", "pas d'adresse");
+				return pageReturn;
+			}
+		}
+
+		if (this.getLoginBean().getCostumer().getDefaultBankCardId() <= 0) {
+
+			if (this.getLoginBean().getCostumer().getBankCardList().size() > 0) {
+				this.getOrder().setBankCardUsed(this.getLoginBean().getCostumer().getBankCardList().get(0));
+			} else {
+				this.getLoginBean().setPromptStatus("%s", "pas de carte de paiement");
+				return pageReturn;
+			}
+		}
+
+		Utils.trace("%s\n", order);
+		return pageReturn;
+	}
+
+	// %%%%%%%%%%%%%%%%%%%%%%%%%%_action_%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+	public String validateOrder() {
+		this.resetPromptStatus();
+		String pageReturn = COSTUMER_HOME;
+		Utils.trace("%s\n", order);
+		this.getOrder().setBankCardUsed(readBankCard(this.getLoginBean().getCostumer().getDefaultBankCardId()));
+		this.getOrder().setBillingAddress(readAddress(this.getLoginBean().getCostumer().getDefaultBillingAddressId()));
+		this.getOrder()
+				.setDeliveryAddress(readAddress(this.getLoginBean().getCostumer().getDefaultDeliveryAddressId()));
+		this.getOrder().setBankCardUsed(readBankCard(this.getLoginBean().getCostumer().getDefaultBankCardId()));
+		Utils.trace("%s\n", order);
+		if (this.getOrder().getId() > 0) {
+			updateOrder();
+		} else {
+
+			createOrder();
+		}
+
+		return pageReturn;
+
+	}
+
+	// %%%%%%%%%%%%%%%%%%%%%%%%%%_action_%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+	public String quatityChange() {
+		this.resetPromptStatus();
+		String pageReturn = null;
 
 		Utils.trace("%s\n", order);
 		return pageReturn;
@@ -216,6 +265,36 @@ public class PurchaseBean extends MasterBean implements IConstant {
 
 	// -+-+-+-+-+-+-+-+-+-+-+-+-+_processing_-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
+	public void updateOrder() {
+		CrudCtrl orderCtrl = new StandardCrudCtrl(new Order());
+		try {
+			orderCtrl.update(this.getOrder());
+		} catch (Exception e) {
+
+			e.printStackTrace();
+		}
+
+	}
+	// -+-+-+-+-+-+-+-+-+-+-+-+-+_processing_-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+	public void createOrder() {
+		
+		Order orderCrea = null; ;
+		CrudCtrl orderCtrl = new StandardCrudCtrl(new Order());
+		this.getOrder().setCostumer(this.getLoginBean().getCostumer());
+		Utils.trace("%s\n", order);
+		try {
+			orderCrea = (Order) orderCtrl.create(this.getOrder());
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		Utils.trace("%s\n", orderCrea );
+
+	}
+
+	// -+-+-+-+-+-+-+-+-+-+-+-+-+_processing_-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
 	public void updateCostumer() {
 
 		CostumerCtrl costumerCtrl = new CostumerCtrl();
@@ -236,6 +315,40 @@ public class PurchaseBean extends MasterBean implements IConstant {
 				return item;
 		}
 		return null;
+	}
+
+	// -+-+-+-+-+-+-+-+-+-+-+-+-+_processing_-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+	public Address readAddress(int id) {
+
+		CrudCtrl AddressCtrl = new StandardCrudCtrl(new Address());
+
+		Address address = null; 
+
+		try {
+			address = (Address) AddressCtrl.read(id);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return address;
+
+	}
+
+	// -+-+-+-+-+-+-+-+-+-+-+-+-+_processing_-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+	public BankCard readBankCard(int id) {
+
+		CrudCtrl bankCardCtrl = new BankCardCtrl();
+
+		BankCard bankCard = null;
+
+		try {
+			bankCard = (BankCard) bankCardCtrl.read(id);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return bankCard;
 	}
 
 //	=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-getters/setters-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- 
@@ -293,6 +406,23 @@ public class PurchaseBean extends MasterBean implements IConstant {
 
 	public void setBillingAdddress(Address billingAdddress) {
 		this.billingAdddress = billingAdddress;
+	}
+
+	public String getOrderDate() {
+		return OrderDate;
+	}
+
+	public void setOrderDate(String orderDate) {
+		OrderDate = orderDate;
+	}
+
+	public String getDeliveryDate() {
+		this.deliveryDate = Utils.date2String(this.getOrder().getDeliveryDate(), "dd/MM/yyy");
+		return deliveryDate;
+	}
+
+	public void setDeliveryDate(String deliveryDate) {
+		this.deliveryDate = Utils.date2String(this.getOrder().getDeliveryDate(), "dd/MM/yyy");
 	}
 
 	// %%%%%%%%%%%%%%%%%%%%%%%%%%_action_%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

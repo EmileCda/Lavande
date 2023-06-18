@@ -22,12 +22,16 @@
 						rowClasses="cartTable-odd-row,cartTable-even-row">
 						<h:column>
 							<f:facet name="header">#{msg['cart.quantity']}</f:facet>
-							<!-- 						<h:inputText value="#{oneCartItem.quantity}" size="3"> -->
-							<!-- 							<f:convertNumber integerOnly="true" type="number" /> -->
-							<!-- 						</h:inputText> -->
-							<p:inputNumber value="#{oneCartItem.quantity}" size="3">
+							<h:inputText value="#{oneCartItem.quantity}" size="3"
+							onchange="submit()"
+							valueChangeListener="#{purchaseBean.quatityChange}"
+							
+							>
+								<f:convertNumber integerOnly="true" type="number" />
+							</h:inputText>
+<!-- 							<p:inputNumber value="#{oneCartItem.quantity}" size="3">
 							</p:inputNumber>
-						</h:column>
+ -->						</h:column>
 
 						<h:column>
 							<f:facet name="header">#{msg['cart.price']}</f:facet>
@@ -94,6 +98,11 @@
 								action="#{purchaseBean.deleteItem(oneCartItem)}" />
 						</h:column>
 					</h:dataTable>
+<!-- 					<h:outputLabel value="#{purchaseBean.order.grandTotal}" /> -->
+<!-- 					<h:outputLabel value="#{purchaseBean.order.totalDiscount}" /> -->
+<!-- 					<h:outputLabel value="#{purchaseBean.order.shippingCosts}" /> -->
+<!-- 					<h:outputLabel value="#{purchaseBean.orderDate}" /> -->
+<!-- 					<h:outputLabel value="#{purchaseBean.deliveryDate}" /> -->
 					<h:commandButton value="#{msg['cart.validate']}"
 						styleClass="border-radius height-4rem submit-button"
 						action="#{purchaseBean.validateCart}" />

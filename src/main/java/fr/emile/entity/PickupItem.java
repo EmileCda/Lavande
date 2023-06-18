@@ -16,8 +16,12 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import fr.emile.common.IConstant;
+import fr.emile.ctrl.CrudCtrl;
+import fr.emile.ctrl.StandardCrudCtrl;
+import fr.emile.utils.Utils;
 
 
 @Entity
@@ -33,6 +37,10 @@ public abstract class PickupItem implements IConstant, Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 	private int quantity;
+	@Transient
+	private float grossCost;
+	@Transient
+	private float netCost;
 	
 	
 	@OneToOne
@@ -59,6 +67,25 @@ public abstract class PickupItem implements IConstant, Serializable {
 	
 
 	
+	public void calculate() {
+		
+		int categoryDiscount = this.getCategoryDiscount();
+		int totalDiscount = categoryDiscount + this.getItem().getDiscount();
+		float netCoast = this.getQuantity() * this.getItem().getPrice()* (100- totalDiscount)/100; 
+		float grossCoast = this.getQuantity() * this.getItem().getPrice(); 
+		this.setNetCost(netCoast );
+		this.setGrossCost(grossCoast);
+	}
+	
+	
+	public int getCategoryDiscount() {
+		int discount = 0 ; 
+
+		Category category = this.getItem().getCategory();
+		if (category.isDiscountCumulative())
+			discount = category.getDiscount();
+		return discount ; 
+	}
 	
 	
 	public int getId() {
@@ -91,6 +118,24 @@ public abstract class PickupItem implements IConstant, Serializable {
 				getId(),
 				getQuantity(), 
 				getItem().getName());
+	}
+
+
+	public float getGrossCost() {
+		return Math.max(0, this.grossCost);
+	}
+
+	public void setGrossCost(float grossCost) {
+		this.grossCost = grossCost;
+	}
+
+	public float getNetCost() {
+		 
+		return Math.max(0, this.netCost);
+	}
+
+	public void setNetCost(float netCost) {
+		this.netCost = netCost;
 	}
 
 	

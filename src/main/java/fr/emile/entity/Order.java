@@ -237,16 +237,19 @@ public class Order implements IConstant, Serializable {
 	public String toString() {
 		String deliveryAddress = "no-delivery-address";
 		String billingAddress = "no-billing-address";
+		String bankCard = "no-card";
 		if (getDeliveryAddress() != null)
 			deliveryAddress = getDeliveryAddress().toString();
 		if (getBillingAddress() != null)
 			billingAddress = getBillingAddress().toString();
+		if (getBankCardUsed() != null)
+			bankCard= getBankCardUsed().toString();
 
 		return String.format(
-				"Id[%d], %s, crea:%s, livraison le:%s, " + "réduction: -%.2f€,  frais de port(): %.2f€, Total: %.2f€ "
-						+ "livraison: %s, facture: %s",
+				"Id[%d], %s, crea:%s, livraison le:%s, réduction: -%.2f€,  "
+				+ "frais de port(): %.2f€, Total: %.2f€ livraison: %s, facture: %s  carte: %s\n",
 				getId(), getOrderNumber(), Utils.date2String(getCreateDate()), Utils.date2String(getDeliveryDate()),
-				getTotalDiscount(), getShippingCosts(), getGrandTotal(), deliveryAddress, billingAddress);
+				getTotalDiscount(), getShippingCosts(), getGrandTotal(), deliveryAddress, billingAddress,bankCard);
 	}
 
 }
