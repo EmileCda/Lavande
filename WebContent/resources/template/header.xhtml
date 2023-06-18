@@ -69,13 +69,13 @@
 			</label>
 
 			<ul class="menu">
-				<li><h:panelGroup rendered="#{loginBean.isCostumer}">
+				<li><h:panelGroup rendered="#{loginBean.user.profile eq loginBean.profileCostumer}">
 						<h:commandLink action="/procurement-management.xhtml">
 							<h:outputText value="#{msg['menu.purchase']}"></h:outputText>
 						</h:commandLink>
 					</h:panelGroup></li>
 
-				<li><h:panelGroup rendered="#{loginBean.isStoreKeeper}">
+				<li><h:panelGroup rendered="#{loginBean.user.profile eq loginBean.profileStoreKeeper}">
 						<h:commandLink action="/item-management.xhtml">
 							<h:outputText value="#{msg['menu.storeKeeper']}"></h:outputText>
 						</h:commandLink>
@@ -87,18 +87,18 @@
 						</h:commandLink>
 					</h:panelGroup></li>
 				<li><h:panelGroup rendered="#{loginBean.isConnected}">
-						<h:commandLink action="#{loginBean.setting}">
+						<h:commandLink action="#{settingBean.setting}">
 							<h:outputText value="#{msg['menu.userSetting']}"></h:outputText>
 						</h:commandLink>
 					</h:panelGroup></li>
-				<li><h:panelGroup rendered="#{loginBean.isAdmin}">
+				<li><h:panelGroup rendered="#{loginBean.user.profile eq loginBean.profileAdmin}">
 						<h:commandLink action="/admin-management.xhtml">
 							<h:outputText value="#{msg['menu.admin']}"></h:outputText>
 						</h:commandLink>
 					</h:panelGroup></li>
 				<h:panelGroup rendered="#{msg['cheat.mode']}">
-					<li><h:commandLink action="#{loginBean.onTest}">
-							<h:outputText value="Test"></h:outputText>
+					<li><h:commandLink action="#{testBean.testAddBankCard}">
+							<h:outputText value="testAddBankCard"></h:outputText>
 						</h:commandLink></li>
 					<li><h:commandLink action="/cart.xhtml">
 							<h:outputText value="Test partiel"></h:outputText>

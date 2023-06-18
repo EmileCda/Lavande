@@ -7,7 +7,9 @@ import javax.faces.bean.SessionScoped;
 import javax.faces.event.ValueChangeEvent;
 
 import fr.emile.common.IConstant;
+import fr.emile.ctrl.BankCardCtrl;
 import fr.emile.ctrl.CostumerCtrl;
+import fr.emile.ctrl.CrudCtrl;
 import fr.emile.ctrl.UserCtrl;
 import fr.emile.entity.Address;
 import fr.emile.entity.BankCard;
@@ -23,39 +25,18 @@ import fr.emile.utils.Utils;
 public class LoginBean extends MasterBean implements IConstant {
 
 	private User user;
-	private Costumer settingCostumer;
 	private Costumer costumer;
 	private Profile currentProfile;
 	private boolean isConnected;
 	private String welcome;
 	private Gender male;
 	private Gender female;
-	private boolean isAdmin;
-	private boolean isStoreKeeper;
-	private boolean isCostumerZ;
-	private String passwordConfirmation;
+
 	private Profile profileCostumer;
 	private Profile profileAdmin;
 	private Profile profileStoreKeeper;
 	private String labelCart;
-	private BankCard currentBankCard;
-	private Address currentAddress;
 
-	public BankCard getCurrentBankCard() {
-		return currentBankCard;
-	}
-
-	public void setCurrentBankCard(BankCard currentBankCard) {
-		this.currentBankCard = currentBankCard;
-	}
-
-	public Address getCurrentAddress() {
-		return currentAddress;
-	}
-
-	public void setCurrentAddress(Address currentAddress) {
-		this.currentAddress = currentAddress;
-	}
 
 	private ResourceBundle msg;
 
@@ -63,8 +44,6 @@ public class LoginBean extends MasterBean implements IConstant {
 		this.setMsg(ResourceBundle.getBundle("webPage"));
 		this.setUser(new User());
 		this.getUser().clean();
-		this.setSettingCostumer(new Costumer());
-		this.getSettingCostumer().clean();
 		this.setCostumer(new Costumer());
 		this.getCostumer().clean();
 		this.setFemale(Gender.FEMALE);
@@ -72,8 +51,6 @@ public class LoginBean extends MasterBean implements IConstant {
 		this.setProfileAdmin(Profile.MANAGER);
 		this.setProfileCostumer(Profile.COSTUMER);
 		this.setProfileStoreKeeper(Profile.STORE_KEEPER);
-		this.setCurrentBankCard(new BankCard());
-		this.setCurrentAddress(new Address());
 
 	}
 
@@ -85,25 +62,6 @@ public class LoginBean extends MasterBean implements IConstant {
 		return pageReturn;
 	}
 
-	// %%%%%%%%%%%%%%%%%%%%%%%%%% action %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-	public String bankCardChange(ValueChangeEvent eventCategoryList) {
-		this.resetPromptStatus();
-		String pageReturn = SETTING;
-		int cardId = (int) eventCategoryList.getNewValue();
-		Utils.trace("cardId : %d\n", cardId);
-		for (BankCard bankCard : this.getCostumer().getBankCardList()) {
-			Utils.trace("cardId : %d\n", bankCard.getId());
-			if (bankCard.getId() == cardId) {
-				Utils.trace("bankCard : %s\n", bankCard);
-				this.setCurrentBankCard(bankCard);
-				Utils.trace("bankCard current: %s\n", this.getCurrentBankCard());
-				break;
-			}
-		}
-
-		Utils.trace("bankCard current: %s\n", this.getCurrentBankCard());
-		return pageReturn;
-	}
 
 	// %%%%%%%%%%%%%%%%%%%%%%%%%% action %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	public String disconnect() {
@@ -114,96 +72,11 @@ public class LoginBean extends MasterBean implements IConstant {
 		return pageReturn;
 	}
 
-	// %%%%%%%%%%%%%%%%%%%%%%%%%% action %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-	public String addUser() {
-		this.resetPromptStatus();
-		String pageReturn = ADMIN_HOME;
-		User userToAdd = new User(this.getSettingCostumer().getProfile(), this.getSettingCostumer().getEmail(),
-				this.getSettingCostumer().getPassword(), true);
-		UserCtrl userCtrl = new UserCtrl();
 
-		try {
-			User newUser = (User) userCtrl.create(userToAdd);
 
-			this.setPromptStatus(
-					String.format("User [%s] %s added", newUser.getProfile().getName(), newUser.getEmail()));
-		} catch (Exception e) {
-			Utils.trace("catch addUser%s\n", e.toString());
-		}
-		Utils.trace("pageReturn %s\n", pageReturn);
-		this.getSettingCostumer().clean();
-		Utils.trace("pageReturn %s\n", pageReturn);
-		return pageReturn;
 
-	}
 
-	// %%%%%%%%%%%%%%%%%%%%%%%%%%_action_%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-	public String setting() {
-		this.resetPromptStatus();
-		String pageReturn = SETTING;
-		Utils.trace("%s\n", "String setting");
 
-		if (this.getUser().getProfile() == Profile.COSTUMER) {
-			this.setSettingCostumer(this.getCostumer());
-			Utils.trace("%s\n", this.getCurrentBankCard());
-			if ((this.getSettingCostumer().getBankCardList().size() > 0) && (this.getCurrentBankCard().getId() <=0))
-				this.setCurrentBankCard(this.getSettingCostumer().getBankCardList().get(0));
-
-			if ((this.getSettingCostumer().getAddressList().size() > 0) && (this.getCurrentAddress().getId() <=0))
-				this.setCurrentAddress(this.getSettingCostumer().getAddressList().get(0));
-
-			this.setPromptStatus("Setting %s %s %s", this.getSettingCostumer().getProfile().getName(),
-					this.getSettingCostumer().getFirstname(), this.getSettingCostumer().getLastname());
-
-			Utils.trace("current bankcard %s\n", this.getCurrentBankCard());
-			Utils.trace("current Address %s\n", this.getCurrentAddress());
-
-		} else {
-			this.getSettingCostumer().setId(this.getUser().getId());
-			this.getSettingCostumer().setPassword(this.getUser().getPassword());
-			this.getSettingCostumer().setProfile(this.getUser().getProfile());
-			this.setPromptStatus("Setting %s %s", this.getSettingCostumer().getProfile().getName(),
-					this.getSettingCostumer().getEmail());
-
-		}
-
-		return pageReturn;
-
-	}
-
-	// %%%%%%%%%%%%%%%%%%%%%%%%%%_action_%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-	public String updateUser() {
-		this.resetPromptStatus();
-		String pageReturn = null;
-
-		return pageReturn;
-	}
-
-// %%%%%%%%%%%%%%%%%%%%%%%%%%_action_%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-	public String addCostumer() {
-		this.resetPromptStatus();
-		String pageReturn = COSTUMER_HOME;
-		CostumerCtrl costumerCtrl = new CostumerCtrl();
-		try {
-			this.getSettingCostumer().setProfile(Profile.COSTUMER);
-			Costumer newCostumer = new Costumer();
-			newCostumer = (Costumer) costumerCtrl.create(this.getSettingCostumer());
-			this.setCostumer(new Costumer(newCostumer));
-			User newUser = new User(this.getSettingCostumer().getProfile(), this.getSettingCostumer().getEmail(),
-					this.getSettingCostumer().getPassword(), true);
-			this.setUser(newUser);
-			this.setIsConnected(true);
-
-		} catch (Exception e) {
-			Utils.trace("catch addUser%s\n", e.toString());
-		}
-
-		this.getSettingCostumer().clean();
-		initWelcomeMessage(this.getCostumer().getProfile().getName(), this.getCostumer().getFirstname());
-
-		return pageReturn;
-
-	}
 
 // %%%%%%%%%%%%%%%%%%%%%%%%%%_action_%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	public String checkUser() throws Exception {
@@ -238,12 +111,22 @@ public class LoginBean extends MasterBean implements IConstant {
 
 	}
 
-	// -------------------------------------------------------------------------------------------------
-	public void cheatGenUser() {
+	// -+-+-+-+-+-+-+-+-+-+-+-+-+_processing_-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+	public BankCard readBankCard(int id) {
+		
+		CrudCtrl bankCardCtrl = new BankCardCtrl();
+		
+		BankCard bankCard = null ; 
 
-		this.setSettingCostumer(DataTest.genCostumer());
+		try {
+			bankCard = (BankCard) bankCardCtrl.read(id);
 
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return bankCard;
 	}
+
 
 	// -------------------------------------------------------------------------------------------------
 	private boolean isAccountCorrect() {
@@ -288,7 +171,6 @@ public class LoginBean extends MasterBean implements IConstant {
 		try {
 			costumer = (Costumer) costumerCtrl.read(this.getUser().getId());
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} finally {
 			this.setCostumer(costumer);
@@ -306,9 +188,6 @@ public class LoginBean extends MasterBean implements IConstant {
 		this.setCurrentProfile(DEFAULT_PROFILE);
 		this.setIsConnected(false);
 		this.setWelcome("");
-		this.setIsAdmin(false);
-		this.setIsCostumer(false);
-		this.setIsStoreKeeper(false);
 		return 0;
 
 	}
@@ -390,78 +269,7 @@ public class LoginBean extends MasterBean implements IConstant {
 		this.msg = msg;
 	}
 
-	public boolean getIsAdmin() {
-		if (this.getUser() == null)
-			return false;
-		return (this.getUser().getProfile() == Profile.MANAGER);
-	}
 
-	public void setIsAdmin(boolean isAdmin) {
-		if (this.getUser() == null)
-			this.isAdmin = false;
-		else
-			this.isAdmin = this.getUser().getProfile() == Profile.MANAGER;
-	}
-
-	public void setAdmin(boolean isAdmin) {
-		this.setAdmin(isAdmin);
-
-	}
-
-	public boolean isAdmin() {
-		return this.getIsAdmin();
-
-	}
-
-	public boolean getIsStoreKeeper() {
-		if (this.getUser() == null)
-			return false;
-		return (this.getUser().getProfile() == Profile.STORE_KEEPER);
-	}
-
-	public void setIsStoreKeeper(boolean isStoreKeeper) {
-		if (this.getUser() == null)
-			this.isStoreKeeper = false;
-		else
-			this.isStoreKeeper = this.getUser().getProfile() == Profile.STORE_KEEPER;
-	}
-
-	public void setStoreKeeper(boolean isStoreKeeper) {
-		this.setStoreKeeper(isStoreKeeper);
-	}
-
-	public boolean isStoreKeeper() {
-		return this.getIsStoreKeeper();
-	}
-
-	public boolean getIsCostumer() {
-		if (this.getUser() == null)
-			return false;
-		return (this.getUser().getProfile() == Profile.COSTUMER);
-	}
-
-	public void setIsCostumer(boolean isCostumer) {
-		if (this.getUser() == null)
-			this.isCostumerZ = false;
-		else
-			this.isCostumerZ = this.getUser().getProfile() == Profile.COSTUMER;
-	}
-
-	public Costumer getSettingCostumer() {
-		return settingCostumer;
-	}
-
-	public void setSettingCostumer(Costumer settingCostumer) {
-		this.settingCostumer = settingCostumer;
-	}
-
-	public String getPasswordConfirmation() {
-		return passwordConfirmation;
-	}
-
-	public void setPasswordConfirmation(String passwordConfirmation) {
-		this.passwordConfirmation = passwordConfirmation;
-	}
 
 	public void initWelcomeMessage(String profile, String name) {
 
@@ -501,7 +309,7 @@ public class LoginBean extends MasterBean implements IConstant {
 	}
 
 	public Profile getProfileStoreKeeper() {
-		return profileStoreKeeper;
+		return this.profileStoreKeeper;
 	}
 
 	public void setProfileStoreKeeper(Profile profileStoreKeeper) {
@@ -509,15 +317,15 @@ public class LoginBean extends MasterBean implements IConstant {
 	}
 
 	public String getLabelCart() {
-		return labelCart;
+		return this.labelCart;
 	}
 
 	public void setLabelCart(String labelCart) {
 		this.labelCart = labelCart;
 	}
 
-//	public void setCostumer(boolean isCostumer) {
-//		this.setIsCostumer(isCostumer);
-//	}
 
+
+	
+	
 }

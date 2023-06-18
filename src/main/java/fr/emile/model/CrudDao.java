@@ -53,10 +53,12 @@ public class CrudDao extends UtilDao  {
 
 //-------------------------------------------------------------------------------------------------
 	public int update(Object myObject) throws Exception {
+		int result = 0 ; 
 		try {
 			beginTransaction();
 
 			this.getSession().update(myObject);
+			result +=1;
 			commit();
 
 		} catch (Exception e) {
@@ -65,7 +67,7 @@ public class CrudDao extends UtilDao  {
 			rollBack();
 
 		}
-		return 0 ; 
+		return result ; 
 	}
 
 //-------------------------------------------------------------------------------------------------

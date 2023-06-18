@@ -218,7 +218,7 @@ public final class DataTest implements IConstant {
 	// ---------------------------------------------------------------------------------------------------
 	public static String crypto() {
 
-		return String.format("0.3%S", Utils.randInt(0, 999));
+		return String.format("03%s", Utils.randInt(0, 999));
 
 	}
 

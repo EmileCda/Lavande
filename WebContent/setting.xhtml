@@ -9,12 +9,10 @@
 
 <ui:composition template="/resources/template/main-template.xhtml">
 	<ui:define name="main">
-		<div class="add-user">
+		<div class="flex-column-center">
 				<h2>#{msg['user-setting.title']}</h2>
 				<div class="row-div">
-					<p>#{addUserBean.promptStatus}</p>
-
-					<h:outputLabel value="#{loginBean.currentBankCard.cardNumber}" />
+					<p>ps #{loginBean.promptStatus}</p>
 				</div>
 <!-- 				<ui:include src="/resources/module/user-setting.xhtml"></ui:include> -->
 				<h:panelGroup
@@ -22,7 +20,7 @@
 
 <!-- 					<ui:include src="/resources/module/costumer-setting.xhtml"></ui:include> -->
 					<ui:include src="/resources/module/bankcard-management.xhtml"></ui:include>
-<!-- 					<ui:include src="/resources/module/address-management.xhtml"></ui:include> -->
+					<ui:include src="/resources/module/address-management.xhtml"></ui:include>
 
 				</h:panelGroup>
 

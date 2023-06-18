@@ -45,7 +45,7 @@ public class ItemManagementBean extends MasterBean implements IConstant {
 
 	}
 
-// %%%%%%%%%%%%%%%%%%%%%%%%%% action %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+// %%%%%%%%%%%%%%%%%%%%%%%%%%_action_%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 	public void updateCurrentCategory(ValueChangeEvent eventCategoryList) {
 		this.cleanPromptStatus();
