@@ -80,6 +80,10 @@ justify-content: space-evenly;
 	height: 3rem;
 }
 
+.height-6rem{
+	height: 6rem;
+}
+
 .height-100{
 	height: 100%;
 }
@@ -90,9 +94,13 @@ justify-content: space-evenly;
 }
 
 .message {
-	
+
 	color: var(--mid);
+
+}
+.text-align-center{
 	
+	text-align: center;
 }
 
 /* =========================== $$$$$$$$$$$$$$ end of common  $$$$$$$$$$$$$$ =================== */
@@ -205,6 +213,24 @@ justify-content: space-evenly;
 	
 }
 
+
+/* =========================== $$$$$$$$$$$$$$ setting page  $$$$$$$$$$$$$$ =========================== */
+
+
+.costumer-setting{
+	
+	border : 1px solid red;
+}
+.address-setting{
+	border : 1px solid blue;
+	
+	
+}
+.bankcard-setting{
+		border : 1px solid green;
+	
+	
+}
 
 /* #--------------------------- below is for trash -------------------------------------------b */
 

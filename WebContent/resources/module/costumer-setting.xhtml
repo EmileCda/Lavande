@@ -12,64 +12,111 @@
 <ui:composition>
 	<div class="flex-column-center">
 
-		<fieldset class="fieldset height-4rem">
-			<legend>
-				<h:outputLabel value="#{msg['account.gender']}" />
-			</legend>
-			<h:panelGrid columns="2" cellpadding="0" cellspacing="2">
-				<h:selectOneRadio id="gender"
-					value="#{loginBean.settingCostumer.gender}" required="true"
-					requiredMessage="#{msg['account.prompt.gender']}">
-					<f:selectItem itemLabel="#{loginBean.male.value}"
-						itemValue="#{loginBean.male}" />
-					<f:selectItem itemLabel="#{loginBean.female.value}"
-						itemValue="#{loginBean.female}" />
-				</h:selectOneRadio>
-			</h:panelGrid>
-		</fieldset>
-		<h:message for="gender" class="message"></h:message>
-		<h:inputText id="lastname"
-			value="#{loginBean.settingCostumer.firstname}" required="true"
-			a:placeholder="#{msg['account.firstname']}"
-			class="border-radius height-3rem padding-1rem"
-			requiredMessage="#{msg['account.prompt.firstname']}">
-			<f:validateLength minimum="2" maximum="20" />
-			<f:validateRegex pattern="^[a-zA-Z-\s]*"></f:validateRegex>
-		</h:inputText>
-		<h:message for="lastname" class="message"></h:message>
+		<h:form>
+			<fieldset class="height-3rem border-radius">
+				<legend>
+					<h:outputLabel value="#{msg['account.gender']}" />
+				</legend>
+				<h:panelGrid columns="2" cellpadding="0" cellspacing="2">
+					<h:selectOneRadio id="gender"
+						value="#{settingBean.settingCostumer.gender}" required="true"
+						requiredMessage="#{msg['account.prompt.gender']}">
+						<f:selectItem itemLabel="#{loginBean.male.value}"
+							itemValue="#{loginBean.male}" />
+						<f:selectItem itemLabel="#{loginBean.female.value}"
+							itemValue="#{loginBean.female}" />
+					</h:selectOneRadio>
+				</h:panelGrid>
+			</fieldset>
+			<h:message for="gender" class="message"></h:message>
+			<div class="flex-row-center height-3rem">
+				<h:inputText id="lastname"
+					value="#{settingBean.settingCostumer.firstname}" required="true"
+					a:placeholder="#{msg['account.firstname']}"
+					class="border-radius height-3rem padding-1rem"
+					requiredMessage="#{msg['account.prompt.firstname']}">
+					<f:validateLength minimum="2" maximum="20" />
+					<f:validateRegex pattern="^[a-zA-Z-\s]*"></f:validateRegex>
+				</h:inputText>
+				<h:message for="lastname" class="message"></h:message>
 
-		<h:inputText id="firstname"
-			value="#{loginBean.settingCostumer.lastname}" required="true"
-			a:placeholder="#{msg['account.lastname']}"
-			class="border-radius height-3rem padding-1rem"
-			requiredMessage="#{msg['account.prompt.firstname']}">
-			<f:validateLength minimum="2" maximum="100" />
-			<f:validateRegex pattern="^[a-zA-Z-\s]*"></f:validateRegex>
-		</h:inputText>
-		<h:message for="firstname" class="message"></h:message>
+				<h:inputText id="firstname"
+					value="#{settingBean.settingCostumer.lastname}" required="true"
+					a:placeholder="#{msg['account.lastname']}"
+					class="border-radius height-3rem padding-1rem"
+					requiredMessage="#{msg['account.prompt.firstname']}">
+					<f:validateLength minimum="2" maximum="100" />
+					<f:validateRegex pattern="^[a-zA-Z-\s]*"></f:validateRegex>
+				</h:inputText>
+				<h:message for="firstname" class="message"></h:message>
+			</div>
+			<div class="flex-row-center height-3rem">
 
+				<h:inputText id="phone"
+					value="#{settingBean.settingCostumer.phoneNumber}"
+					a:placeholder="#{msg['account.phone']}" required="true"
+					class="border-radius height-3rem padding-1rem"
+					requiredMessage="#{msg['account.prompt.phone']}">
+					<f:validateLength minimum="8" maximum="15" />
+				</h:inputText>
 
-		<h:inputText id="phone"
-			value="#{loginBean.settingCostumer.phoneNumber}"
-			a:placeholder="#{msg['account.phone']}" required="true"
-			class="border-radius height-3rem padding-1rem"
-			requiredMessage="#{msg['account.prompt.phone']}">
-			<f:validateLength minimum="8" maximum="15" />
-		</h:inputText>
+				<h:message for="phone" class="message"></h:message>
 
-		<h:message for="phone" class="message"></h:message>
-
-		<h:inputText id="birthdate"
-			value="#{loginBean.settingCostumer.birthdate}"
-			a:placeholder="#{msg['account.birthdate']}" required="true"
-			class="border-radius height-3rem padding-1rem"
-			requiredMessage="#{msg['account.prompt.birtdate']}">
-			<f:convertDateTime pattern="dd/MM/yyyy"></f:convertDateTime>
+				<h:inputText id="birthdate"
+					value="#{settingBean.settingCostumer.birthdate}"
+					a:placeholder="#{msg['account.birthdate']}" required="true"
+					class="border-radius height-3rem padding-1rem"
+					requiredMessage="#{msg['account.prompt.birtdate']}">
+					<f:convertDateTime pattern="dd/MM/yyyy"></f:convertDateTime>
 					(jj/mm/aaaa)
 				</h:inputText>
-		<h:message for="birthdate" class="message"></h:message>
+				<h:message for="birthdate" class="message"></h:message>
+			</div>
+			<fieldset class="height-6rem border-radius">
+				<legend>
+					<h:outputLabel value="#{msg['costumer-setting.billingAddress']}" />
+				</legend>
+				<h:selectOneMenu
+					value="#{settingBean.settingCostumer.defaultBillingAddressId}"
+					class="flex-row-center padding-1rem margin-auto">
+					<f:selectItems value="#{settingBean.settingCostumer.addressList}"
+						var="oneAddress" itemValue="#{oneAddress.id}"
+						itemLabel="#{oneAddress.toString()}" />
+				</h:selectOneMenu>
+			</fieldset>
+			<fieldset class="height-6rem border-radius">
+				<legend>
+					<h:outputLabel value="#{msg['costumer-setting.deliveryAddress']}" />
+				</legend>
 
+				<h:selectOneMenu
+					value="#{settingBean.settingCostumer.defaultDeliveryAddressId}"
+					class="flex-row-center padding-1rem margin-auto">
+					<f:selectItems value="#{settingBean.settingCostumer.addressList}"
+						var="oneAddress" itemValue="#{oneAddress.id}"
+						itemLabel="#{oneAddress.toString()}" />
+				</h:selectOneMenu>
+			</fieldset>
 
+			<fieldset class="height-6rem border-radius">
+				<legend>
+					<h:outputLabel value="#{msg['costumer-setting.bankCard']}" />
+				</legend>
+				<h:selectOneMenu
+					value="#{settingBean.settingCostumer.defaultBankCardId}"
+					class="flex-row-center padding-1rem margin-auto">
+					<f:selectItems value="#{settingBean.settingCostumer.bankCardList}"
+						var="oneCard" itemValue="#{oneCard.id}"
+						itemLabel="#{oneCard.cardNumber}" />
+				</h:selectOneMenu>
+			</fieldset>
+			<div class="flex-row-center">
+				<h:commandButton id="submitCostumerModification"
+					value="#{msg['costumer-setting.submit']}"
+					styleClass="border-radius height-4rem submit-button"
+					action="#{settingBean.updateCostumerSetting}" />
+			</div>
+		</h:form>
 
 	</div>
 </ui:composition>

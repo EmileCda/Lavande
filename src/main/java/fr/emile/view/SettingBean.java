@@ -9,6 +9,7 @@ import fr.emile.common.IConstant;
 import fr.emile.ctrl.BankCardCtrl;
 import fr.emile.ctrl.CostumerCtrl;
 import fr.emile.ctrl.CrudCtrl;
+import fr.emile.ctrl.StandardCrudCtrl;
 import fr.emile.ctrl.UserCtrl;
 import fr.emile.entity.Address;
 import fr.emile.entity.BankCard;
@@ -31,14 +32,21 @@ public class SettingBean extends MasterBean implements IConstant {
 	private Costumer settingCostumer;
 	private String passwordConfirmation;
 
-	
-	
 	public SettingBean() {
-		
+
 		this.setSettingBankCard(new BankCard());
 		this.setSettingAddress(new Address());
 		this.setSettingCostumer(new Costumer());
-		
+
+	}
+
+	// %%%%%%%%%%%%%%%%%%%%%%%%%%_action_%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	public void addressChange(ValueChangeEvent eventAddressList) {
+		this.resetPromptStatus();
+		int addressId = (int) eventAddressList.getNewValue();
+		this.setSettingAddress(readAddress(addressId));
+		this.setPromptStatus("%s", this.getSettingAddress().toShortString());
+		Utils.trace("bankCard current: %s\n", this.getSettingBankCard());
 
 	}
 
@@ -53,7 +61,32 @@ public class SettingBean extends MasterBean implements IConstant {
 		Utils.trace("bankCard current: %s\n", this.getSettingBankCard());
 
 	}
+	// %%%%%%%%%%%%%%%%%%%%%%%%%%_action_%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	public String billingAddressChange(ValueChangeEvent event) {
+		this.resetPromptStatus();
+		String pageReturn = null;
+		this.getSettingCostumer().setDefaultBillingAddressId((int)event.getNewValue());
 
+		return pageReturn;
+	}
+
+	// %%%%%%%%%%%%%%%%%%%%%%%%%%_action_%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	public String deliveryAddressChange(ValueChangeEvent event) {
+		this.resetPromptStatus();
+		String pageReturn = null;
+		this.getSettingCostumer().setDefaultDeliveryAddressId((int)event.getNewValue());
+
+		return pageReturn;
+	}
+
+	// %%%%%%%%%%%%%%%%%%%%%%%%%%_action_%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	public String defaultBankCardChange(ValueChangeEvent event) {
+		this.resetPromptStatus();
+		String pageReturn = null;
+		this.getSettingCostumer().setDefaultBankCardId((int)event.getNewValue());  
+
+		return pageReturn;
+	}
 	// %%%%%%%%%%%%%%%%%%%%%%%%%% action %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	public String addUser() {
 		this.resetPromptStatus();
@@ -81,7 +114,6 @@ public class SettingBean extends MasterBean implements IConstant {
 	public String setting() {
 		this.resetPromptStatus();
 		String pageReturn = SETTING;
-		Utils.trace("%s\n", "String setting");
 
 		if (this.getLoginBean().getUser().getProfile() == Profile.COSTUMER) {
 			this.setSettingCostumer(this.getLoginBean().getCostumer());
@@ -95,9 +127,6 @@ public class SettingBean extends MasterBean implements IConstant {
 			this.setPromptStatus("Setting %s %s %s", this.getSettingCostumer().getProfile().getName(),
 					this.getSettingCostumer().getFirstname(), this.getSettingCostumer().getLastname());
 
-			Utils.trace("current bankcard %s\n", this.getSettingBankCard());
-			Utils.trace("current Address %s\n", this.getSettingAddress());
-
 		} else {
 			this.getSettingCostumer().setId(this.getLoginBean().getUser().getId());
 			this.getSettingCostumer().setPassword(this.getLoginBean().getUser().getPassword());
@@ -106,6 +135,8 @@ public class SettingBean extends MasterBean implements IConstant {
 					this.getSettingCostumer().getEmail());
 
 		}
+		Utils.trace("current costumer %s\n", this.getSettingCostumer());
+		Utils.trace("address %s\n", this.getSettingAddress());
 
 		return pageReturn;
 
@@ -117,12 +148,8 @@ public class SettingBean extends MasterBean implements IConstant {
 		String pageReturn = null;
 		CrudCtrl bankCardCtrl = new BankCardCtrl();
 		if (this.getSettingBankCard().getId() <= 0) { // new bankcard
-			Utils.trace("addBankCard %s\n", this.getSettingBankCard());
-			Utils.trace("addBankCard %s\n", this.getSettingBankCard());
 			this.getSettingBankCard().setCostumer(this.getSettingCostumer());
-			Utils.trace("addBankCard %s\n", this.getSettingBankCard());
 			try {
-				Utils.trace("addBankCard %s\n", this.getSettingBankCard());
 				BankCard bankcard = (BankCard) bankCardCtrl.create(this.getSettingBankCard());
 				this.getLoginBean().setPromptStatus("Add  %s", this.getSettingBankCard().getCardNumber());
 				this.getSettingCostumer().addBankCard(bankcard);
@@ -158,6 +185,77 @@ public class SettingBean extends MasterBean implements IConstant {
 	}
 
 	// %%%%%%%%%%%%%%%%%%%%%%%%%%_action_%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	public String updateAddress() {
+		this.resetPromptStatus();
+		String pageReturn = null;
+		if (this.getSettingAddress().getId() > 0) {
+			updateAddress(this.getSettingAddress());
+
+		} else
+			this.getSettingAddress().setCostumer(this.getSettingCostumer());
+		Address address = createAddress(this.getSettingAddress());
+		if (address.getId() > 0)
+			this.getSettingCostumer().addAddress(address);
+
+		return pageReturn;
+	}
+
+	// %%%%%%%%%%%%%%%%%%%%%%%%%%_action_%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	public int updateAddress(Address address) {
+		int status = -1;
+		CrudCtrl addressCtrl = new StandardCrudCtrl(new Address());
+		try {
+			status = addressCtrl.update(address);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		this.getLoginBean().setPromptStatus("update sta:%d addr:%s ", status, address.toString());
+		return status;
+	}
+
+	// %%%%%%%%%%%%%%%%%%%%%%%%%%_action_%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	public String updateCostumerSetting() {
+	
+		this.resetPromptStatus();
+		String pageReturn = SETTING;
+		CrudCtrl CostumerCtrl = new  CostumerCtrl();
+		try {
+			CostumerCtrl.update(this.getSettingCostumer());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return pageReturn;
+	}
+	
+
+	// %%%%%%%%%%%%%%%%%%%%%%%%%%_action_%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	public Address createAddress(Address address) {
+		Address addressRetreive = null;
+		CrudCtrl addressCtrl = new StandardCrudCtrl(new Address());
+		try {
+			addressRetreive = (Address) addressCtrl.create(address);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		this.getLoginBean().setPromptStatus("create sta:%d addr:%s ", addressRetreive.getId(),
+				addressRetreive.toString());
+		return addressRetreive;
+	}
+
+	// %%%%%%%%%%%%%%%%%%%%%%%%%%_action_%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	public String newAddress() {
+		this.resetPromptStatus();
+		String pageReturn = null;
+		this.setSettingAddress(new Address());
+
+		Utils.trace("new address %s \n", this.getSettingAddress());
+		return pageReturn;
+	}
+
+	// %%%%%%%%%%%%%%%%%%%%%%%%%%_action_%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	public String updateUser() {
 		this.resetPromptStatus();
 		String pageReturn = null;
@@ -165,7 +263,9 @@ public class SettingBean extends MasterBean implements IConstant {
 		return pageReturn;
 	}
 
-// %%%%%%%%%%%%%%%%%%%%%%%%%%_action_%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+	// %%%%%%%%%%%%%%%%%%%%%%%%%%_action_%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	public String addCostumer() {
 		this.resetPromptStatus();
 		String pageReturn = COSTUMER_HOME;
@@ -206,6 +306,28 @@ public class SettingBean extends MasterBean implements IConstant {
 			e.printStackTrace();
 		}
 		return bankCard;
+	}
+
+	// -+-+-+-+-+-+-+-+-+-+-+-+-+_processing_-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+	public Address readAddress(int id) {
+		CrudCtrl AddressCtrl = new StandardCrudCtrl(new Address());
+
+		Address address = null;
+
+		try {
+			address = (Address) AddressCtrl.read(id);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return address;
+	}
+
+	// -------------------------------------------------------------------------------------------------
+	public String cheatAddress() {
+
+		this.setSettingAddress(DataTest.genAddress());
+		return null;
+
 	}
 
 	// -------------------------------------------------------------------------------------------------

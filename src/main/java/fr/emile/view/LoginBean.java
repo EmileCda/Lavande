@@ -36,6 +36,7 @@ public class LoginBean extends MasterBean implements IConstant {
 	private Profile profileAdmin;
 	private Profile profileStoreKeeper;
 	private String labelCart;
+	private String passwordFromInput;
 
 
 	private ResourceBundle msg;
@@ -87,6 +88,7 @@ public class LoginBean extends MasterBean implements IConstant {
 			return pageReturn;
 
 		this.setConnected(true);
+		Utils.trace("user: %s\n",this.getUser());
 
 		switch (this.getUser().getProfile()) {
 
@@ -103,9 +105,12 @@ public class LoginBean extends MasterBean implements IConstant {
 			initCostumer();
 			this.initWelcomeMessage(this.getCostumer().getProfile().getName(), this.getCostumer().getFirstname());
 			pageReturn = COSTUMER_HOME;
+			Utils.trace("costumer : %s\n",this.getCostumer());
+			Utils.trace("user: %s\n",this.getUser());
 			break;
 		}
-		this.getUser().setPassword("");// cleaning input
+		this.setPasswordFromInput("");
+//		this.getUser().setPassword("");// cleaning input
 
 		return pageReturn;
 
@@ -148,18 +153,22 @@ public class LoginBean extends MasterBean implements IConstant {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		Utils.trace("%s\n", userRetreive);
 		if (userRetreive == null) {
 			Utils.trace("%s\n", userRetreive);
 			this.setPromptStatus(this.getMsg().getString("login.erreur") + "2");
 			return false;
 		}
 // not same password
-		String passwordInput = this.getUser().getPassword();
+		String passwordInput = this.getPasswordFromInput();
+		Utils.trace("%s\n", userRetreive);
 		if (!userRetreive.getPassword().equals(passwordInput)) {
 			this.setPromptStatus(this.getMsg().getString("login.erreur") + "3");
 			return false;
 		}
+		Utils.trace("%s\n", userRetreive);
 		this.setUser(userRetreive);
+		Utils.trace("%s\n", this.getUser());
 
 		return true;
 	}
@@ -322,6 +331,14 @@ public class LoginBean extends MasterBean implements IConstant {
 
 	public void setLabelCart(String labelCart) {
 		this.labelCart = labelCart;
+	}
+
+	public String getPasswordFromInput() {
+		return passwordFromInput;
+	}
+
+	public void setPasswordFromInput(String passwordFromInput) {
+		this.passwordFromInput = passwordFromInput;
 	}
 
 

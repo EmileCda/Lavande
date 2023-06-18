@@ -155,6 +155,13 @@ public  class Address implements IConstant, Serializable {
 	public void setIsValide(Boolean isValide) {
 		this.isValide = isValide;
 	}
+	public Costumer getCostumer() {
+		return costumer;
+	}
+
+	public void setCostumer(Costumer costumer) {
+		this.costumer = costumer;
+	}
 
 	@Override
 	public String toString() {
@@ -166,12 +173,14 @@ public  class Address implements IConstant, Serializable {
 		        
 	}
 
-	public Costumer getCostumer() {
-		return costumer;
+	public String toShortString() {
+		return String.format(
+				"%d%s, %s %s %s",
+				 getStreetNumber(), getNumberType().length()<=0?"":(" "+getNumberType()), 
+						getStreetType(),getStreet(), getCity());
+				
+		        
 	}
 
-	public void setCostumer(Costumer costumer) {
-		this.costumer = costumer;
-	}
 
 }

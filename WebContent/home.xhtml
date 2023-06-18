@@ -23,7 +23,7 @@
 					<h:message for="email" />
 				</div>
 				<div class="row-div padding-top-2rem">
-					<h:inputSecret value="#{loginBean.user.password}" required="true"
+					<h:inputSecret value="#{loginBean.passwordFromInput}" required="true"
 						 a:placeholder="#{msg['home.password']}"
 						requiredMessage="#{msg['home.prompt.password']}"
 						id="password" class="border-radius height-4rem padding-1rem" />

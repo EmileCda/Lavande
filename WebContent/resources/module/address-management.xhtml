@@ -10,9 +10,88 @@
 
 
 <ui:composition>
-	<div class="flex-column-center">
-		<h:outputLabel value="Address management" />	
+	<div class="flex-column-center text-align-center">
+		<h3>#{msg['bankcard-management.title']}</h3>
 	</div>
+	<h:form>
+
+		<h:selectOneMenu value="#{settingBean.settingAddress.id}"
+			class="flex-row-center padding-1rem margin-auto" onchange="submit()"
+			valueChangeListener="#{settingBean.addressChange}">
+			<f:selectItems value="#{settingBean.settingCostumer.addressList}"
+				var="oneAddress" itemValue="#{oneAddress.id}"
+				itemLabel="#{oneAddress.toShortString()}" />
+		</h:selectOneMenu>
+	</h:form>
+	<h:form>
+		<div class="flex-row-center">
+
+			<h:inputText id="streeNumber"
+				value="#{settingBean.settingAddress.streetNumber}"
+				class="border-radius height-3rem padding-1rem" />
+			<h:message for="streeNumber" style="message"></h:message>
+
+			<h:inputText id="numberType"
+				value="#{settingBean.settingAddress.numberType}"
+				class="border-radius height-3rem padding-1rem" />
+			<h:message for="numberType" style="message"></h:message>
+		</div>
+		<div class="flex-row-center">
+			<h:inputText id="streetType"
+				value="#{settingBean.settingAddress.streetType}"
+				class="border-radius height-3rem padding-1rem" />
+			<h:message for="streetType" style="message"></h:message>
+
+			<h:inputText id="street" value="#{settingBean.settingAddress.street}"
+				class="border-radius height-3rem padding-1rem" />
+			<h:message for="street" style="message"></h:message>
+		</div>
+		<div class="flex-row-center">
+
+			<h:inputText id="zipCode"
+				value="#{settingBean.settingAddress.zipCode}"
+				class="border-radius height-3rem padding-1rem" />
+			<h:message for="zipCode" style="message"></h:message>
+			<h:inputText id="city" value="#{settingBean.settingAddress.city}"
+				class="border-radius height-3rem padding-1rem" />
+			<h:message for="city" style="message"></h:message>
+		</div>
+		<fieldset class="border-radius  padding-1rem margin-auto">
+			<legend>
+				<h:outputLabel value="#{msg['address-management.valid']}" />
+			</legend>
+			<h:selectOneRadio id="AddressValid" required="true"
+				layout="pageDirection"
+				value="#{settingBean.settingAddress.isValide}"
+				requiredMessage="#{msg['address-management.valid']}">
+				<f:selectItem itemLabel="#{msg['address-management.not-valid']}"
+					itemValue="#{itemManagementBean.falseValue}" />
+				<f:selectItem itemLabel="#{msg['address-management.valid']}"
+					itemValue="#{itemManagementBean.trueValue}" />
+			</h:selectOneRadio>
+			<h:message for="AddressValid" style="message"></h:message>
+		</fieldset>
+		<div class="flex-row-center">
+			<h:commandButton id="submitAddressModification"
+				value="#{msg['address-management.submit']}"
+				styleClass="border-radius height-4rem submit-button"
+				action="#{settingBean.updateAddress}" />
+			<h:commandButton id="newAddress"
+				value="#{msg['address-management.newAddress']}"
+				styleClass="border-radius height-4rem submit-button"
+				action="#{settingBean.newAddress}" />
+			<h:panelGroup rendered="#{msg['cheat.mode']}">
+				<h:commandButton action="#{settingBean.cheatAddress}"
+					class="border-radius  padding-1rem button-header"
+					value="#{msg['cheat.name']}">
+
+				</h:commandButton>
+
+			</h:panelGroup>
+		</div>
+
+	</h:form>
+
 </ui:composition>
 
 </html>

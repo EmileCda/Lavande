@@ -123,7 +123,7 @@ public class User implements IConstant,Serializable {
 
 	@Override
 	public String toString() {
-		return String.format("Id[%d], %s, %s, %s, {%s}",
+		return String.format("Id[%d], %s, [%s], [%s], {%s}",
 				getId(), getProfile(), getEmail(), getPassword(), (getIsActif()?"" :"non-") + "actif");
 	}
 	

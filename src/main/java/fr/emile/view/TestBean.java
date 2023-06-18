@@ -29,21 +29,39 @@ public class TestBean implements IConstant {
 	private SettingBean settingBean;
 
 	
-// %%%%%%%%%%%%%%%%%%%%%%%%%%_action_%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	// %%%%%%%%%%%%%%%%%%%%%%%%%%_action_%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-	public String testAddBankCard() {
-		String pageReturn = SETTING;
-		this.getLoginBean().cleanPromptStatus();
-		int userId = 31;
-		this.getLoginBean().setCostumer(getCostumer(userId));
-		this.getLoginBean().setUser(getUser(userId));
-		this.getSettingBean().setSettingCostumer(this.getLoginBean().getCostumer());
-		this.getSettingBean().setSettingBankCard(this.getSettingBean().getSettingCostumer().getBankCardList().get(0));
-		
-		this.getLoginBean().setPromptStatus("testAddBankCard()");
-		return pageReturn;
-		
-	}
+		public String testAddBankCard() {
+			String pageReturn = SETTING;
+			this.getLoginBean().cleanPromptStatus();
+			int userId = 31;
+			this.getLoginBean().setCostumer(getCostumer(userId));
+			this.getLoginBean().setUser(getUser(userId));
+			this.getSettingBean().setSettingCostumer(this.getLoginBean().getCostumer());
+			this.getSettingBean().setSettingBankCard(this.getSettingBean().getSettingCostumer().getBankCardList().get(0));
+			
+			this.getLoginBean().setPromptStatus("testAddBankCard()");
+			return pageReturn;
+			
+		}
+		// %%%%%%%%%%%%%%%%%%%%%%%%%%_action_%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+		public String testAddressManagement() {
+			String pageReturn = SETTING;
+			this.getLoginBean().cleanPromptStatus();
+			int userId = 32;
+			this.getLoginBean().setCostumer(getCostumer(userId));
+			this.getLoginBean().setUser(getUser(userId));
+			this.getSettingBean().setSettingCostumer(this.getLoginBean().getCostumer());
+
+			if (this.getSettingBean().getSettingCostumer().getAddressList().size() >0 )
+				this.getSettingBean().setSettingAddress(this.getSettingBean().getSettingCostumer().getAddressList().get(0));
+			
+			
+			this.getLoginBean().setPromptStatus("testAddressManagement()");
+			return pageReturn;
+			
+		}
 
 	// -+-+-+-+-+-+-+-+-+-+-+-+-+_processing_-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 

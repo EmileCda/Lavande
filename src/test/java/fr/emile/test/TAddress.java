@@ -18,9 +18,9 @@ public class TAddress {
 	public static void main(String[] args) {
 		Utils.trace("*************************** Begin ************************************\n");
 		TAddressUnitTest unitTest = new TAddressUnitTest();
-		unitTest.createOne();
+		unitTest.createOne(76);
 //		unitTest.createMany(31,10);
-//		unitTest.readOne(1);
+//		unitTest.readOne(76);
 //		unitTest.readMany();
 //		unitTest.update();
 //		unitTest.delete();
@@ -96,10 +96,10 @@ class TAddressUnitTest {
 	}
 	// -------------------------------------------------------------------------------------------------
 
-	public void createOne() {
+	public void createOne(int custumerId) {
 		Utils.trace("=========================== create One  ===========================\n");
 		Address address = new Address();
-		Costumer costumer = getCostumer(1);
+		Costumer costumer = getCostumer(custumerId);
 		address = DataTest.genAddress();
 		address.setCostumer(costumer);
 		costumer.addAddress(address);
