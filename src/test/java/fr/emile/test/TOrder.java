@@ -17,7 +17,7 @@ public class TOrder {
 	public static void main(String[] args) {
 		Utils.trace("*************************** Begin ************************************\n");
 		TOrderUnitTest unitTest = new TOrderUnitTest();
-//		unitTest.createOne();
+		unitTest.createOne();
 //		unitTest.createMany();
 //		unitTest.readOne(1);
 //		unitTest.readMany();
@@ -100,10 +100,11 @@ class TOrderUnitTest {
 		Order order = new Order();
 		Order orderCrea = new Order();
 //		OrderLine orderLine= getOrderLine(1);
-		Costumer costumer = getCostumer(1);
-
+		Costumer costumer = getCostumer(35);
+		if (costumer  != null) Utils.trace("%s\n", costumer );
 		order = DataTest.genOrder();
 		order.setCostumer(costumer);
+		order.setOrderNumber(order.generateOrderNumber());
 //		order.setOrderLine(orderLine);
 		try {
 			orderCrea= (Order) this.getCtrl().create(order);

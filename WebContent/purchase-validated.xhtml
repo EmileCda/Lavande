@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<ui:composition template="/resources/template/main-template.xhtml">
+	<ui:define name="main">
+		<div class="flex-row-center height-100">
+			<f:view>
+				<div class="row-div padding-top-3rem margin-auto">
+					<h3>#{msg['purchase-validated.title']}</h3>
+				</div>
+				<h:form>
+					<div>
+						<h:outputLabel value="#{msg['purchase-validate.bankcardUsed']}" />
+						<h:selectOneMenu value="#{loginBean.costumer.defaultBankCardId}">
+							<f:selectItems value="#{loginBean.costumer.bankCardList}"
+								var="oneCard" itemValue="#{oneCard.id}"
+								itemLabel="#{oneCard.cardNumber}" />
+						</h:selectOneMenu>
+					</div>
+					<div>
+						<h:outputLabel
+							value="#{msg['purchase-validate.deliveryAdddress']}" />
+						<h:selectOneMenu
+							value="#{loginBean.costumer.defaultDeliveryAddressId}">
+							<f:selectItems value="#{loginBean.costumer.addressList}"
+								var="oneAddress" itemValue="#{oneAddress.id}"
+								itemLabel="#{oneAddress}" />
+						</h:selectOneMenu>
+					</div>
+					<div>
+
+						<h:outputLabel value="#{msg['purchase-validate.billingAddress']}" />
+						<h:selectOneMenu
+							value="#{loginBean.costumer.defaultBillingAddressId}">
+							<f:selectItems value="#{loginBean.costumer.addressList}"
+								var="oneAddress" itemValue="#{oneAddress.id}"
+								itemLabel="#{oneAddress}" />
+						</h:selectOneMenu>
+					</div>
+
+
+
+					<h:dataTable id="orderTable"
+						value="#{purchaseBean.order.orderLineList}" var="oneLine"
+						styleClass="cartTable" headerClass="cartTable-header"
+						rowClasses="cartTable-odd-row,cartTable-even-row">
+						<h:column>
+							<f:facet name="header">#{msg['orderline.quantity']}</f:facet>
+							<h:outputText value="#{oneLine.quantity}" size="3" />
+						</h:column>
+
+						<h:column>
+							<f:facet name="header">#{msg['orderline.price']}</f:facet>
+							<h:outputText value="#{oneLine.item.price}" size="3">
+								<f:convertNumber minFractionDigits="2" currencySymbol="€"
+									type="currency" />
+							</h:outputText>
+						</h:column>
+
+
+
+						<h:column>
+							<f:facet name="header">#{msg['orderline.discount']}</f:facet>
+							<h:outputText value="#{oneLine.grossCost-oneLine.netCost}"
+								size="3">
+								<f:convertNumber minFractionDigits="2" currencySymbol="€"
+									type="currency" />
+							</h:outputText>
+						</h:column>
+
+						<h:column>
+							<f:facet name="header">#{msg['orderline.name']}</f:facet>
+							<h:outputText value="#{oneLine.item.name}" size="3" />
+						</h:column>
+
+
+						<h:column>
+							<f:facet name="header">#{msg['orderline.cost']}</f:facet>
+							<h:outputLabel value="#{oneLine.netCost}">
+								<f:convertNumber minFractionDigits="2" currencySymbol="€"
+									type="currency" />
+							</h:outputLabel>
+
+						</h:column>
+
+					</h:dataTable>
+
+					<div class="flex-column-center">
+						<div>
+							<h:outputLabel value="#{msg['orderline.grandTotal']} : " />
+							<h:outputLabel value="#{purchaseBean.order.grandTotal}">
+								<f:convertNumber minFractionDigits="2" currencySymbol="€"
+									type="currency" />
+
+							</h:outputLabel>
+						</div>
+						<div>
+							<h:outputLabel value="#{msg['orderline.totalDiscount']} : " />
+							<h:outputLabel value="#{purchaseBean.order.totalDiscount}">
+								<f:convertNumber minFractionDigits="2" currencySymbol="€"
+									type="currency" />
+
+							</h:outputLabel>
+						</div>
+
+					</div>
+
+
+					<div>
+						<h:outputLabel value="#{msg['orderline.createDate']} : " />
+						<h:outputLabel value="#{purchaseBean.order.createDate}">
+							<f:convertDateTime pattern="MM/dd/yyyy" />
+						</h:outputLabel>
+					</div>
+					<div>
+						<h:outputLabel value="#{msg['orderline.deliveryDate']} : " />
+						<h:outputLabel value="#{purchaseBean.order.deliveryDate}">
+							<f:convertDateTime pattern="MM/dd/yyyy" />
+						</h:outputLabel>
+					</div>
+						<h:commandButton value="#{msg['order.validate']}"
+						styleClass="border-radius height-4rem submit-button"
+						action="#{purchaseBean.validateOrder}" />
+				</h:form>
+			</f:view>
+		</div>
+	</ui:define>
+</ui:composition>
+
+</html>

@@ -9,32 +9,47 @@
 
 <ui:composition template="/resources/template/main-template.xhtml">
 	<ui:define name="main">
-		<f:view>
-<!-- 				<h3>#{msg['home.title']}</h3> -->
+		<div class="flex-row-center home">
+			<f:view>
 
-<!-- 				<h:graphicImage library="images" name="homepage.jpg" -->
-<!-- 					class="homePage" /> -->
+				<h:form>
+				<div class="row-div padding-top-2rem"><h3>#{msg['home.title']}</h3></div>
 
-<!-- 			<h:form> -->
+				<div class="row-div padding-top-3rem">
+					<h:inputText value="#{loginBean.user.email}" required="true"
+						 a:placeholder="#{msg['home.email']}"
+						requiredMessage="#{msg['home.prompt.email']}" id="email"
+						class="border-radius height-4rem padding-1rem" />
+					<h:message for="email" />
+				</div>
+				<div class="row-div padding-top-2rem">
+					<h:inputSecret value="#{loginBean.passwordFromInput}" required="true"
+						 a:placeholder="#{msg['home.password']}"
+						requiredMessage="#{msg['home.prompt.password']}"
+						id="password" class="border-radius height-4rem padding-1rem" />
+					<h:message for="password" />
+				</div>
+				<div class="row-div padding-top-2rem">
+					<p>#{loginBean.promptStatus}</p>
+				</div>
+					<div class="row-div padding-top-2rem">
 
-<!-- 				<div class="button-group"> -->
-<!-- 					<div class="row-div message"> -->
-<!-- 						<h:commandLink action="/login-utilisateur.xhtml" -->
-<!-- 							class="push-button"> -->
-<!-- 							<h:outputText value="#{msg['home.connection']}"></h:outputText> -->
-<!-- 						</h:commandLink> -->
+						<h:commandButton id="submitConnection"
+							value="#{msg['home.submit']}" styleClass="border-radius height-4rem submit-button"
+							action="#{loginBean.checkUser()}" />
 
-<!-- 					</div> -->
 
-<!-- 					<div class="row-div message"> -->
-<!-- 						<h:commandLink action="/add-utilisateur.xhtml" class="push-button"> -->
-<!-- 							<h:outputText value="#{msg['home.subscibre']}"></h:outputText> -->
-<!-- 						</h:commandLink> -->
+					</div>
+					<div class="row-div  padding-top-2rem">
+						<h:link value="#{msg['home.not-subscibre-yet']}"
+							outcome="create-user.xhtml" />
+					</div>
+				</h:form>
 
-<!-- 					</div> -->
-<!-- 				</div> -->
-<!-- 			</h:form> -->
-		</f:view>
+
+
+			</f:view>
+		</div>
 	</ui:define>
 </ui:composition>
 

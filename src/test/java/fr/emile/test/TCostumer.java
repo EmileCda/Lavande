@@ -19,8 +19,8 @@ public class TCostumer {
 		Utils.trace("*************************** Begin ************************************\n");
 		TCostumerUnitTest unitTest = new TCostumerUnitTest();
 //		unitTest.createOne();
-		unitTest.createMany(10);
-//		unitTest.readOne(1);
+//		unitTest.createMany(10);
+		unitTest.readOne(76);
 //		unitTest.readMany();
 //		unitTest.update();
 //		unitTest.delete();
@@ -42,7 +42,7 @@ class TCostumerUnitTest {
 
 //-------------------------------------------------------------------------------------------------
 	public void update() {
-		int costumerId = 3;
+		int costumerId = 30;
 		Utils.trace("=========================== Update [%d]===========================\n",costumerId);
 		Costumer costumer = null;
 
@@ -72,17 +72,18 @@ class TCostumerUnitTest {
 //-------------------------------------------------------------------------------------------------
 	public void delete() {
 		Utils.trace("=========================== Delete ===========================\n");
-		int addressId = 2;
+		int id = 2;
 		Costumer costumer = new Costumer();
 
 		try {
-			costumer = (Costumer) this.getCtrl().read(addressId);
+			costumer = (Costumer) this.getCtrl().read(id);
 			if (costumer == null)
 				Utils.trace("Error : l'costumer n'existe pas\n");
 			else {
 				Utils.trace("last time seen %s\n", costumer);
 				this.getCtrl().delete(costumer);
-				costumer = (Costumer) this.getCtrl().read(addressId);
+				costumer = (Costumer) this.getCtrl().read(id
+						);
 
 				if (costumer != null)
 					Utils.trace("Error not remove\n");

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+<ui:composition>
+
+
+	<h:panelGroup
+		rendered="#{loginBean.user.profile eq loginBean.profileCostumer}">
+		<div class="row-div"></div>
+		<h:form style="text-align:left">
+
+			<h:selectManyCheckbox value="#{purchaseBean.pickUpItemList}"
+				layout="pageDirection" border="1">
+				<f:selectItems
+					value="#{itemManagementBean.currentCategory.itemList}"
+					rendered="#{oneItem.isSalable}" var="oneItem"
+					itemValue="#{oneItem.id}" itemLabel="#{oneItem.toItemLabel()}"></f:selectItems>
+			</h:selectManyCheckbox>
+			<br></br>
+
+			<h:commandButton id="submitConnection"
+				value="#{msg['item-by-category.submit']}"
+				styleClass="border-radius height-4rem submit-button"
+				action="#{purchaseBean.addItemToCart}" />
+
+		</h:form>
+
+	</h:panelGroup>
+	<h:panelGroup
+		rendered="#{loginBean.user.profile eq loginBean.profileStoreKeeper}">
+		<h:form>
+
+			<h:dataTable id="datatable"
+				value="#{itemManagementBean.currentCategory.itemList}" var="oneItem"
+				styleClass="item-table" headerClass="item-table-header"
+				rowClasses="item-table-odd-row,item-table-even-row">
+
+				<h:column>
+					<!-- column header -->
+					<f:facet name="header">#{msg['item-by-category.id']}</f:facet>
+					<!-- row record -->
+					<h:outputText value="#{oneItem.id}" />
+				</h:column>
+				<h:column>
+					<!-- column header -->
+					<f:facet name="header">#{msg['item-by-category.description']}</f:facet>
+					<!-- row record -->
+					<h:outputText value="#{oneItem.toItemLabel()}" />
+				</h:column>
+
+				<h:column>
+					<f:facet name="header">#{msg['item-by-category.update']}</f:facet>
+					<h:commandLink value="#{msg['item-by-category.update']}"
+						action="#{itemManagementBean.modifyItem(oneItem)}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">#{msg['item-by-category.delete']}</f:facet>
+					<h:commandLink value="#{msg['item-by-category.delete']}"
+						action="#{itemManagementBean.deleteItem(oneItem)}" />
+				</h:column>
+			</h:dataTable>
+
+
+		</h:form>
+	</h:panelGroup>
+
+
+</ui:composition>
+</html>

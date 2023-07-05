@@ -49,6 +49,12 @@ public class User implements IConstant,Serializable {
 				);
 		
 	}
+	public User( User copy) {
+		
+		this(copy.getId(), copy.getProfile(), copy.getEmail(),copy.getPassword(), copy.getIsActif());
+		
+		
+	}
 	public User( Profile profile, String email, String password, Boolean isActif) {
 		this(DEFAULT_ID, profile, email,password, isActif);
 	}
@@ -61,24 +67,14 @@ public class User implements IConstant,Serializable {
 		this.setIsActif ( isActif);
 	}
 
-
-//	public void preWrite(){
-//		try {
-//			this.setPasswordEncrpted(Code.encrypt(this.getPassword()));
-//		} catch (UnsupportedEncodingException e) {
-//			Utils.trace("catch test encrypt" + e.toString());
-//		}
-//	}
-//
-//	public void postRead(){
-//		
-//		
-//		this.setPassword(Encryption.decrypt(this.getPasswordEncrpted()));
-//		
-//		
-//	}
-//	
-//	
+	
+	public void clean(){
+		this.setId ( DEFAULT_ID);
+		this.setProfile ( DEFAULT_PROFILE);
+		this.setEmail ("");
+		this.setPassword ("");
+		this.setIsActif (false);
+	}
 	public int getId() {
 		return id;
 	}
@@ -127,7 +123,7 @@ public class User implements IConstant,Serializable {
 
 	@Override
 	public String toString() {
-		return String.format("Id[%d], %s, %s, %s, {%s}",
+		return String.format("Id[%d], %s, [%s], [%s], {%s}",
 				getId(), getProfile(), getEmail(), getPassword(), (getIsActif()?"" :"non-") + "actif");
 	}
 	

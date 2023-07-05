@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+
+<ui:composition>
+	<div class="flex-column-center">
+
+		<h:panelGroup
+			rendered="#{loginBean.user.profile eq loginBean.profileAdmin}">
+			<fieldset class="fieldset">
+				<legend>
+					<h:outputLabel value="#{msg['account.profile']}" />
+				</legend>
+				<h:selectOneRadio id="profile"
+					value="#{loginBean.settingCostumer.profile}" required="true"
+					requiredMessage="#{msg['account.prompt.profile']}">
+					<f:selectItem itemLabel="#{loginBean.profileAdmin.name}"
+						itemValue="#{loginBean.profileAdmin}" />
+					<f:selectItem itemLabel="#{loginBean.profileStoreKeeper.name}"
+						itemValue="#{loginBean.profileStoreKeeper}" />
+					<f:selectItem itemLabel="#{loginBean.profileCostumer.name}"
+						itemValue="#{loginBean.profileCostumer}" />
+				</h:selectOneRadio>
+			</fieldset>
+			<h:message for="profile" class="message"></h:message>
+		</h:panelGroup>
+
+
+		<h:outputLabel id="email" value="#{loginBean.user.email}"
+			class="border-radius height-3rem padding-1rem" />
+
+		<h:inputSecret id="password"
+			value="#{loginBean.settingCostumer.password}"
+			a:placeholder="#{msg['account.password']}" required="true"
+			class="border-radius height-3rem padding-1rem"
+			requiredMessage="#{msg['account.prompt.password']}">
+			<f:validateLength minimum="8" maximum="100" />
+			<!-- 			<f:validateRegex pattern="^[a-z]{1,}[A-Z]{1,}[0-9]{1,}[@%!-+?]{1,}*"></f:validateRegex> -->
+		</h:inputSecret>
+		<h:message for="password" class="message"></h:message>
+
+		<h:inputSecret id="password-confirmation"
+			a:placeholder="#{msg['account.re-password']}"
+			value="#{loginBean.passwordConfirmation}" required="true"
+			class="border-radius height-3rem padding-1rem"
+			requiredMessage="#{msg['account.prompt.re-password']}">
+			<f:validateLength minimum="8" maximum="100" />
+			<!-- 			<f:validateRegex pattern="^[a-z]{1,}[A-Z]{1,}[0-9]{1,}[@%!-+?]{1,}*"></f:validateRegex> -->
+		</h:inputSecret>
+		<h:message for="password-confirmation" class="message"></h:message>
+	</div>
+</ui:composition>
+
+</html>
+
+

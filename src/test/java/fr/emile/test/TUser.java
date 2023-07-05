@@ -17,9 +17,10 @@ public class TUser {
 	public static void main(String[] args) {
 		Utils.trace("*************************** Begin ************************************\n");
 		TUserUnitTest unitTest = new TUserUnitTest();
-		unitTest.createOne();
-		unitTest.createMany(2);
+//		unitTest.createOne();
+//		unitTest.createMany(2);
 //		unitTest.readOne(1);
+//		unitTest.readOneByEmail("Zedmond.michel@noisetier.us");
 //		unitTest.readMany();
 //		unitTest.update();
 //		unitTest.delete();
@@ -39,11 +40,10 @@ class TUserUnitTest {
 		this.setCtrl(new UserCtrl());
 	}
 
-
 //-------------------------------------------------------------------------------------------------
 	public void update() {
 		int userId = 3;
-		Utils.trace("=========================== Update [%d]===========================\n",userId);
+		Utils.trace("=========================== Update [%d]===========================\n", userId);
 		User user = null;
 
 		try {
@@ -99,8 +99,6 @@ class TUserUnitTest {
 	public void createOne() {
 		Utils.trace("=========================== create One  ===========================\n");
 		User user = new User();
-		Item item = getItem(1);
-		Costumer costumer = getCostumer(1);
 
 		user = DataTest.genUser();
 		try {
@@ -118,12 +116,12 @@ class TUserUnitTest {
 		User user = new User();
 
 		try {
-				
-				for (int indexUser = 1; indexUser <= maxUser; indexUser++) {
 
-					user = DataTest.genUser();
-					this.getCtrl().create(user);
-					Utils.trace("%s\n", user);
+			for (int indexUser = 1; indexUser <= maxUser; indexUser++) {
+
+				user = DataTest.genUser();
+				this.getCtrl().create(user);
+				Utils.trace("%s\n", user);
 
 			}
 		} catch (Exception e) {
@@ -152,16 +150,36 @@ class TUserUnitTest {
 
 //-------------------------------------------------------------------------------------------------	
 	public void readOne(int id) {
-		Utils.trace("=========================== read One [%d] ===========================\n",id);
+		Utils.trace("=========================== read One [%d] ===========================\n", id);
 
 		User user = new User();
 
 		try {
 			for (int index = id; index < this.getMaxRetry() + id; index++) {
 				user = (User) this.getCtrl().read(id);
-				if (user!= null)	break;
+				if (user != null)
+					break;
 			}
-				
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		if (user != null)
+			Utils.trace("%s\n", user);
+		else
+			Utils.trace("user null\n");
+
+	}
+
+//-------------------------------------------------------------------------------------------------	
+	public void readOneByEmail(String email) {
+		Utils.trace("=========================== read One [] ===========================\n");
+
+		User user = new User();
+
+		try {
+			user = (User) this.getCtrl().read(email);
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

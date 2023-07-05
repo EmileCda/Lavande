@@ -12,8 +12,8 @@
 	<div class="upper-bar">
 		<div class="logo">
 			<h:form>
-				<h:commandLink action="/accueil.xhtml">
-					<h:graphicImage library="images" name="jasmin.png" />
+				<h:commandLink action="/home.xhtml">
+					<h:graphicImage library="images" name="logo.png" class="icon" />
 				</h:commandLink>
 			</h:form>
 		</div>
@@ -21,22 +21,28 @@
 			<h1>#{msg['project.title']}</h1>
 		</div>
 		<h:form>
-			<h:panelGroup rendered="#{loginBean.user.cartItemList.size() gt 0 }">
+			<h:panelGroup
+				rendered="#{loginBean.costumer.cartItemList.size() gt 0 }">
 				<li><h:commandLink action="/cart.xhtml">
-						<h:graphicImage library="images" name="my_cart.png"
-							class="iconCart" />
+						<h:graphicImage library="images" name="my_cart.png" class="icon" />
 						<h:outputText value="#{msg['menu.cart']} #{loginBean.labelCart} "></h:outputText>
 					</h:commandLink></li>
 			</h:panelGroup>
 		</h:form>
+
 		<h:panelGroup rendered="#{loginBean.isConnected}">
 			<h:form>
-				<div class="addOn">
+				<div class="row-div padding-top-2rem">
 					<h:outputText value="#{loginBean.welcome}"></h:outputText>
-					<h:commandLink action="#{loginBean.disconnect}"
-						class="button-header">
-						<h:outputText value="#{msg['menu.disconnect']}"></h:outputText>
-					</h:commandLink>
+					<div class="row-div padding-top-2rem"></div>
+					<div class="row-div padding-top-2rem">
+
+						<h:commandLink action="#{loginBean.disconnect}" 
+						class="border-radius  padding-1rem button-header"
+						>
+							<h:outputText  value="#{msg['menu.disconnect']}" />	
+						</h:commandLink>
+					</div>
 
 				</div>
 			</h:form>
@@ -44,13 +50,11 @@
 
 		<h:panelGroup rendered="#{!loginBean.isConnected}">
 			<h:form>
-				<div class="addOn">
-					<h:outputText value="#{loginBean.welcome}"></h:outputText>
-					<h:commandLink action="/login-utilisateur.xhtml">
+				<div class="row-div padding-top-2rem">
+					<h:commandLink action="/home.xhtml">
 						<h:graphicImage library="images" name="my_account.png"
-							class="iconCart" />
+							class="icon" />
 					</h:commandLink>
-
 				</div>
 			</h:form>
 		</h:panelGroup>
@@ -65,40 +69,41 @@
 			</label>
 
 			<ul class="menu">
-				<li><h:commandLink action="/accueil.xhtml">
-						<h:outputText value="#{msg['menu.home']}"></h:outputText>
-					</h:commandLink></li>
-				<li><h:panelGroup rendered="#{loginBean.isClient}">
-
+				<li><h:panelGroup rendered="#{loginBean.user.profile eq loginBean.profileCostumer}">
 						<h:commandLink action="/procurement-management.xhtml">
 							<h:outputText value="#{msg['menu.purchase']}"></h:outputText>
 						</h:commandLink>
 					</h:panelGroup></li>
 
-				<li><h:panelGroup rendered="#{loginBean.isStoreKeeper}">
-
+				<li><h:panelGroup rendered="#{loginBean.user.profile eq loginBean.profileStoreKeeper}">
 						<h:commandLink action="/item-management.xhtml">
 							<h:outputText value="#{msg['menu.storeKeeper']}"></h:outputText>
 						</h:commandLink>
 					</h:panelGroup></li>
 
-				<li><h:commandLink action="/add-utilisateur.xhtml">
-						<h:outputText value="#{msg['menu.addUser']}"></h:outputText>
-					</h:commandLink></li>
-
-				<li><h:panelGroup rendered="#{loginBean.isAdmin}">
+				<li><h:panelGroup rendered="#{!loginBean.isConnected}">
+						<h:commandLink action="/create-user.xhtml">
+							<h:outputText value="#{msg['menu.addUser']}"></h:outputText>
+						</h:commandLink>
+					</h:panelGroup></li>
+				<li><h:panelGroup rendered="#{loginBean.isConnected}">
+						<h:commandLink action="#{settingBean.setting}">
+							<h:outputText value="#{msg['menu.userSetting']}"></h:outputText>
+						</h:commandLink>
+					</h:panelGroup></li>
+				<li><h:panelGroup rendered="#{loginBean.user.profile eq loginBean.profileAdmin}">
 						<h:commandLink action="/admin-management.xhtml">
 							<h:outputText value="#{msg['menu.admin']}"></h:outputText>
 						</h:commandLink>
 					</h:panelGroup></li>
-				<h:panelGroup rendered="#{msg['cheat.code']}">
-					<li><h:commandLink action="/procurement-management.xhtml">
-							<h:outputText value="Test"></h:outputText>
+				<h:panelGroup rendered="#{msg['cheat.mode']}">
+					<li><h:commandLink action="#{testBean.testAddressManagement}">
+							<h:outputText value="testAddressManagement"></h:outputText>
 						</h:commandLink></li>
 					<li><h:commandLink action="/cart.xhtml">
 							<h:outputText value="Test partiel"></h:outputText>
 						</h:commandLink></li>
-					<li><h:commandLink action="/testUnitaire.xhtml">
+					<li><h:commandLink action="/unit-test.xhtml">
 							<h:outputText value="Test unitaire"></h:outputText>
 						</h:commandLink></li>
 				</h:panelGroup>

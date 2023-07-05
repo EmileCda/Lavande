@@ -74,7 +74,7 @@ public class Item  implements IConstant, Serializable {
 		this.setPrice(price);
 		this.setDiscount(discount);
 		this.setInventory(inventory);
-		this.setSalable(isSalable);
+		this.setIsSalable(isSalable);
 		this.setPicture(picture);
 		this.setVideo(video);
 		this.setCategory(category);
@@ -169,11 +169,11 @@ public class Item  implements IConstant, Serializable {
 		this.inventory = inventory;
 	}
 
-	public boolean isSalable() {
+	public boolean getIsSalable() {
 		return isSalable;
 	}
 
-	public void setSalable(boolean isSalable) {
+	public void setIsSalable(boolean isSalable) {
 		this.isSalable = isSalable;
 	}
 
@@ -221,16 +221,6 @@ public class Item  implements IConstant, Serializable {
 	public void setCartItemList(List<CartItem> cartItemList) {
 		this.cartItemList = cartItemList;
 	}
-
-	@Override
-	public String toString() {
-		return String.format("Id[%d] %s : %s %.2f€, -%d %%, stock:%d, %svendable, img:%s, vid :%s",
-				getId(), getName(), getDescription(), getPrice(), getDiscount(), getInventory(), 
-				isSalable()?"":"non-",
-				getPicture(), getVideo());
-
-	}
-
 	public List<OrderLine> getOrderLineList() {
 		return orderLineList;
 	}
@@ -238,6 +228,25 @@ public class Item  implements IConstant, Serializable {
 	public void setOrderLineList(List<OrderLine> orderLineList) {
 		this.orderLineList = orderLineList;
 	}
+	
+	public String toItemLabel() {
+		return String.format("%s \t%.2f€, \t-%d%%, \tstock:%d, \t%svendable,%s \timg:%s, \tvid :%s",
+				getName(),  getPrice(), getDiscount(), getInventory(), 
+				getIsSalable()?"":"non-",
+						getDescription(),
+				getPicture(), getVideo());
+
+	}
+
+	@Override
+	public String toString() {
+		return String.format("Id[%d] %s : %s %.2f€, -%d %%, stock:%d, %svendable, img:%s, vid :%s",
+				getId(), getName(), getDescription(), getPrice(), getDiscount(), getInventory(), 
+				getIsSalable()?"":"non-",
+				getPicture(), getVideo());
+
+	}
+
 
 
 

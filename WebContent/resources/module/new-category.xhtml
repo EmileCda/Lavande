@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+
+<ui:composition>
+	<h:form>
+	<div class="flex-column-center">
+		<fieldset class="flex-column-center border-radius padding-1rem">
+			<legend>
+				<h:outputLabel value="#{msg['new-item.title']}" />
+			</legend>
+			<h:inputText id="nom" value="#{itemManagementBean.categoryToUpdate.name}"
+				class="border-radius height-4rem padding-1rem margin-auto"
+				required="true" a:placeholder="#{msg['new-category.name']}"
+				requiredMessage="#{msg['add-category.prompt.name']}">
+				<f:validateLength minimum="2" maximum="20" />
+			</h:inputText>
+			<h:message for="nom" style="color:red"></h:message>
+
+			<h:inputText id="discount"
+				class="border-radius height-4rem padding-1rem margin-auto"
+				value="#{itemManagementBean.categoryToUpdate.discount}" required="true"
+				a:placeholder="#{msg['new-category.discount']}"
+				requiredMessage="#{msg['add-category.prompt.discount']}">
+				<f:convertNumber integerOnly="true" minFractionDigits="0"
+					currencySymbol="%" type="currency" />
+			</h:inputText>
+			<h:message for="discount" style="color:red"></h:message>
+			<h:inputText id="photo"
+				class="border-radius height-4rem padding-1rem margin-auto"
+				value="#{itemManagementBean.categoryToUpdate.picture}"
+				a:placeholder="#{msg['new-category.photo']}" required="true"
+				requiredMessage="#{msg['new-category.prompt.picture']}">
+				<f:validateLength minimum="8" maximum="100" />
+			</h:inputText>
+			<h:message for="photo" style="color:red"></h:message>
+
+			<fieldset class="border-radius  padding-1rem margin-auto">
+				<legend>
+					<h:outputLabel value="#{msg['new-category.cumulable']}" />
+				</legend>
+				<h:selectOneRadio id="discount-cumulable" required="true"
+					layout="pageDirection"
+					value="#{itemManagementBean.categoryToUpdate.discountCumulative}"
+					requiredMessage="#{msg['new-category.prompt.cumulable']}">
+					<f:selectItem
+						itemLabel="#{msg['new-category.discount-not-cumulable']}"
+						itemValue="#{itemManagementBean.falseValue}" />
+					<f:selectItem itemLabel="#{msg['new-category.discount-cumulable']}"
+						itemValue="#{itemManagementBean.trueValue}" />
+				</h:selectOneRadio>
+				<h:message for="discount-cumulable" style="color:red"></h:message>
+			</fieldset>
+		</fieldset>
+
+		<div class="flex-colum-center margin-auto padding-1rem">
+			<h:commandLink action="#{itemManagementBean.updateCategory}"
+				class="border-radius  padding-1rem button-header">
+				<h:outputText value="#{msg['new-category.update']}"></h:outputText>
+			</h:commandLink>
+
+
+			<h:panelGroup rendered="#{msg['cheat.mode']}">
+				<h:commandLink action="#{itemManagementBean.cheatCodeCategory}"
+					class="border-radius  padding-1rem button-header">
+					<h:outputText value="#{msg['cheat.name']}"></h:outputText>
+				</h:commandLink>
+
+			</h:panelGroup>
+		</div>
+	</div>
+	</h:form>
+</ui:composition>
+
+</html>
+
+

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<ui:composition template="/resources/template/main-template.xhtml">
+	<ui:define name="main">
+		<div class="flex-column-center height-100">
+			<f:view>
+				<div class="row-div padding-top-3rem margin-auto">
+					<h3>#{msg['item.management.title']}</h3>
+				</div>
+
+					<div class="flex-row-center justify-evenly ">
+						<div>
+							<ui:include src="/resources/module/new-Item.xhtml" />
+						</div>
+						<div>
+							<ui:include src="/resources/module/new-category.xhtml" />
+						</div>
+					</div>
+
+				<h:form>
+
+					<div class="flex-row-center padding-top-3rem margin-auto ">
+
+						<h:selectOneMenu value="#{itemManagementBean.currentCategory.id}"
+							class="flex-row-center padding-1rem margin-auto"
+							onchange="submit()"
+							valueChangeListener="#{itemManagementBean.updateCurrentCategory}">
+							<f:selectItems value="#{itemManagementBean.categoryList}"
+								var="oneCat" itemValue="#{oneCat.id}" itemLabel="#{oneCat.name}" />
+						</h:selectOneMenu>
+					</div>
+
+
+				</h:form>
+				<div class="row-div">
+					<p>#{loginBean.promptStatus}</p>
+				</div>
+
+
+				<ui:include src="/resources/module/item-by-category.xhtml" />
+
+			</f:view>
+		</div>
+	</ui:define>
+</ui:composition>
+
+</html>

@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+
+<ui:composition>
+	<div class="flex-column-center">
+
+		<h:panelGroup
+			rendered="#{loginBean.user.profile eq loginBean.profileAdmin}">
+			<fieldset class="fieldset">
+				<legend>
+					<h:outputLabel value="#{msg['account.profile']}" />
+				</legend>
+				<h:selectOneRadio id="profile"
+					value="#{loginBean.settingCostumer.profile}" required="true"
+					requiredMessage="#{msg['account.prompt.profile']}">
+					<f:selectItem itemLabel="#{loginBean.profileAdmin.name}"
+						itemValue="#{loginBean.profileAdmin}" />
+					<f:selectItem itemLabel="#{loginBean.profileStoreKeeper.name}"
+						itemValue="#{loginBean.profileStoreKeeper}" />
+					<f:selectItem itemLabel="#{loginBean.profileCostumer.name}"
+						itemValue="#{loginBean.profileCostumer}" />
+				</h:selectOneRadio>
+			</fieldset>
+			<h:message for="profile" class="message"></h:message>
+		</h:panelGroup>
+
+		<h:panelGroup rendered="#{loginBean.isCostumer}">
+			<fieldset class="fieldset height-4rem">
+				<legend>
+					<h:outputLabel value="#{msg['account.gender']}" />
+				</legend>
+				<h:panelGrid columns="2" cellpadding="0" cellspacing="2">
+					<h:selectOneRadio id="gender"
+						value="#{loginBean.settingCostumer.gender}" required="true"
+						requiredMessage="#{msg['account.prompt.gender']}">
+						<f:selectItem itemLabel="#{loginBean.male.value}"
+							itemValue="#{loginBean.male}" />
+						<f:selectItem itemLabel="#{loginBean.female.value}"
+							itemValue="#{loginBean.female}" />
+					</h:selectOneRadio>
+				</h:panelGrid>
+			</fieldset>
+			<h:message for="gender" class="message"></h:message>
+			<h:inputText id="lastname"
+				value="#{loginBean.settingCostumer.firstname}" required="true"
+				a:placeholder="#{msg['account.firstname']}"
+				class="border-radius height-3rem padding-1rem"
+				requiredMessage="#{msg['account.prompt.firstname']}">
+				<f:validateLength minimum="2" maximum="20" />
+				<f:validateRegex pattern="^[a-zA-Z-\s]*"></f:validateRegex>
+			</h:inputText>
+			<h:message for="lastname" class="message"></h:message>
+
+			<h:inputText id="firstname"
+				value="#{loginBean.settingCostumer.lastname}" required="true"
+				a:placeholder="#{msg['account.lastname']}"
+				class="border-radius height-3rem padding-1rem"
+				requiredMessage="#{msg['account.prompt.firstname']}">
+				<f:validateLength minimum="2" maximum="100" />
+				<f:validateRegex pattern="^[a-zA-Z-\s]*"></f:validateRegex>
+			</h:inputText>
+			<h:message for="firstname" class="message"></h:message>
+
+
+			<h:inputText id="phone"
+				value="#{loginBean.settingCostumer.phoneNumber}"
+				a:placeholder="#{msg['account.phone']}" required="true"
+				class="border-radius height-3rem padding-1rem"
+				requiredMessage="#{msg['account.prompt.phone']}">
+				<f:validateLength minimum="8" maximum="15" />
+			</h:inputText>
+
+			<h:message for="phone" class="message"></h:message>
+
+			<h:inputText id="birthdate"
+				value="#{loginBean.settingCostumer.birthdate}"
+				a:placeholder="#{msg['account.birthdate']}" required="true"
+				class="border-radius height-3rem padding-1rem"
+				requiredMessage="#{msg['account.prompt.birtdate']}">
+				<f:convertDateTime pattern="dd/MM/yyyy"></f:convertDateTime>
+					(jj/mm/aaaa)
+				</h:inputText>
+			<h:message for="birthdate" class="message"></h:message>
+
+
+		</h:panelGroup>
+
+
+		<h:inputText id="email" value="#{loginBean.settingCostumer.email}"
+			a:placeholder="#{msg['account.email']}" required="true"
+			class="border-radius height-3rem padding-1rem"
+			requiredMessage="#{msg['account.prompt.email']}">
+			<f:validateLength minimum="8" maximum="100" />
+		</h:inputText>
+		<h:message for="email" class="message"></h:message>
+
+		<h:inputSecret id="password"
+			value="#{loginBean.settingCostumer.password}"
+			a:placeholder="#{msg['account.password']}" required="true"
+			class="border-radius height-3rem padding-1rem"
+			requiredMessage="#{msg['account.prompt.password']}">
+			<f:validateLength minimum="8" maximum="100" />
+			<!-- 			<f:validateRegex pattern="^[a-z]{1,}[A-Z]{1,}[0-9]{1,}[@%!-+?]{1,}*"></f:validateRegex> -->
+		</h:inputSecret>
+		<h:message for="password" class="message"></h:message>
+
+		<h:inputSecret id="password-confirmation"
+			a:placeholder="#{msg['account.re-password']}"
+			value="#{loginBean.passwordConfirmation}" required="true"
+			class="border-radius height-3rem padding-1rem"
+			requiredMessage="#{msg['account.prompt.re-password']}">
+			<f:validateLength minimum="8" maximum="100" />
+			<!-- 			<f:validateRegex pattern="^[a-z]{1,}[A-Z]{1,}[0-9]{1,}[@%!-+?]{1,}*"></f:validateRegex> -->
+		</h:inputSecret>
+		<h:message for="password-confirmation" class="message"></h:message>
+	</div>
+</ui:composition>
+
+</html>
+
+

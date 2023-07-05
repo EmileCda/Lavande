@@ -67,7 +67,13 @@ public class Costumer extends User implements IConstant, Serializable {
 				DEFAULT_EMAIL, DEFAULT_PASSWORD, true);
 
 	}
-
+	public Costumer(Costumer copy) {
+		
+		this(copy.getId(), copy.getGender(), copy.getFirstname(), 
+				copy.getLastname(), copy.getBirthdate(), copy.getPhoneNumber(), 
+				copy.getProfile(), copy.getEmail(), copy.getPassword(), copy.getIsActif());
+		
+	}
 	public Costumer(Gender gender, String firstname, String lastname, Date birthdate, String phoneNumber,
 			Profile profile, String email, String password) {
 
@@ -126,6 +132,13 @@ public class Costumer extends User implements IConstant, Serializable {
 
 	}
 
+	public boolean  removeCartItem(CartItem cartItemToRemove) {
+
+		return this.getCartItemList().remove(cartItemToRemove);
+
+	}
+		
+
 	public void initBankCardList() {
 		if (this.getBankCardList() == null)
 			this.setBankCardList(new ArrayList<BankCard>());
@@ -154,6 +167,16 @@ public class Costumer extends User implements IConstant, Serializable {
 		if (this.getCartItemList() == null)
 			this.setCartItemList(new ArrayList<CartItem>());
 
+	}
+
+	public void clean() {
+		super.clean();
+		this.setGender(DEFAULT_GENDER);
+		this.setFirstname("");
+		this.setLastname("");
+		this.setBirthdate(DATE_NOW);
+		this.setPhoneNumber("");
+		
 	}
 
 	public Gender getGender() {
@@ -262,6 +285,24 @@ public class Costumer extends User implements IConstant, Serializable {
 			}
 		}
 		return stringReturn;
+	}
+	public int getDefaultBillingAddressId() {
+		return defaultBillingAddressId;
+	}
+	public void setDefaultBillingAddressId(int defaultBillingAddressId) {
+		this.defaultBillingAddressId = defaultBillingAddressId;
+	}
+	public int getDefaultDeliveryAddressId() {
+		return defaultDeliveryAddressId;
+	}
+	public void setDefaultDeliveryAddressId(int defaultDeliveryAddressId) {
+		this.defaultDeliveryAddressId = defaultDeliveryAddressId;
+	}
+	public int getDefaultBankCardId() {
+		return defaultBankCardId;
+	}
+	public void setDefaultBankCardId(int defaultBankCardId) {
+		this.defaultBankCardId = defaultBankCardId;
 	}
 
 }

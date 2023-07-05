@@ -99,7 +99,7 @@ class TBankCardUnitTest {
 	public void createOne() {
 		Utils.trace("=========================== create One  ===========================\n");
 		BankCard bankCard = new BankCard();
-		Costumer costumer = getCostumer(1);
+		Costumer costumer = getCostumer(31);
 		bankCard = DataTest.genBankCard(costumer);
 		bankCard.setCostumer(costumer);
 		costumer.addBankCard(bankCard);
